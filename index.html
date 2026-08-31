@@ -1,1444 +1,1713 @@
 <!DOCTYPE html>
 <html lang="vi">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="theme-color" content="#101b3d" />
-
-  <title>Morse Quest - Level 1</title>
-
-  <style>
-    * {
-      box-sizing: border-box;
-    }
-
-    body {
-      margin: 0;
-      font-family: Arial, Helvetica, sans-serif;
-      color: white;
-      min-height: 100vh;
-
-      background:
-        radial-gradient(circle at 10% 15%, rgba(70, 120, 255, .25), transparent 25%),
-        radial-gradient(circle at 90% 20%, rgba(174, 75, 255, .25), transparent 25%),
-        radial-gradient(circle at 50% 100%, rgba(0, 220, 180, .14), transparent 35%),
-        linear-gradient(160deg, #081127, #111d43 50%, #09142f);
-
-      overflow-x: hidden;
-    }
-
-    body::before,
-    body::after {
-      content: "✦   ·   ✧      ·       ★      ·   ✦";
-      position: fixed;
-      z-index: 0;
-      opacity: .22;
-      font-size: 28px;
-      letter-spacing: 22px;
-      pointer-events: none;
-    }
-
-    body::before {
-      top: 7%;
-      left: 5%;
-    }
-
-    body::after {
-      bottom: 10%;
-      right: 5%;
-      transform: rotate(-12deg);
-    }
-
-    .app {
-      position: relative;
-      z-index: 1;
-      width: min(720px, 100%);
-      margin: auto;
-      padding: 18px 14px 40px;
-    }
-
-    .topbar {
-      display: flex;
-      justify-content: space-between;
-      gap: 10px;
-      margin-bottom: 16px;
-    }
-
-    .pill {
-      background: rgba(255,255,255,.09);
-      border: 1px solid rgba(255,255,255,.14);
-      backdrop-filter: blur(12px);
-      padding: 10px 13px;
-      border-radius: 16px;
-      font-weight: bold;
-      font-size: 14px;
-    }
-
-    .hero {
-      position: relative;
-      overflow: hidden;
-      padding: 22px;
-      border-radius: 28px;
-
-      background:
-        linear-gradient(
-          145deg,
-          rgba(63,104,255,.28),
-          rgba(123,66,246,.18)
-        );
-
-      border: 1px solid rgba(255,255,255,.16);
-      box-shadow: 0 18px 40px rgba(0,0,0,.24);
-    }
-
-    .hero-content {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 15px;
-    }
-
-    .level {
-      font-size: 13px;
-      font-weight: bold;
-      letter-spacing: 1px;
-      color: #a9c3ff;
-    }
-
-    h1 {
-      margin: 7px 0 4px;
-      font-size: clamp(27px, 8vw, 42px);
-    }
-
-    .subtitle {
-      margin: 0;
-      color: #cbd5ff;
-      line-height: 1.45;
-      font-size: 14px;
-    }
-
-    .robot {
-      font-size: 72px;
-      animation: float 3s ease-in-out infinite;
-      filter: drop-shadow(0 10px 10px rgba(0,0,0,.18));
-    }
-
-    @keyframes float {
-      0%, 100% { transform: translateY(0); }
-      50% { transform: translateY(-7px); }
-    }
-
-    .progress-label {
-      display: flex;
-      justify-content: space-between;
-      margin-top: 18px;
-      margin-bottom: 7px;
-      font-size: 13px;
-      font-weight: bold;
-      color: #d8e0ff;
-    }
-
-    .progress-track {
-      height: 12px;
-      background: rgba(255,255,255,.12);
-      border-radius: 999px;
-      overflow: hidden;
-    }
-
-    .progress-bar {
-      width: 0%;
-      height: 100%;
-      background: linear-gradient(90deg, #55e6b8, #6aa6ff);
-      border-radius: inherit;
-      transition: width .35s;
-    }
-
-    .card {
-      margin-top: 16px;
-      padding: 18px;
-      background: rgba(255,255,255,.075);
-      border: 1px solid rgba(255,255,255,.13);
-      border-radius: 25px;
-      backdrop-filter: blur(12px);
-    }
-
-    .card-title {
-      font-size: 17px;
-      font-weight: 800;
-    }
-
-    .small {
-      font-size: 13px;
-      color: #bfc9e9;
-    }
-
-    .radio-area {
-      margin-top: 15px;
-      text-align: center;
-      background: rgba(4,10,28,.35);
-      border-radius: 22px;
-      padding: 20px 15px;
-    }
-
-    .signal {
-      height: 32px;
-      font-size: 29px;
-      font-weight: 900;
-      letter-spacing: 8px;
-      color: #82e6ff;
-      margin-bottom: 10px;
-    }
-
-    .listen {
-      border: 0;
-      width: min(300px, 100%);
-      min-height: 54px;
-      border-radius: 17px;
-      font-size: 17px;
-      font-weight: 800;
-      color: #092341;
-
-      background: linear-gradient(135deg, #7ff1d1, #72b7ff);
-      box-shadow: 0 8px 22px rgba(82,190,255,.2);
-
-      cursor: pointer;
-    }
-
-    .listen:active {
-      transform: scale(.97);
-    }
-
-    #feedback {
-      min-height: 24px;
-      margin-top: 13px;
-      font-weight: bold;
-      color: #cfd8ff;
-    }
-
-    .stats {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 9px;
-      margin-top: 15px;
-    }
-
-    .stat {
-      background: rgba(255,255,255,.075);
-      border-radius: 16px;
-      text-align: center;
-      padding: 11px 6px;
-    }
-
-    .stat strong {
-      display: block;
-      font-size: 21px;
-      margin-top: 4px;
-    }
-
-    .keyboard {
-      margin-top: 14px;
-    }
-
-    .keyrow {
-      display: flex;
-      justify-content: center;
-      gap: 5px;
-      margin-bottom: 6px;
-    }
-
-    .key {
-      min-width: 0;
-      flex: 1;
-      max-width: 56px;
-      height: 48px;
-      border: 1px solid rgba(255,255,255,.12);
-      border-radius: 11px;
-
-      background: rgba(255,255,255,.045);
-      color: rgba(255,255,255,.25);
-
-      font-weight: 900;
-      font-size: 15px;
-    }
-
-    .key.active {
-      cursor: pointer;
-      color: white;
-
-      background:
-        linear-gradient(
-          160deg,
-          rgba(74,123,255,.48),
-          rgba(99,75,228,.35)
-        );
-
-      border-color: rgba(132,183,255,.75);
-
-      box-shadow:
-        inset 0 0 15px rgba(109,167,255,.15),
-        0 4px 10px rgba(0,0,0,.12);
-    }
-
-    .key.active:active {
-      transform: translateY(2px);
-    }
-
-    .key.correct {
-      background: #28b988 !important;
-    }
-
-    .key.wrong {
-      background: #d85c6d !important;
-    }
-
-    .letters {
-      display: grid;
-      grid-template-columns: repeat(6, 1fr);
-      gap: 7px;
-      margin-top: 14px;
-    }
-
-    .letter {
-      text-align: center;
-      padding: 11px 4px;
-      border-radius: 15px;
-
-      background:
-        linear-gradient(
-          160deg,
-          rgba(103,132,255,.25),
-          rgba(82,220,184,.12)
-        );
-
-      border: 1px solid rgba(125,183,255,.35);
-    }
-
-    .letter b {
-      display: block;
-      font-size: 21px;
-    }
-
-    .letter span {
-      color: #9bcfff;
-      font-family: monospace;
-      font-weight: bold;
-    }
-
-    .mission {
-      margin-top: 12px;
-      display: grid;
-      gap: 8px;
-    }
-
-    .mission-item {
-      padding: 12px;
-      border-radius: 15px;
-      background: rgba(255,255,255,.055);
-      display: flex;
-      justify-content: space-between;
-      font-size: 14px;
-    }
-
-    .complete {
-      display: none;
-      margin-top: 16px;
-      text-align: center;
-      padding: 22px;
-
-      background:
-        linear-gradient(
-          145deg,
-          rgba(52,205,151,.20),
-          rgba(75,144,255,.20)
-        );
-
-      border: 1px solid rgba(104,235,192,.4);
-      border-radius: 22px;
-    }
-
-    .complete .medal {
-      font-size: 54px;
-    }
-
-    .reset {
-      margin-top: 13px;
-      border: 1px solid rgba(255,255,255,.18);
-      background: transparent;
-      color: #cbd4f4;
-      padding: 10px 15px;
-      border-radius: 12px;
-      cursor: pointer;
-    }
-
-    @media (max-width: 460px) {
-      .hero {
-        padding: 18px;
-      }
-
-      .robot {
-        font-size: 56px;
-      }
-
-      .key {
-        height: 45px;
-        font-size: 13px;
-      }
-
-      .letters {
-        grid-template-columns: repeat(3,1fr);
-      }
-    }
-
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#081127">
+
+<title>Morse Quest</title>
+
+<style>
+*{box-sizing:border-box}
+
+body{
+  margin:0;
+  font-family:Arial,Helvetica,sans-serif;
+  color:#fff;
+  min-height:100vh;
+  background:
+    radial-gradient(circle at 10% 10%,rgba(70,120,255,.24),transparent 28%),
+    radial-gradient(circle at 90% 20%,rgba(180,80,255,.22),transparent 28%),
+    radial-gradient(circle at 50% 100%,rgba(0,220,180,.14),transparent 35%),
+    linear-gradient(160deg,#071126,#111d43 55%,#09142f);
+}
+
+button{
+  font-family:inherit;
+}
+
+.app{
+  width:min(760px,100%);
+  margin:auto;
+  padding:16px 14px 40px;
+}
+
+.topbar{
+  display:flex;
+  justify-content:space-between;
+  gap:8px;
+  margin-bottom:14px;
+}
+
+.pill{
+  background:rgba(255,255,255,.09);
+  border:1px solid rgba(255,255,255,.14);
+  border-radius:16px;
+  padding:9px 12px;
+  font-weight:700;
+  font-size:14px;
+}
+
+.hero{
+  position:relative;
+  overflow:hidden;
+  border-radius:28px;
+  padding:22px;
+  border:1px solid rgba(255,255,255,.15);
+  background:linear-gradient(
+    145deg,
+    rgba(63,104,255,.28),
+    rgba(123,66,246,.18)
+  );
+  box-shadow:0 18px 40px rgba(0,0,0,.22);
+}
+
+.hero-grid{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:14px;
+}
+
+.robot{
+  font-size:70px;
+  animation:floaty 3s ease-in-out infinite;
+}
+
+@keyframes floaty{
+  0%,100%{transform:translateY(0)}
+  50%{transform:translateY(-7px)}
+}
+
+h1{
+  margin:5px 0;
+  font-size:clamp(29px,8vw,44px);
+}
+
+.subtitle{
+  margin:0;
+  color:#cbd5ff;
+  line-height:1.45;
+}
+
+.level-tag{
+  font-size:12px;
+  font-weight:800;
+  letter-spacing:1px;
+  color:#9fc2ff;
+}
+
+.card{
+  margin-top:15px;
+  padding:17px;
+  border-radius:24px;
+  background:rgba(255,255,255,.075);
+  border:1px solid rgba(255,255,255,.13);
+  backdrop-filter:blur(10px);
+}
+
+.card-title{
+  font-size:17px;
+  font-weight:800;
+}
+
+.small{
+  color:#bcc7e8;
+  font-size:13px;
+  margin-top:3px;
+}
+
+.level-grid{
+  display:grid;
+  grid-template-columns:repeat(2,1fr);
+  gap:10px;
+  margin-top:14px;
+}
+
+.level-btn{
+  min-height:102px;
+  border-radius:19px;
+  border:1px solid rgba(255,255,255,.15);
+  background:rgba(255,255,255,.07);
+  color:#fff;
+  padding:13px;
+  text-align:left;
+  cursor:pointer;
+}
+
+.level-btn.active{
+  background:linear-gradient(
+    145deg,
+    rgba(70,130,255,.40),
+    rgba(91,78,218,.35)
+  );
+  border-color:#88b8ff;
+}
+
+.level-btn.locked{
+  opacity:.40;
+  cursor:not-allowed;
+}
+
+.level-number{
+  font-weight:900;
+  font-size:17px;
+}
+
+.level-letters{
+  margin-top:6px;
+  font-weight:800;
+  letter-spacing:2px;
+  color:#a8d9ff;
+}
+
+.level-status{
+  font-size:12px;
+  margin-top:7px;
+  color:#c8d0ef;
+}
+
+.start-btn{
+  margin-top:15px;
+  width:100%;
+  min-height:55px;
+  border:0;
+  border-radius:17px;
+  font-weight:900;
+  font-size:17px;
+  color:#092341;
+  background:linear-gradient(135deg,#7ff1d1,#72b7ff);
+  cursor:pointer;
+}
+
+.hidden{
+  display:none!important;
+}
+
+.progress-label{
+  display:flex;
+  justify-content:space-between;
+  margin-top:16px;
+  margin-bottom:7px;
+  font-size:13px;
+  font-weight:700;
+}
+
+.progress-track{
+  height:12px;
+  border-radius:999px;
+  background:rgba(255,255,255,.11);
+  overflow:hidden;
+}
+
+.progress-bar{
+  height:100%;
+  width:0;
+  background:linear-gradient(90deg,#58e5b7,#69a8ff);
+  transition:width .3s;
+}
+
+.radio{
+  margin-top:14px;
+  background:rgba(3,9,27,.34);
+  border-radius:20px;
+  padding:20px;
+  text-align:center;
+}
+
+.signal{
+  min-height:38px;
+  font-size:28px;
+  font-weight:900;
+  letter-spacing:8px;
+  color:#86e4ff;
+}
+
+.listen{
+  margin-top:9px;
+  border:0;
+  width:min(310px,100%);
+  min-height:54px;
+  border-radius:17px;
+  font-weight:900;
+  font-size:17px;
+  color:#092341;
+  background:linear-gradient(135deg,#7ff1d1,#72b7ff);
+}
+
+#feedback{
+  min-height:25px;
+  margin-top:12px;
+  font-weight:700;
+  color:#d3dcff;
+}
+
+.stats{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:8px;
+  margin-top:13px;
+}
+
+.stat{
+  padding:10px 5px;
+  border-radius:15px;
+  text-align:center;
+  background:rgba(255,255,255,.06);
+}
+
+.stat strong{
+  display:block;
+  font-size:21px;
+  margin-top:4px;
+}
+
+.keyboard{
+  margin-top:13px;
+}
+
+.keyrow{
+  display:flex;
+  justify-content:center;
+  gap:5px;
+  margin-bottom:6px;
+}
+
+.key{
+  flex:1;
+  min-width:0;
+  max-width:56px;
+  height:47px;
+  border-radius:11px;
+  border:1px solid rgba(255,255,255,.10);
+  background:rgba(255,255,255,.04);
+  color:rgba(255,255,255,.20);
+  font-weight:900;
+}
+
+.key.active{
+  color:white;
+  cursor:pointer;
+  background:linear-gradient(
+    160deg,
+    rgba(74,123,255,.48),
+    rgba(99,75,228,.35)
+  );
+  border-color:rgba(132,183,255,.75);
+}
+
+.key.correct{
+  background:#28b988!important;
+}
+
+.key.wrong{
+  background:#d85c6d!important;
+}
+
+.letters{
+  display:grid;
+  grid-template-columns:repeat(6,1fr);
+  gap:7px;
+  margin-top:13px;
+}
+
+.letter{
+  text-align:center;
+  border-radius:14px;
+  padding:10px 4px;
+  background:rgba(90,130,255,.17);
+  border:1px solid rgba(130,185,255,.30);
+}
+
+.letter b{
+  display:block;
+  font-size:20px;
+}
+
+.letter span{
+  display:block;
+  margin-top:3px;
+  color:#9ed6ff;
+  font-family:monospace;
+}
+
+.complete{
+  text-align:center;
+  margin-top:14px;
+  padding:20px;
+  border-radius:20px;
+  background:rgba(54,210,155,.13);
+  border:1px solid rgba(95,230,183,.35);
+}
+
+.medal{
+  font-size:50px;
+}
+
+.secondary{
+  margin-top:12px;
+  width:100%;
+  min-height:45px;
+  border-radius:14px;
+  border:1px solid rgba(255,255,255,.17);
+  background:transparent;
+  color:#d7def5;
+  font-weight:700;
+  cursor:pointer;
+}
+
+@media(max-width:480px){
+  .level-grid{
+    grid-template-columns:1fr;
+  }
+
+  .letters{
+    grid-template-columns:repeat(3,1fr);
+  }
+
+  .robot{
+    font-size:56px;
+  }
+
+  .key{
+    height:44px;
+    font-size:13px;
+  }
+}
+</style>
 </head>
 
 <body>
 
 <div class="app">
 
-  <div class="topbar">
-    <div class="pill">
-      🔥 <span id="streak">1</span> ngày
-    </div>
-
-    <div class="pill">
-      ⭐ <span id="totalXP">0</span> XP
-    </div>
+<div class="topbar">
+  <div class="pill">
+    🔥 <span id="streak">1</span> ngày
   </div>
 
-
-  <section class="hero">
-
-    <div class="hero-content">
-
-      <div>
-        <div class="level">
-          LEVEL 1 · RADIO ROOKIE
-        </div>
-
-        <h1>Morse Quest</h1>
-
-        <p class="subtitle">
-          Nghe tín hiệu bí mật và giúp Robo
-          tìm đúng ký tự.
-        </p>
-      </div>
-
-      <div class="robot">
-        🤖
-      </div>
-
-    </div>
+  <div class="pill">
+    ⭐ <span id="xp">0</span> XP
+  </div>
+</div>
 
 
-    <div class="progress-label">
-      <span>Thử thách hôm nay</span>
-      <span id="progressText">0 / 10</span>
-    </div>
+<section class="hero">
 
-    <div class="progress-track">
-      <div
-        class="progress-bar"
-        id="progressBar">
-      </div>
-    </div>
+<div class="hero-grid">
 
-  </section>
+<div>
 
+<div class="level-tag">
+MORSE TRAINING ADVENTURE
+</div>
 
-  <section class="card">
+<h1>Morse Quest</h1>
 
-    <div class="card-title">
-      🎧 Nghe tín hiệu
-    </div>
-
-    <div class="small">
-      Level 1: E · T · A · N · I · M
-    </div>
-
-
-    <div class="radio-area">
-
-      <div
-        class="signal"
-        id="signal">
-        • • •
-      </div>
-
-      <button
-        class="listen"
-        id="listenBtn">
-        ▶ NGHE MORSE
-      </button>
-
-      <div id="feedback">
-        Nghe thật kỹ rồi chọn chữ bên dưới.
-      </div>
-
-    </div>
-
-
-    <div class="stats">
-
-      <div class="stat">
-        Đúng
-        <strong id="score">0</strong>
-      </div>
-
-      <div class="stat">
-        Combo
-        <strong id="combo">0</strong>
-      </div>
-
-      <div class="stat">
-        Hôm nay
-        <strong id="tries">0</strong>
-      </div>
-
-    </div>
-
-  </section>
-
-
-  <section class="card">
-
-    <div class="card-title">
-      ⌨️ Chọn ký tự
-    </div>
-
-    <div class="small">
-      Chỉ những chữ đã học mới sáng lên.
-    </div>
-
-    <div
-      class="keyboard"
-      id="keyboard">
-    </div>
-
-  </section>
-
-
-  <section class="card">
-
-    <div class="card-title">
-      🚀 Ký tự đã mở khóa
-    </div>
-
-    <div
-      class="letters"
-      id="letters">
-    </div>
-
-  </section>
-
-
-  <section class="card">
-
-    <div class="card-title">
-      🏆 Nhiệm vụ hôm nay
-    </div>
-
-    <div class="mission">
-
-      <div class="mission-item">
-        <span>Hoàn thành 10 tín hiệu</span>
-        <span id="mission10">⬜</span>
-      </div>
-
-      <div class="mission-item">
-        <span>Trả lời đúng 5 câu</span>
-        <span id="mission5">⬜</span>
-      </div>
-
-      <div class="mission-item">
-        <span>Combo đúng 3 câu</span>
-        <span id="missionCombo">⬜</span>
-      </div>
-
-    </div>
-
-
-    <div
-      class="complete"
-      id="complete">
-
-      <div class="medal">
-        🏅
-      </div>
-
-      <h2>
-        Hoàn thành Level 1 hôm nay!
-      </h2>
-
-      <p>
-        Robo đã nhận được tín hiệu.
-        Hẹn gặp lại ở thử thách tiếp theo.
-      </p>
-
-    </div>
-
-
-    <button
-      class="reset"
-      id="resetBtn">
-      Chơi lại thử thách
-    </button>
-
-  </section>
+<p class="subtitle">
+Nghe tín hiệu, mở khóa ký tự và vượt qua từng cấp độ.
+</p>
 
 </div>
+
+<div class="robot">
+🤖
+</div>
+
+</div>
+
+</section>
+
+
+
+<section
+  class="card"
+  id="levelScreen">
+
+<div class="card-title">
+🚀 Chọn cấp độ
+</div>
+
+<div class="small">
+Mỗi người có thể bắt đầu ở trình độ riêng.
+</div>
+
+<div
+  class="level-grid"
+  id="levelGrid">
+</div>
+
+<button
+  class="start-btn"
+  id="startBtn">
+▶ BẮT ĐẦU LEVEL
+</button>
+
+</section>
+
+
+
+<div
+  id="gameScreen"
+  class="hidden">
+
+
+<section class="card">
+
+<div class="card-title">
+🎯 <span id="currentLevelTitle"></span>
+</div>
+
+<div
+  class="small"
+  id="currentLetters">
+</div>
+
+<div class="progress-label">
+
+<span>Thử thách</span>
+
+<span id="progressText">
+0 / 10
+</span>
+
+</div>
+
+<div class="progress-track">
+
+<div
+  class="progress-bar"
+  id="progressBar">
+</div>
+
+</div>
+
+<div class="radio">
+
+<div
+  class="signal"
+  id="signal">
+•••
+</div>
+
+<button
+  class="listen"
+  id="listenBtn">
+▶ NGHE MORSE
+</button>
+
+<div id="feedback">
+Nghe tín hiệu rồi chọn chữ.
+</div>
+
+</div>
+
+
+<div class="stats">
+
+<div class="stat">
+Đúng
+<strong id="score">0</strong>
+</div>
+
+<div class="stat">
+Combo
+<strong id="combo">0</strong>
+</div>
+
+<div class="stat">
+Câu
+<strong id="tries">0</strong>
+</div>
+
+</div>
+
+</section>
+
+
+
+<section class="card">
+
+<div class="card-title">
+⌨️ Bàn phím
+</div>
+
+<div class="small">
+Các ký tự đang học sẽ sáng lên.
+</div>
+
+<div
+  id="keyboard"
+  class="keyboard">
+</div>
+
+</section>
+
+
+
+<section class="card">
+
+<div class="card-title">
+📡 Ký tự Level này
+</div>
+
+<div
+  id="letterCards"
+  class="letters">
+</div>
+
+</section>
+
+
+
+<section
+  class="card hidden"
+  id="completeCard">
+
+<div class="complete">
+
+<div class="medal">
+🏅
+</div>
+
+<h2 id="completeTitle">
+Hoàn thành!
+</h2>
+
+<p id="completeText">
+Level tiếp theo đã được mở khóa.
+</p>
+
+</div>
+
+<button
+  class="start-btn"
+  id="nextLevelBtn">
+🚀 LEVEL TIẾP THEO
+</button>
+
+</section>
+
+
+<button
+  class="secondary"
+  id="backBtn">
+← Chọn Level khác
+</button>
+
+
+</div>
+
+</div>
+
 
 
 <script>
 
 const MORSE = {
-  E: ".",
-  T: "-",
-  A: ".-",
-  N: "-.",
-  I: "..",
-  M: "--"
+
+E: ".",
+T: "-",
+
+A: ".-",
+N: "-.",
+
+I: "..",
+M: "--",
+
+S: "...",
+O: "---",
+
+R: ".-.",
+K: "-.-",
+
+D: "-..",
+G: "--.",
+
+U: "..-",
+W: ".--",
+
+H: "....",
+V: "...-",
+
+F: "..-.",
+L: ".-..",
+
+P: ".--.",
+J: ".---",
+
+B: "-...",
+X: "-..-",
+
+C: "-.-.",
+Y: "-.--",
+
+Z: "--..",
+Q: "--.-"
+
 };
 
 
-// LEVEL 1
-const unlockedLetters = [
-  "E",
-  "T",
-  "A",
-  "N",
-  "I",
-  "M"
+
+const LEVELS = [
+
+{
+level:1,
+name:"Tín hiệu đầu tiên",
+letters:["E","T"]
+},
+
+{
+level:2,
+name:"Bộ đôi mới",
+letters:["E","T","A","N"]
+},
+
+{
+level:3,
+name:"Radio Rookie",
+letters:["E","T","A","N","I","M"]
+},
+
+{
+level:4,
+name:"Signal Explorer",
+letters:[
+"E","T","A","N","I","M",
+"S","O"
+]
+},
+
+{
+level:5,
+name:"Morse Ranger",
+letters:[
+"E","T","A","N","I","M",
+"S","O","R","K"
+]
+},
+
+{
+level:6,
+name:"Code Scout",
+letters:[
+"E","T","A","N","I","M",
+"S","O","R","K",
+"D","G"
+]
+},
+
+{
+level:7,
+name:"Radio Pilot",
+letters:[
+"E","T","A","N","I","M",
+"S","O","R","K",
+"D","G","U","W"
+]
+},
+
+{
+level:8,
+name:"Signal Master",
+letters:[
+"E","T","A","N","I","M",
+"S","O","R","K",
+"D","G","U","W",
+"H","V","F"
+]
+}
+
 ];
+
 
 
 const keyboardRows = [
-  "QWERTYUIOP",
-  "ASDFGHJKL",
-  "ZXCVBNM"
+"QWERTYUIOP",
+"ASDFGHJKL",
+"ZXCVBNM"
 ];
 
+
+let selectedLevel = 1;
+
+let unlockedLevel =
+Number(
+localStorage.getItem(
+"morseUnlockedLevel"
+)
+) || 1;
+
+
+let levelLetters = [];
 
 let currentLetter = "";
 
 let score = 0;
 
+let tries = 0;
+
 let combo = 0;
 
 let maxCombo = 0;
 
-let tries = 0;
+let locked = false;
 
 let audioContext = null;
 
-let locked = false;
 
 
+function symbolText(code){
 
-function todayKey() {
-
-  const d = new Date();
-
-  return (
-    d.getFullYear() +
-    "-" +
-    String(d.getMonth() + 1).padStart(2, "0") +
-    "-" +
-    String(d.getDate()).padStart(2, "0")
-  );
+return code
+.replaceAll(".","•")
+.replaceAll("-","—");
 
 }
 
 
 
-function yesterdayKey() {
+function createLevels(){
 
-  const d = new Date();
-
-  d.setDate(d.getDate() - 1);
-
-  return (
-    d.getFullYear() +
-    "-" +
-    String(d.getMonth() + 1).padStart(2, "0") +
-    "-" +
-    String(d.getDate()).padStart(2, "0")
-  );
-
-}
-
-
-
-function loadProgress() {
-
-  const savedDay =
-    localStorage.getItem("morseDay");
-
-  if (savedDay === todayKey()) {
-
-    score =
-      Number(
-        localStorage.getItem("morseScore")
-      ) || 0;
-
-    tries =
-      Number(
-        localStorage.getItem("morseTries")
-      ) || 0;
-
-    maxCombo =
-      Number(
-        localStorage.getItem("morseMaxCombo")
-      ) || 0;
-
-  }
-
-}
-
-
-
-function saveProgress() {
-
-  localStorage.setItem(
-    "morseDay",
-    todayKey()
-  );
-
-  localStorage.setItem(
-    "morseScore",
-    score
-  );
-
-  localStorage.setItem(
-    "morseTries",
-    tries
-  );
-
-  localStorage.setItem(
-    "morseMaxCombo",
-    maxCombo
-  );
-
-
-  let xp =
-    Number(
-      localStorage.getItem("morseXP")
-    ) || 0;
-
-  document.getElementById(
-    "totalXP"
-  ).textContent = xp;
-
-}
-
-
-
-function updateStreak() {
-
-  let streak =
-    Number(
-      localStorage.getItem("morseStreak")
-    ) || 1;
-
-  const lastComplete =
-    localStorage.getItem(
-      "morseLastComplete"
-    );
-
-
-  if (lastComplete === todayKey()) {
-
-    // giữ nguyên
-
-  } else if (
-    lastComplete === yesterdayKey()
-  ) {
-
-    // chờ hoàn thành hôm nay
-
-  }
-
-
-  document.getElementById(
-    "streak"
-  ).textContent = streak;
-
-}
-
-
-
-function completeDay() {
-
-  const lastComplete =
-    localStorage.getItem(
-      "morseLastComplete"
-    );
-
-
-  if (
-    lastComplete === todayKey()
-  ) {
-    return;
-  }
-
-
-  let streak =
-    Number(
-      localStorage.getItem(
-        "morseStreak"
-      )
-    ) || 0;
-
-
-  if (
-    lastComplete === yesterdayKey()
-  ) {
-
-    streak++;
-
-  } else {
-
-    streak = 1;
-
-  }
-
-
-  localStorage.setItem(
-    "morseStreak",
-    streak
-  );
-
-
-  localStorage.setItem(
-    "morseLastComplete",
-    todayKey()
-  );
-
-
-  let xp =
-    Number(
-      localStorage.getItem(
-        "morseXP"
-      )
-    ) || 0;
-
-
-  xp += 100;
-
-
-  localStorage.setItem(
-    "morseXP",
-    xp
-  );
-
-
-  document.getElementById(
-    "streak"
-  ).textContent = streak;
-
-
-  document.getElementById(
-    "totalXP"
-  ).textContent = xp;
-
-}
-
-
-
-function makeKeyboard() {
-
-  const keyboard =
-    document.getElementById(
-      "keyboard"
-    );
-
-
-  keyboard.innerHTML = "";
-
-
-  keyboardRows.forEach(row => {
-
-    const rowDiv =
-      document.createElement("div");
-
-    rowDiv.className =
-      "keyrow";
-
-
-    [...row].forEach(letter => {
-
-      const button =
-        document.createElement(
-          "button"
-        );
-
-
-      button.className = "key";
-
-      button.textContent = letter;
-
-      button.dataset.letter =
-        letter;
-
-
-      if (
-        unlockedLetters.includes(
-          letter
-        )
-      ) {
-
-        button.classList.add(
-          "active"
-        );
-
-
-        button.addEventListener(
-          "click",
-          () => answer(letter, button)
-        );
-
-      } else {
-
-        button.disabled = true;
-
-      }
-
-
-      rowDiv.appendChild(
-        button
-      );
-
-    });
-
-
-    keyboard.appendChild(
-      rowDiv
-    );
-
-  });
-
-}
-
-
-
-function makeLetterCards() {
-
-  const container =
-    document.getElementById(
-      "letters"
-    );
-
-
-  unlockedLetters.forEach(
-    letter => {
-
-      const box =
-        document.createElement(
-          "div"
-        );
-
-
-      box.className =
-        "letter";
-
-
-      const display =
-        MORSE[letter]
-        .replaceAll(".", "•")
-        .replaceAll("-", "—");
-
-
-      box.innerHTML = `
-        <b>${letter}</b>
-        <span>${display}</span>
-      `;
-
-
-      container.appendChild(
-        box
-      );
-
-    }
-  );
-
-}
-
-
-
-function newQuestion() {
-
-  const available =
-    unlockedLetters.filter(
-      l => l !== currentLetter
-    );
-
-
-  currentLetter =
-    available[
-      Math.floor(
-        Math.random() *
-        available.length
-      )
-    ];
-
-
-  locked = false;
-
-
-  document.getElementById(
-    "signal"
-  ).textContent =
-    "• • •";
-
-
-  document.getElementById(
-    "feedback"
-  ).textContent =
-    "Nghe tín hiệu rồi chọn chữ.";
-
-}
-
-
-
-async function playMorse() {
-
-  const AudioCtx =
-    window.AudioContext ||
-    window.webkitAudioContext;
-
-
-  if (!AudioCtx) {
-
-    document.getElementById(
-      "feedback"
-    ).textContent =
-      "Thiết bị không hỗ trợ âm thanh.";
-
-    return;
-  }
-
-
-  if (!audioContext) {
-
-    audioContext =
-      new AudioCtx();
-
-  }
-
-
-  if (
-    audioContext.state ===
-    "suspended"
-  ) {
-
-    await audioContext.resume();
-
-  }
-
-
-  const code =
-    MORSE[currentLetter];
-
-
-  const dotLength = 0.12;
-
-  const symbolGap = 0.10;
-
-  let start =
-    audioContext.currentTime +
-    0.05;
-
-
-  [...code].forEach(symbol => {
-
-    const duration =
-      symbol === "."
-      ? dotLength
-      : dotLength * 3;
-
-
-    const oscillator =
-      audioContext.createOscillator();
-
-
-    const gain =
-      audioContext.createGain();
-
-
-    oscillator.frequency.value =
-      650;
-
-
-    oscillator.type =
-      "sine";
-
-
-    gain.gain.setValueAtTime(
-      0.0001,
-      start
-    );
-
-
-    gain.gain.exponentialRampToValueAtTime(
-      0.25,
-      start + 0.01
-    );
-
-
-    gain.gain.setValueAtTime(
-      0.25,
-      start +
-      Math.max(
-        0.01,
-        duration - 0.015
-      )
-    );
-
-
-    gain.gain.exponentialRampToValueAtTime(
-      0.0001,
-      start + duration
-    );
-
-
-    oscillator
-      .connect(gain)
-      .connect(
-        audioContext.destination
-      );
-
-
-    oscillator.start(start);
-
-    oscillator.stop(
-      start +
-      duration +
-      0.02
-    );
-
-
-    start +=
-      duration +
-      symbolGap;
-
-  });
-
-
-  document.getElementById(
-    "signal"
-  ).textContent =
-    "♪";
-
-
-  document.getElementById(
-    "feedback"
-  ).textContent =
-    "Tín hiệu đã phát. Chọn chữ!";
-
-}
-
-
-
-function answer(letter, button) {
-
-  if (locked) {
-    return;
-  }
-
-
-  locked = true;
-
-  tries++;
-
-
-  const correct =
-    letter === currentLetter;
-
-
-  if (correct) {
-
-    score++;
-
-    combo++;
-
-    maxCombo =
-      Math.max(
-        maxCombo,
-        combo
-      );
-
-
-    button.classList.add(
-      "correct"
-    );
-
-
-    document.getElementById(
-      "feedback"
-    ).textContent =
-      "🎉 Chính xác!";
-
-
-    let xp =
-      Number(
-        localStorage.getItem(
-          "morseXP"
-        )
-      ) || 0;
-
-
-    xp += 10;
-
-
-    localStorage.setItem(
-      "morseXP",
-      xp
-    );
-
-
-    document.getElementById(
-      "totalXP"
-    ).textContent =
-      xp;
-
-  } else {
-
-    combo = 0;
-
-
-    button.classList.add(
-      "wrong"
-    );
-
-
-    document.getElementById(
-      "feedback"
-    ).textContent =
-      "💡 Chưa đúng. Đáp án là " +
-      currentLetter;
-
-  }
-
-
-  const answerDisplay =
-    MORSE[currentLetter]
-    .replaceAll(".", "•")
-    .replaceAll("-", "—");
-
-
-  document.getElementById(
-    "signal"
-  ).textContent =
-    currentLetter +
-    "  " +
-    answerDisplay;
-
-
-  updateUI();
-
-  saveProgress();
-
-
-  setTimeout(() => {
-
-    button.classList.remove(
-      "correct",
-      "wrong"
-    );
-
-
-    if (tries < 10) {
-
-      newQuestion();
-
-      setTimeout(
-        playMorse,
-        250
-      );
-
-    }
-
-  }, 1100);
-
-}
-
-
-
-function updateUI() {
-
-  document.getElementById(
-    "score"
-  ).textContent =
-    score;
-
-
-  document.getElementById(
-    "combo"
-  ).textContent =
-    combo;
-
-
-  document.getElementById(
-    "tries"
-  ).textContent =
-    tries;
-
-
-  const completed =
-    Math.min(
-      tries,
-      10
-    );
-
-
-  document.getElementById(
-    "progressText"
-  ).textContent =
-    completed +
-    " / 10";
-
-
-  document.getElementById(
-    "progressBar"
-  ).style.width =
-    completed * 10 +
-    "%";
-
-
-  if (tries >= 10) {
-
-    document.getElementById(
-      "mission10"
-    ).textContent =
-      "✅";
-
-
-    document.getElementById(
-      "complete"
-    ).style.display =
-      "block";
-
-
-    completeDay();
-
-  }
-
-
-  if (score >= 5) {
-
-    document.getElementById(
-      "mission5"
-    ).textContent =
-      "✅";
-
-  }
-
-
-  if (maxCombo >= 3) {
-
-    document.getElementById(
-      "missionCombo"
-    ).textContent =
-      "✅";
-
-  }
-
-}
-
-
-
+const grid =
 document.getElementById(
-  "listenBtn"
-).addEventListener(
-  "click",
-  playMorse
+"levelGrid"
+);
+
+grid.innerHTML = "";
+
+
+LEVELS.forEach(item=>{
+
+const button =
+document.createElement(
+"button"
+);
+
+button.className =
+"level-btn";
+
+
+const unlocked =
+item.level <= unlockedLevel;
+
+
+if(!unlocked){
+
+button.classList.add(
+"locked"
+);
+
+button.disabled = true;
+
+}
+
+
+if(
+item.level === selectedLevel &&
+unlocked
+){
+
+button.classList.add(
+"active"
+);
+
+}
+
+
+button.innerHTML = `
+
+<div class="level-number">
+Level ${item.level}
+${unlocked ? "" : " 🔒"}
+</div>
+
+<div class="level-letters">
+${item.letters.join(" ")}
+</div>
+
+<div class="level-status">
+${item.name}
+</div>
+
+`;
+
+
+if(unlocked){
+
+button.addEventListener(
+"click",
+()=>{
+
+selectedLevel =
+item.level;
+
+createLevels();
+
+}
+);
+
+}
+
+
+grid.appendChild(
+button
+);
+
+});
+
+}
+
+
+
+function startLevel(){
+
+const data =
+LEVELS.find(
+x=>x.level===selectedLevel
 );
 
 
-
-document.getElementById(
-  "resetBtn"
-).addEventListener(
-  "click",
-  () => {
-
-    score = 0;
-
-    tries = 0;
-
-    combo = 0;
-
-    maxCombo = 0;
+if(!data)return;
 
 
-    localStorage.setItem(
-      "morseDay",
-      todayKey()
-    );
+levelLetters =
+[...data.letters];
 
 
-    localStorage.setItem(
-      "morseScore",
-      0
-    );
+score = 0;
+tries = 0;
+combo = 0;
+maxCombo = 0;
 
 
-    localStorage.setItem(
-      "morseTries",
-      0
-    );
-
-
-    localStorage.setItem(
-      "morseMaxCombo",
-      0
-    );
-
-
-    document.getElementById(
-      "complete"
-    ).style.display =
-      "none";
-
-
-    document.getElementById(
-      "mission10"
-    ).textContent =
-      "⬜";
-
-
-    document.getElementById(
-      "mission5"
-    ).textContent =
-      "⬜";
-
-
-    document.getElementById(
-      "missionCombo"
-    ).textContent =
-      "⬜";
-
-
-    updateUI();
-
-    newQuestion();
-
-  }
+document
+.getElementById(
+"levelScreen"
+)
+.classList.add(
+"hidden"
 );
 
 
+document
+.getElementById(
+"gameScreen"
+)
+.classList.remove(
+"hidden"
+);
 
-makeKeyboard();
 
-makeLetterCards();
+document
+.getElementById(
+"completeCard"
+)
+.classList.add(
+"hidden"
+);
 
-loadProgress();
+
+document.getElementById(
+"currentLevelTitle"
+).textContent =
+`Level ${data.level} · ${data.name}`;
+
+
+document.getElementById(
+"currentLetters"
+).textContent =
+"Đang luyện: " +
+levelLetters.join(" · ");
+
+
+createKeyboard();
+
+createLetterCards();
+
+updateGame();
+
+newQuestion();
+
+}
+
+
+
+function createKeyboard(){
+
+const keyboard =
+document.getElementById(
+"keyboard"
+);
+
+keyboard.innerHTML = "";
+
+
+keyboardRows.forEach(row=>{
+
+const rowDiv =
+document.createElement(
+"div"
+);
+
+rowDiv.className =
+"keyrow";
+
+
+[...row].forEach(letter=>{
+
+const key =
+document.createElement(
+"button"
+);
+
+key.className =
+"key";
+
+key.textContent =
+letter;
+
+
+if(
+levelLetters.includes(
+letter
+)
+){
+
+key.classList.add(
+"active"
+);
+
+key.addEventListener(
+"click",
+()=>answer(
+letter,
+key
+)
+);
+
+}else{
+
+key.disabled = true;
+
+}
+
+
+rowDiv.appendChild(
+key
+);
+
+});
+
+
+keyboard.appendChild(
+rowDiv
+);
+
+});
+
+}
+
+
+
+function createLetterCards(){
+
+const box =
+document.getElementById(
+"letterCards"
+);
+
+box.innerHTML = "";
+
+
+levelLetters.forEach(
+letter=>{
+
+const card =
+document.createElement(
+"div"
+);
+
+card.className =
+"letter";
+
+
+card.innerHTML = `
+
+<b>${letter}</b>
+
+<span>
+${symbolText(
+MORSE[letter]
+)}
+</span>
+
+`;
+
+
+box.appendChild(
+card
+);
+
+});
+
+}
+
+
+
+function newQuestion(){
+
+let options =
+levelLetters.filter(
+x=>x!==currentLetter
+);
+
+
+if(
+options.length===0
+){
+
+options =
+levelLetters;
+
+}
+
+
+currentLetter =
+options[
+Math.floor(
+Math.random() *
+options.length
+)
+];
+
+
+locked = false;
+
+
+document.getElementById(
+"signal"
+).textContent =
+"•••";
+
+
+document.getElementById(
+"feedback"
+).textContent =
+"Nghe tín hiệu rồi chọn chữ.";
+
+}
+
+
+
+async function playMorse(){
+
+const AC =
+window.AudioContext ||
+window.webkitAudioContext;
+
+
+if(!AC){
+
+document.getElementById(
+"feedback"
+).textContent =
+"Thiết bị chưa hỗ trợ âm thanh.";
+
+return;
+
+}
+
+
+if(!audioContext){
+
+audioContext =
+new AC();
+
+}
+
+
+if(
+audioContext.state ===
+"suspended"
+){
+
+await audioContext.resume();
+
+}
+
+
+const code =
+MORSE[currentLetter];
+
+
+const dot = .12;
+
+const gap = .10;
+
+
+let time =
+audioContext.currentTime +
+.05;
+
+
+[...code].forEach(symbol=>{
+
+const duration =
+symbol === "."
+? dot
+: dot * 3;
+
+
+const oscillator =
+audioContext.createOscillator();
+
+
+const gain =
+audioContext.createGain();
+
+
+oscillator.frequency.value =
+650;
+
+
+gain.gain.setValueAtTime(
+.0001,
+time
+);
+
+
+gain.gain.exponentialRampToValueAtTime(
+.25,
+time + .01
+);
+
+
+gain.gain.setValueAtTime(
+.25,
+time +
+Math.max(
+.01,
+duration-.015
+)
+);
+
+
+gain.gain.exponentialRampToValueAtTime(
+.0001,
+time+duration
+);
+
+
+oscillator
+.connect(gain)
+.connect(
+audioContext.destination
+);
+
+
+oscillator.start(
+time
+);
+
+
+oscillator.stop(
+time +
+duration +
+.02
+);
+
+
+time +=
+duration +
+gap;
+
+});
+
+
+document.getElementById(
+"signal"
+).textContent =
+"♪";
+
+
+document.getElementById(
+"feedback"
+).textContent =
+"Tín hiệu đã phát — chọn chữ!";
+
+}
+
+
+
+function answer(letter,key){
+
+if(locked)return;
+
+
+locked = true;
+
+tries++;
+
+
+if(
+letter === currentLetter
+){
+
+score++;
+
+combo++;
+
+maxCombo =
+Math.max(
+maxCombo,
+combo
+);
+
+
+key.classList.add(
+"correct"
+);
+
+
+document.getElementById(
+"feedback"
+).textContent =
+"🎉 Chính xác!";
+
+
+addXP(10);
+
+}else{
+
+combo = 0;
+
+
+key.classList.add(
+"wrong"
+);
+
+
+document.getElementById(
+"feedback"
+).textContent =
+"💡 Đáp án là " +
+currentLetter;
+
+}
+
+
+document.getElementById(
+"signal"
+).textContent =
+currentLetter +
+"  " +
+symbolText(
+MORSE[currentLetter]
+);
+
+
+updateGame();
+
+
+setTimeout(()=>{
+
+key.classList.remove(
+"correct",
+"wrong"
+);
+
+
+if(tries < 10){
+
+newQuestion();
+
+setTimeout(
+playMorse,
+250
+);
+
+}else{
+
+finishLevel();
+
+}
+
+},1100);
+
+}
+
+
+
+function updateGame(){
+
+document.getElementById(
+"score"
+).textContent =
+score;
+
+
+document.getElementById(
+"combo"
+).textContent =
+combo;
+
+
+document.getElementById(
+"tries"
+).textContent =
+tries;
+
+
+const done =
+Math.min(
+tries,
+10
+);
+
+
+document.getElementById(
+"progressText"
+).textContent =
+`${done} / 10`;
+
+
+document.getElementById(
+"progressBar"
+).style.width =
+`${done*10}%`;
+
+}
+
+
+
+function finishLevel(){
+
+const passed =
+score >= 8;
+
+
+document
+.getElementById(
+"completeCard"
+)
+.classList.remove(
+"hidden"
+);
+
+
+if(passed){
+
+document.getElementById(
+"completeTitle"
+).textContent =
+"🏆 Hoàn thành Level!";
+
+
+if(
+selectedLevel <
+LEVELS.length
+){
+
+const next =
+selectedLevel + 1;
+
+
+if(
+next >
+unlockedLevel
+){
+
+unlockedLevel =
+next;
+
+
+localStorage.setItem(
+"morseUnlockedLevel",
+unlockedLevel
+);
+
+}
+
+
+document.getElementById(
+"completeText"
+).textContent =
+`Bạn đúng ${score}/10. Level ${next} đã được mở khóa!`;
+
+
+document.getElementById(
+"nextLevelBtn"
+).style.display =
+"block";
+
+}else{
+
+document.getElementById(
+"completeText"
+).textContent =
+`Bạn đúng ${score}/10. Đã hoàn thành toàn bộ Level hiện tại!`;
+
+
+document.getElementById(
+"nextLevelBtn"
+).style.display =
+"none";
+
+}
+
+
+addXP(100);
 
 updateStreak();
 
-updateUI();
+}else{
 
-newQuestion();
+document.getElementById(
+"completeTitle"
+).textContent =
+"🎯 Gần đạt rồi!";
+
+
+document.getElementById(
+"completeText"
+).textContent =
+`Bạn đúng ${score}/10. Cần 8/10 để mở Level tiếp theo.`;
+
+
+document.getElementById(
+"nextLevelBtn"
+).style.display =
+"none";
+
+}
+
+}
+
+
+
+function addXP(value){
+
+let xp =
+Number(
+localStorage.getItem(
+"morseXP"
+)
+) || 0;
+
+
+xp += value;
+
+
+localStorage.setItem(
+"morseXP",
+xp
+);
+
+
+document.getElementById(
+"xp"
+).textContent =
+xp;
+
+}
+
+
+
+function dateKey(offset=0){
+
+const d =
+new Date();
+
+
+d.setDate(
+d.getDate()+offset
+);
+
+
+return (
+d.getFullYear()+
+"-"+
+String(
+d.getMonth()+1
+).padStart(2,"0")+
+"-"+
+String(
+d.getDate()
+).padStart(2,"0")
+);
+
+}
+
+
+
+function updateStreak(){
+
+const today =
+dateKey(0);
+
+
+const yesterday =
+dateKey(-1);
+
+
+const last =
+localStorage.getItem(
+"morseLastComplete"
+);
+
+
+let streak =
+Number(
+localStorage.getItem(
+"morseStreak"
+)
+) || 0;
+
+
+if(last===today){
+
+return;
+
+}
+
+
+if(last===yesterday){
+
+streak++;
+
+}else{
+
+streak=1;
+
+}
+
+
+localStorage.setItem(
+"morseStreak",
+streak
+);
+
+
+localStorage.setItem(
+"morseLastComplete",
+today
+);
+
+
+document.getElementById(
+"streak"
+).textContent =
+streak;
+
+}
+
+
+
+function loadStats(){
+
+document.getElementById(
+"xp"
+).textContent =
+Number(
+localStorage.getItem(
+"morseXP"
+)
+) || 0;
+
+
+document.getElementById(
+"streak"
+).textContent =
+Number(
+localStorage.getItem(
+"morseStreak"
+)
+) || 1;
+
+}
+
+
+
+document
+.getElementById(
+"startBtn"
+)
+.addEventListener(
+"click",
+startLevel
+);
+
+
+document
+.getElementById(
+"listenBtn"
+)
+.addEventListener(
+"click",
+playMorse
+);
+
+
+document
+.getElementById(
+"backBtn"
+)
+.addEventListener(
+"click",
+()=>{
+
+document
+.getElementById(
+"gameScreen"
+)
+.classList.add(
+"hidden"
+);
+
+
+document
+.getElementById(
+"levelScreen"
+)
+.classList.remove(
+"hidden"
+);
+
+
+createLevels();
+
+}
+);
+
+
+document
+.getElementById(
+"nextLevelBtn"
+)
+.addEventListener(
+"click",
+()=>{
+
+if(
+selectedLevel <
+LEVELS.length
+){
+
+selectedLevel++;
+
+startLevel();
+
+}
+
+}
+);
+
+
+
+loadStats();
+
+createLevels();
 
 </script>
 
