@@ -1,1 +1,1446 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#101b3d" />
 
+  <title>Morse Quest - Level 1</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: Arial, Helvetica, sans-serif;
+      color: white;
+      min-height: 100vh;
+
+      background:
+        radial-gradient(circle at 10% 15%, rgba(70, 120, 255, .25), transparent 25%),
+        radial-gradient(circle at 90% 20%, rgba(174, 75, 255, .25), transparent 25%),
+        radial-gradient(circle at 50% 100%, rgba(0, 220, 180, .14), transparent 35%),
+        linear-gradient(160deg, #081127, #111d43 50%, #09142f);
+
+      overflow-x: hidden;
+    }
+
+    body::before,
+    body::after {
+      content: "✦   ·   ✧      ·       ★      ·   ✦";
+      position: fixed;
+      z-index: 0;
+      opacity: .22;
+      font-size: 28px;
+      letter-spacing: 22px;
+      pointer-events: none;
+    }
+
+    body::before {
+      top: 7%;
+      left: 5%;
+    }
+
+    body::after {
+      bottom: 10%;
+      right: 5%;
+      transform: rotate(-12deg);
+    }
+
+    .app {
+      position: relative;
+      z-index: 1;
+      width: min(720px, 100%);
+      margin: auto;
+      padding: 18px 14px 40px;
+    }
+
+    .topbar {
+      display: flex;
+      justify-content: space-between;
+      gap: 10px;
+      margin-bottom: 16px;
+    }
+
+    .pill {
+      background: rgba(255,255,255,.09);
+      border: 1px solid rgba(255,255,255,.14);
+      backdrop-filter: blur(12px);
+      padding: 10px 13px;
+      border-radius: 16px;
+      font-weight: bold;
+      font-size: 14px;
+    }
+
+    .hero {
+      position: relative;
+      overflow: hidden;
+      padding: 22px;
+      border-radius: 28px;
+
+      background:
+        linear-gradient(
+          145deg,
+          rgba(63,104,255,.28),
+          rgba(123,66,246,.18)
+        );
+
+      border: 1px solid rgba(255,255,255,.16);
+      box-shadow: 0 18px 40px rgba(0,0,0,.24);
+    }
+
+    .hero-content {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 15px;
+    }
+
+    .level {
+      font-size: 13px;
+      font-weight: bold;
+      letter-spacing: 1px;
+      color: #a9c3ff;
+    }
+
+    h1 {
+      margin: 7px 0 4px;
+      font-size: clamp(27px, 8vw, 42px);
+    }
+
+    .subtitle {
+      margin: 0;
+      color: #cbd5ff;
+      line-height: 1.45;
+      font-size: 14px;
+    }
+
+    .robot {
+      font-size: 72px;
+      animation: float 3s ease-in-out infinite;
+      filter: drop-shadow(0 10px 10px rgba(0,0,0,.18));
+    }
+
+    @keyframes float {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-7px); }
+    }
+
+    .progress-label {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 18px;
+      margin-bottom: 7px;
+      font-size: 13px;
+      font-weight: bold;
+      color: #d8e0ff;
+    }
+
+    .progress-track {
+      height: 12px;
+      background: rgba(255,255,255,.12);
+      border-radius: 999px;
+      overflow: hidden;
+    }
+
+    .progress-bar {
+      width: 0%;
+      height: 100%;
+      background: linear-gradient(90deg, #55e6b8, #6aa6ff);
+      border-radius: inherit;
+      transition: width .35s;
+    }
+
+    .card {
+      margin-top: 16px;
+      padding: 18px;
+      background: rgba(255,255,255,.075);
+      border: 1px solid rgba(255,255,255,.13);
+      border-radius: 25px;
+      backdrop-filter: blur(12px);
+    }
+
+    .card-title {
+      font-size: 17px;
+      font-weight: 800;
+    }
+
+    .small {
+      font-size: 13px;
+      color: #bfc9e9;
+    }
+
+    .radio-area {
+      margin-top: 15px;
+      text-align: center;
+      background: rgba(4,10,28,.35);
+      border-radius: 22px;
+      padding: 20px 15px;
+    }
+
+    .signal {
+      height: 32px;
+      font-size: 29px;
+      font-weight: 900;
+      letter-spacing: 8px;
+      color: #82e6ff;
+      margin-bottom: 10px;
+    }
+
+    .listen {
+      border: 0;
+      width: min(300px, 100%);
+      min-height: 54px;
+      border-radius: 17px;
+      font-size: 17px;
+      font-weight: 800;
+      color: #092341;
+
+      background: linear-gradient(135deg, #7ff1d1, #72b7ff);
+      box-shadow: 0 8px 22px rgba(82,190,255,.2);
+
+      cursor: pointer;
+    }
+
+    .listen:active {
+      transform: scale(.97);
+    }
+
+    #feedback {
+      min-height: 24px;
+      margin-top: 13px;
+      font-weight: bold;
+      color: #cfd8ff;
+    }
+
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 9px;
+      margin-top: 15px;
+    }
+
+    .stat {
+      background: rgba(255,255,255,.075);
+      border-radius: 16px;
+      text-align: center;
+      padding: 11px 6px;
+    }
+
+    .stat strong {
+      display: block;
+      font-size: 21px;
+      margin-top: 4px;
+    }
+
+    .keyboard {
+      margin-top: 14px;
+    }
+
+    .keyrow {
+      display: flex;
+      justify-content: center;
+      gap: 5px;
+      margin-bottom: 6px;
+    }
+
+    .key {
+      min-width: 0;
+      flex: 1;
+      max-width: 56px;
+      height: 48px;
+      border: 1px solid rgba(255,255,255,.12);
+      border-radius: 11px;
+
+      background: rgba(255,255,255,.045);
+      color: rgba(255,255,255,.25);
+
+      font-weight: 900;
+      font-size: 15px;
+    }
+
+    .key.active {
+      cursor: pointer;
+      color: white;
+
+      background:
+        linear-gradient(
+          160deg,
+          rgba(74,123,255,.48),
+          rgba(99,75,228,.35)
+        );
+
+      border-color: rgba(132,183,255,.75);
+
+      box-shadow:
+        inset 0 0 15px rgba(109,167,255,.15),
+        0 4px 10px rgba(0,0,0,.12);
+    }
+
+    .key.active:active {
+      transform: translateY(2px);
+    }
+
+    .key.correct {
+      background: #28b988 !important;
+    }
+
+    .key.wrong {
+      background: #d85c6d !important;
+    }
+
+    .letters {
+      display: grid;
+      grid-template-columns: repeat(6, 1fr);
+      gap: 7px;
+      margin-top: 14px;
+    }
+
+    .letter {
+      text-align: center;
+      padding: 11px 4px;
+      border-radius: 15px;
+
+      background:
+        linear-gradient(
+          160deg,
+          rgba(103,132,255,.25),
+          rgba(82,220,184,.12)
+        );
+
+      border: 1px solid rgba(125,183,255,.35);
+    }
+
+    .letter b {
+      display: block;
+      font-size: 21px;
+    }
+
+    .letter span {
+      color: #9bcfff;
+      font-family: monospace;
+      font-weight: bold;
+    }
+
+    .mission {
+      margin-top: 12px;
+      display: grid;
+      gap: 8px;
+    }
+
+    .mission-item {
+      padding: 12px;
+      border-radius: 15px;
+      background: rgba(255,255,255,.055);
+      display: flex;
+      justify-content: space-between;
+      font-size: 14px;
+    }
+
+    .complete {
+      display: none;
+      margin-top: 16px;
+      text-align: center;
+      padding: 22px;
+
+      background:
+        linear-gradient(
+          145deg,
+          rgba(52,205,151,.20),
+          rgba(75,144,255,.20)
+        );
+
+      border: 1px solid rgba(104,235,192,.4);
+      border-radius: 22px;
+    }
+
+    .complete .medal {
+      font-size: 54px;
+    }
+
+    .reset {
+      margin-top: 13px;
+      border: 1px solid rgba(255,255,255,.18);
+      background: transparent;
+      color: #cbd4f4;
+      padding: 10px 15px;
+      border-radius: 12px;
+      cursor: pointer;
+    }
+
+    @media (max-width: 460px) {
+      .hero {
+        padding: 18px;
+      }
+
+      .robot {
+        font-size: 56px;
+      }
+
+      .key {
+        height: 45px;
+        font-size: 13px;
+      }
+
+      .letters {
+        grid-template-columns: repeat(3,1fr);
+      }
+    }
+
+  </style>
+</head>
+
+<body>
+
+<div class="app">
+
+  <div class="topbar">
+    <div class="pill">
+      🔥 <span id="streak">1</span> ngày
+    </div>
+
+    <div class="pill">
+      ⭐ <span id="totalXP">0</span> XP
+    </div>
+  </div>
+
+
+  <section class="hero">
+
+    <div class="hero-content">
+
+      <div>
+        <div class="level">
+          LEVEL 1 · RADIO ROOKIE
+        </div>
+
+        <h1>Morse Quest</h1>
+
+        <p class="subtitle">
+          Nghe tín hiệu bí mật và giúp Robo
+          tìm đúng ký tự.
+        </p>
+      </div>
+
+      <div class="robot">
+        🤖
+      </div>
+
+    </div>
+
+
+    <div class="progress-label">
+      <span>Thử thách hôm nay</span>
+      <span id="progressText">0 / 10</span>
+    </div>
+
+    <div class="progress-track">
+      <div
+        class="progress-bar"
+        id="progressBar">
+      </div>
+    </div>
+
+  </section>
+
+
+  <section class="card">
+
+    <div class="card-title">
+      🎧 Nghe tín hiệu
+    </div>
+
+    <div class="small">
+      Level 1: E · T · A · N · I · M
+    </div>
+
+
+    <div class="radio-area">
+
+      <div
+        class="signal"
+        id="signal">
+        • • •
+      </div>
+
+      <button
+        class="listen"
+        id="listenBtn">
+        ▶ NGHE MORSE
+      </button>
+
+      <div id="feedback">
+        Nghe thật kỹ rồi chọn chữ bên dưới.
+      </div>
+
+    </div>
+
+
+    <div class="stats">
+
+      <div class="stat">
+        Đúng
+        <strong id="score">0</strong>
+      </div>
+
+      <div class="stat">
+        Combo
+        <strong id="combo">0</strong>
+      </div>
+
+      <div class="stat">
+        Hôm nay
+        <strong id="tries">0</strong>
+      </div>
+
+    </div>
+
+  </section>
+
+
+  <section class="card">
+
+    <div class="card-title">
+      ⌨️ Chọn ký tự
+    </div>
+
+    <div class="small">
+      Chỉ những chữ đã học mới sáng lên.
+    </div>
+
+    <div
+      class="keyboard"
+      id="keyboard">
+    </div>
+
+  </section>
+
+
+  <section class="card">
+
+    <div class="card-title">
+      🚀 Ký tự đã mở khóa
+    </div>
+
+    <div
+      class="letters"
+      id="letters">
+    </div>
+
+  </section>
+
+
+  <section class="card">
+
+    <div class="card-title">
+      🏆 Nhiệm vụ hôm nay
+    </div>
+
+    <div class="mission">
+
+      <div class="mission-item">
+        <span>Hoàn thành 10 tín hiệu</span>
+        <span id="mission10">⬜</span>
+      </div>
+
+      <div class="mission-item">
+        <span>Trả lời đúng 5 câu</span>
+        <span id="mission5">⬜</span>
+      </div>
+
+      <div class="mission-item">
+        <span>Combo đúng 3 câu</span>
+        <span id="missionCombo">⬜</span>
+      </div>
+
+    </div>
+
+
+    <div
+      class="complete"
+      id="complete">
+
+      <div class="medal">
+        🏅
+      </div>
+
+      <h2>
+        Hoàn thành Level 1 hôm nay!
+      </h2>
+
+      <p>
+        Robo đã nhận được tín hiệu.
+        Hẹn gặp lại ở thử thách tiếp theo.
+      </p>
+
+    </div>
+
+
+    <button
+      class="reset"
+      id="resetBtn">
+      Chơi lại thử thách
+    </button>
+
+  </section>
+
+</div>
+
+
+<script>
+
+const MORSE = {
+  E: ".",
+  T: "-",
+  A: ".-",
+  N: "-.",
+  I: "..",
+  M: "--"
+};
+
+
+// LEVEL 1
+const unlockedLetters = [
+  "E",
+  "T",
+  "A",
+  "N",
+  "I",
+  "M"
+];
+
+
+const keyboardRows = [
+  "QWERTYUIOP",
+  "ASDFGHJKL",
+  "ZXCVBNM"
+];
+
+
+let currentLetter = "";
+
+let score = 0;
+
+let combo = 0;
+
+let maxCombo = 0;
+
+let tries = 0;
+
+let audioContext = null;
+
+let locked = false;
+
+
+
+function todayKey() {
+
+  const d = new Date();
+
+  return (
+    d.getFullYear() +
+    "-" +
+    String(d.getMonth() + 1).padStart(2, "0") +
+    "-" +
+    String(d.getDate()).padStart(2, "0")
+  );
+
+}
+
+
+
+function yesterdayKey() {
+
+  const d = new Date();
+
+  d.setDate(d.getDate() - 1);
+
+  return (
+    d.getFullYear() +
+    "-" +
+    String(d.getMonth() + 1).padStart(2, "0") +
+    "-" +
+    String(d.getDate()).padStart(2, "0")
+  );
+
+}
+
+
+
+function loadProgress() {
+
+  const savedDay =
+    localStorage.getItem("morseDay");
+
+  if (savedDay === todayKey()) {
+
+    score =
+      Number(
+        localStorage.getItem("morseScore")
+      ) || 0;
+
+    tries =
+      Number(
+        localStorage.getItem("morseTries")
+      ) || 0;
+
+    maxCombo =
+      Number(
+        localStorage.getItem("morseMaxCombo")
+      ) || 0;
+
+  }
+
+}
+
+
+
+function saveProgress() {
+
+  localStorage.setItem(
+    "morseDay",
+    todayKey()
+  );
+
+  localStorage.setItem(
+    "morseScore",
+    score
+  );
+
+  localStorage.setItem(
+    "morseTries",
+    tries
+  );
+
+  localStorage.setItem(
+    "morseMaxCombo",
+    maxCombo
+  );
+
+
+  let xp =
+    Number(
+      localStorage.getItem("morseXP")
+    ) || 0;
+
+  document.getElementById(
+    "totalXP"
+  ).textContent = xp;
+
+}
+
+
+
+function updateStreak() {
+
+  let streak =
+    Number(
+      localStorage.getItem("morseStreak")
+    ) || 1;
+
+  const lastComplete =
+    localStorage.getItem(
+      "morseLastComplete"
+    );
+
+
+  if (lastComplete === todayKey()) {
+
+    // giữ nguyên
+
+  } else if (
+    lastComplete === yesterdayKey()
+  ) {
+
+    // chờ hoàn thành hôm nay
+
+  }
+
+
+  document.getElementById(
+    "streak"
+  ).textContent = streak;
+
+}
+
+
+
+function completeDay() {
+
+  const lastComplete =
+    localStorage.getItem(
+      "morseLastComplete"
+    );
+
+
+  if (
+    lastComplete === todayKey()
+  ) {
+    return;
+  }
+
+
+  let streak =
+    Number(
+      localStorage.getItem(
+        "morseStreak"
+      )
+    ) || 0;
+
+
+  if (
+    lastComplete === yesterdayKey()
+  ) {
+
+    streak++;
+
+  } else {
+
+    streak = 1;
+
+  }
+
+
+  localStorage.setItem(
+    "morseStreak",
+    streak
+  );
+
+
+  localStorage.setItem(
+    "morseLastComplete",
+    todayKey()
+  );
+
+
+  let xp =
+    Number(
+      localStorage.getItem(
+        "morseXP"
+      )
+    ) || 0;
+
+
+  xp += 100;
+
+
+  localStorage.setItem(
+    "morseXP",
+    xp
+  );
+
+
+  document.getElementById(
+    "streak"
+  ).textContent = streak;
+
+
+  document.getElementById(
+    "totalXP"
+  ).textContent = xp;
+
+}
+
+
+
+function makeKeyboard() {
+
+  const keyboard =
+    document.getElementById(
+      "keyboard"
+    );
+
+
+  keyboard.innerHTML = "";
+
+
+  keyboardRows.forEach(row => {
+
+    const rowDiv =
+      document.createElement("div");
+
+    rowDiv.className =
+      "keyrow";
+
+
+    [...row].forEach(letter => {
+
+      const button =
+        document.createElement(
+          "button"
+        );
+
+
+      button.className = "key";
+
+      button.textContent = letter;
+
+      button.dataset.letter =
+        letter;
+
+
+      if (
+        unlockedLetters.includes(
+          letter
+        )
+      ) {
+
+        button.classList.add(
+          "active"
+        );
+
+
+        button.addEventListener(
+          "click",
+          () => answer(letter, button)
+        );
+
+      } else {
+
+        button.disabled = true;
+
+      }
+
+
+      rowDiv.appendChild(
+        button
+      );
+
+    });
+
+
+    keyboard.appendChild(
+      rowDiv
+    );
+
+  });
+
+}
+
+
+
+function makeLetterCards() {
+
+  const container =
+    document.getElementById(
+      "letters"
+    );
+
+
+  unlockedLetters.forEach(
+    letter => {
+
+      const box =
+        document.createElement(
+          "div"
+        );
+
+
+      box.className =
+        "letter";
+
+
+      const display =
+        MORSE[letter]
+        .replaceAll(".", "•")
+        .replaceAll("-", "—");
+
+
+      box.innerHTML = `
+        <b>${letter}</b>
+        <span>${display}</span>
+      `;
+
+
+      container.appendChild(
+        box
+      );
+
+    }
+  );
+
+}
+
+
+
+function newQuestion() {
+
+  const available =
+    unlockedLetters.filter(
+      l => l !== currentLetter
+    );
+
+
+  currentLetter =
+    available[
+      Math.floor(
+        Math.random() *
+        available.length
+      )
+    ];
+
+
+  locked = false;
+
+
+  document.getElementById(
+    "signal"
+  ).textContent =
+    "• • •";
+
+
+  document.getElementById(
+    "feedback"
+  ).textContent =
+    "Nghe tín hiệu rồi chọn chữ.";
+
+}
+
+
+
+async function playMorse() {
+
+  const AudioCtx =
+    window.AudioContext ||
+    window.webkitAudioContext;
+
+
+  if (!AudioCtx) {
+
+    document.getElementById(
+      "feedback"
+    ).textContent =
+      "Thiết bị không hỗ trợ âm thanh.";
+
+    return;
+  }
+
+
+  if (!audioContext) {
+
+    audioContext =
+      new AudioCtx();
+
+  }
+
+
+  if (
+    audioContext.state ===
+    "suspended"
+  ) {
+
+    await audioContext.resume();
+
+  }
+
+
+  const code =
+    MORSE[currentLetter];
+
+
+  const dotLength = 0.12;
+
+  const symbolGap = 0.10;
+
+  let start =
+    audioContext.currentTime +
+    0.05;
+
+
+  [...code].forEach(symbol => {
+
+    const duration =
+      symbol === "."
+      ? dotLength
+      : dotLength * 3;
+
+
+    const oscillator =
+      audioContext.createOscillator();
+
+
+    const gain =
+      audioContext.createGain();
+
+
+    oscillator.frequency.value =
+      650;
+
+
+    oscillator.type =
+      "sine";
+
+
+    gain.gain.setValueAtTime(
+      0.0001,
+      start
+    );
+
+
+    gain.gain.exponentialRampToValueAtTime(
+      0.25,
+      start + 0.01
+    );
+
+
+    gain.gain.setValueAtTime(
+      0.25,
+      start +
+      Math.max(
+        0.01,
+        duration - 0.015
+      )
+    );
+
+
+    gain.gain.exponentialRampToValueAtTime(
+      0.0001,
+      start + duration
+    );
+
+
+    oscillator
+      .connect(gain)
+      .connect(
+        audioContext.destination
+      );
+
+
+    oscillator.start(start);
+
+    oscillator.stop(
+      start +
+      duration +
+      0.02
+    );
+
+
+    start +=
+      duration +
+      symbolGap;
+
+  });
+
+
+  document.getElementById(
+    "signal"
+  ).textContent =
+    "♪";
+
+
+  document.getElementById(
+    "feedback"
+  ).textContent =
+    "Tín hiệu đã phát. Chọn chữ!";
+
+}
+
+
+
+function answer(letter, button) {
+
+  if (locked) {
+    return;
+  }
+
+
+  locked = true;
+
+  tries++;
+
+
+  const correct =
+    letter === currentLetter;
+
+
+  if (correct) {
+
+    score++;
+
+    combo++;
+
+    maxCombo =
+      Math.max(
+        maxCombo,
+        combo
+      );
+
+
+    button.classList.add(
+      "correct"
+    );
+
+
+    document.getElementById(
+      "feedback"
+    ).textContent =
+      "🎉 Chính xác!";
+
+
+    let xp =
+      Number(
+        localStorage.getItem(
+          "morseXP"
+        )
+      ) || 0;
+
+
+    xp += 10;
+
+
+    localStorage.setItem(
+      "morseXP",
+      xp
+    );
+
+
+    document.getElementById(
+      "totalXP"
+    ).textContent =
+      xp;
+
+  } else {
+
+    combo = 0;
+
+
+    button.classList.add(
+      "wrong"
+    );
+
+
+    document.getElementById(
+      "feedback"
+    ).textContent =
+      "💡 Chưa đúng. Đáp án là " +
+      currentLetter;
+
+  }
+
+
+  const answerDisplay =
+    MORSE[currentLetter]
+    .replaceAll(".", "•")
+    .replaceAll("-", "—");
+
+
+  document.getElementById(
+    "signal"
+  ).textContent =
+    currentLetter +
+    "  " +
+    answerDisplay;
+
+
+  updateUI();
+
+  saveProgress();
+
+
+  setTimeout(() => {
+
+    button.classList.remove(
+      "correct",
+      "wrong"
+    );
+
+
+    if (tries < 10) {
+
+      newQuestion();
+
+      setTimeout(
+        playMorse,
+        250
+      );
+
+    }
+
+  }, 1100);
+
+}
+
+
+
+function updateUI() {
+
+  document.getElementById(
+    "score"
+  ).textContent =
+    score;
+
+
+  document.getElementById(
+    "combo"
+  ).textContent =
+    combo;
+
+
+  document.getElementById(
+    "tries"
+  ).textContent =
+    tries;
+
+
+  const completed =
+    Math.min(
+      tries,
+      10
+    );
+
+
+  document.getElementById(
+    "progressText"
+  ).textContent =
+    completed +
+    " / 10";
+
+
+  document.getElementById(
+    "progressBar"
+  ).style.width =
+    completed * 10 +
+    "%";
+
+
+  if (tries >= 10) {
+
+    document.getElementById(
+      "mission10"
+    ).textContent =
+      "✅";
+
+
+    document.getElementById(
+      "complete"
+    ).style.display =
+      "block";
+
+
+    completeDay();
+
+  }
+
+
+  if (score >= 5) {
+
+    document.getElementById(
+      "mission5"
+    ).textContent =
+      "✅";
+
+  }
+
+
+  if (maxCombo >= 3) {
+
+    document.getElementById(
+      "missionCombo"
+    ).textContent =
+      "✅";
+
+  }
+
+}
+
+
+
+document.getElementById(
+  "listenBtn"
+).addEventListener(
+  "click",
+  playMorse
+);
+
+
+
+document.getElementById(
+  "resetBtn"
+).addEventListener(
+  "click",
+  () => {
+
+    score = 0;
+
+    tries = 0;
+
+    combo = 0;
+
+    maxCombo = 0;
+
+
+    localStorage.setItem(
+      "morseDay",
+      todayKey()
+    );
+
+
+    localStorage.setItem(
+      "morseScore",
+      0
+    );
+
+
+    localStorage.setItem(
+      "morseTries",
+      0
+    );
+
+
+    localStorage.setItem(
+      "morseMaxCombo",
+      0
+    );
+
+
+    document.getElementById(
+      "complete"
+    ).style.display =
+      "none";
+
+
+    document.getElementById(
+      "mission10"
+    ).textContent =
+      "⬜";
+
+
+    document.getElementById(
+      "mission5"
+    ).textContent =
+      "⬜";
+
+
+    document.getElementById(
+      "missionCombo"
+    ).textContent =
+      "⬜";
+
+
+    updateUI();
+
+    newQuestion();
+
+  }
+);
+
+
+
+makeKeyboard();
+
+makeLetterCards();
+
+loadProgress();
+
+updateStreak();
+
+updateUI();
+
+newQuestion();
+
+</script>
+
+</body>
+</html>
