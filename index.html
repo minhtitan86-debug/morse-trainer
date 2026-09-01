@@ -42,8 +42,53 @@ button {
 .topbar {
   display: flex;
   justify-content: space-between;
+  flex-wrap: wrap;
   gap: 8px;
   margin-bottom: 14px;
+}
+
+.settings-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
+  margin-top: 16px;
+}
+
+.setting {
+  padding: 13px;
+  border-radius: 16px;
+  background: rgba(3,9,27,.28);
+  border: 1px solid rgba(255,255,255,.1);
+}
+
+.setting label {
+  display: flex;
+  justify-content: space-between;
+  gap: 8px;
+  margin-bottom: 9px;
+  font-size: 13px;
+  font-weight: 800;
+}
+
+.setting input,
+.setting select {
+  width: 100%;
+  accent-color: #7ff1d1;
+}
+
+.setting select {
+  padding: 9px;
+  border: 1px solid rgba(255,255,255,.16);
+  border-radius: 10px;
+  color: white;
+  background: #17234b;
+}
+
+.best-score {
+  margin-top: 10px;
+  color: #ffd978;
+  font-size: 13px;
+  font-weight: 800;
 }
 
 .pill {
@@ -580,6 +625,10 @@ h1 {
 
 @media(max-width:480px) {
 
+  .settings-grid {
+    grid-template-columns: 1fr;
+  }
+
   .level-grid {
     grid-template-columns: 1fr;
   }
@@ -671,9 +720,33 @@ h1 {
       Mỗi Level mở thêm ký tự mới.
     </div>
 
-    <div
-      class="level-grid"
-      id="levelGrid">
+    <div class="settings-grid">
+      <div class="setting">
+        <label for="speedInput">
+          <span>⚡ Tốc độ</span>
+          <span id="speedValue">12 WPM</span>
+        </label>
+        <input id="speedInput" type="range" min="8" max="24" step="1" value="12">
+      </div>
+
+      <div class="setting">
+        <label for="questionCount">
+          <span>🎯 Độ dài bài</span>
+        </label>
+        <select id="questionCount">
+          <option value="10">10 câu · Nhanh</option>
+          <option value="20">20 câu · Thử thách</option>
+        </select>
+      </div>
+    </div>
+
+      <div
+        class="level-grid"
+        id="levelGrid">
+      </div>
+
+    <div class="best-score" id="bestScore">
+      🏅 Kỷ lục Level này: chưa có
     </div>
 
 
@@ -704,6 +777,10 @@ h1 {
       <div
         class="small"
         id="currentLetters">
+      </div>
+
+      <div class="small">
+        Mẹo: nhấn Space để nghe lại, nhấn chữ cái để trả lời.
       </div>
 
 
@@ -1284,6 +1361,12 @@ let locked = false;
 
 let audioContext = null;
 
+let sessionLength =
+  Number(localStorage.getItem("morseQuestionCount")) || 10;
+
+let speedWpm =
+  Number(localStorage.getItem("morseSpeedWpm")) || 12;
+
 
 /* =====================================================
    HELPERS
@@ -1476,6 +1559,22 @@ function createLevels(){
 
   });
 
+  updateBestScore();
+
+}
+
+
+function updateBestScore(){
+
+  const best = Number(
+    localStorage.getItem(`morseBestLevel${selectedLevel}`)
+  ) || 0;
+
+  document.getElementById("bestScore").textContent =
+    best
+      ? `🏅 Kỷ lục Level này: ${best}% chính xác`
+      : "🏅 Kỷ lục Level này: chưa có";
+
 }
 
 
@@ -1522,6 +1621,10 @@ function startLevel(){
   maxCombo = 0;
 
   locked = false;
+
+  sessionLength = Number(
+    document.getElementById("questionCount").value
+  );
 
 
   document
@@ -1876,12 +1979,13 @@ async function playMorse(){
     ];
 
 
+  // PARIS standard: one dot lasts 1.2 / WPM seconds.
   const dot =
-    0.12;
+    1.2 / speedWpm;
 
 
   const gap =
-    0.10;
+    dot;
 
 
   let time =
@@ -2093,7 +2197,7 @@ function answer(
 
 
       if(
-        tries < 10
+        tries < sessionLength
       ){
 
         newQuestion();
@@ -2146,20 +2250,20 @@ function updateGame(){
   const completed =
     Math.min(
       tries,
-      10
+      sessionLength
     );
 
 
   document.getElementById(
     "progressText"
   ).textContent =
-    `${completed} / 10`;
+    `${completed} / ${sessionLength}`;
 
 
   document.getElementById(
     "progressBar"
   ).style.width =
-    `${completed * 10}%`;
+    `${(completed / sessionLength) * 100}%`;
 
 }
 
@@ -2170,8 +2274,21 @@ function updateGame(){
 
 function finishLevel(){
 
+  const accuracy =
+    Math.round((score / sessionLength) * 100);
+
   const passed =
-    score >= 8;
+    accuracy >= 80;
+
+  const bestKey =
+    `morseBestLevel${selectedLevel}`;
+
+  const previousBest =
+    Number(localStorage.getItem(bestKey)) || 0;
+
+  if(accuracy > previousBest){
+    localStorage.setItem(bestKey, accuracy);
+  }
 
 
   document
@@ -2222,7 +2339,7 @@ function finishLevel(){
         "completeText"
       ).textContent =
 
-        `Bạn đạt ${score}/10. ` +
+        `Bạn đạt ${score}/${sessionLength} (${accuracy}%). ` +
         `Level ${nextLevel} đã được mở khóa!`;
 
 
@@ -2236,7 +2353,7 @@ function finishLevel(){
       document.getElementById(
         "completeText"
       ).textContent =
-        `Bạn đạt ${score}/10. Bạn đã mở khóa toàn bộ bảng chữ cái Morse!`;
+        `Bạn đạt ${score}/${sessionLength} (${accuracy}%). Bạn đã mở khóa toàn bộ bảng chữ cái Morse!`;
 
 
       document.getElementById(
@@ -2266,8 +2383,8 @@ function finishLevel(){
       "completeText"
     ).textContent =
 
-      `Bạn đạt ${score}/10. ` +
-      `Cần 8/10 để mở Level tiếp theo.`;
+      `Bạn đạt ${score}/${sessionLength} (${accuracy}%). ` +
+      `Cần ít nhất 80% để mở Level tiếp theo.`;
 
 
     document.getElementById(
@@ -2536,6 +2653,50 @@ document
 
     }
   );
+
+
+const speedInput =
+  document.getElementById("speedInput");
+
+const questionCount =
+  document.getElementById("questionCount");
+
+speedInput.value = speedWpm;
+questionCount.value = sessionLength;
+document.getElementById("speedValue").textContent = `${speedWpm} WPM`;
+
+speedInput.addEventListener("input", event=>{
+  speedWpm = Number(event.target.value);
+  document.getElementById("speedValue").textContent = `${speedWpm} WPM`;
+  localStorage.setItem("morseSpeedWpm", speedWpm);
+});
+
+questionCount.addEventListener("change", event=>{
+  sessionLength = Number(event.target.value);
+  localStorage.setItem("morseQuestionCount", sessionLength);
+});
+
+document.addEventListener("keydown", event=>{
+
+  if(document.getElementById("gameScreen").classList.contains("hidden")){
+    return;
+  }
+
+  if(event.code === "Space"){
+    event.preventDefault();
+    playMorse();
+    return;
+  }
+
+  const letter = event.key.toUpperCase();
+
+  if(levelLetters.includes(letter) && !locked){
+    const key = [...document.querySelectorAll(".key")]
+      .find(item => item.textContent === letter);
+    answer(letter, key);
+  }
+
+});
 
 
 /* =====================================================
