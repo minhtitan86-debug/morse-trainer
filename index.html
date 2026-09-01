@@ -1675,6 +1675,8 @@ let sendingLastRelease = 0;
 let sendingGap = null;
 let sendingTimer = null;
 let sendingTone = null;
+let sendingToneRequest = 0;
+let sendingSafetyTimer = null;
 let sendingLocked = false;
 let sendingAttempts = 0;
 let sendingCorrect = 0;
@@ -1926,6 +1928,7 @@ function updateHome(){
 function showHome(){
 
   clearTimeout(sendingTimer);
+  clearTimeout(sendingSafetyTimer);
   stopSendingTone();
   sendingPressStart = 0;
   document.getElementById("gameScreen").classList.add("hidden");
@@ -3039,6 +3042,7 @@ function showSendingMenu(){
 
   stopSendingTone();
   clearTimeout(sendingTimer);
+  clearTimeout(sendingSafetyTimer);
   sendingPressStart = 0;
   document.getElementById("homeScreen").classList.add("hidden");
   document.getElementById("sendingPracticeScreen").classList.add("hidden");
@@ -3108,6 +3112,8 @@ function updateSendingStats(){
 
 async function startSendingTone(){
 
+  const request = ++sendingToneRequest;
+
   const AudioCtx = window.AudioContext || window.webkitAudioContext;
   if(!AudioCtx){
     return;
@@ -3119,6 +3125,11 @@ async function startSendingTone(){
 
   if(audioContext.state === "suspended"){
     await audioContext.resume();
+  }
+
+  // On mobile, resume() may finish after the finger was already released.
+  if(request !== sendingToneRequest || !sendingPressStart){
+    return;
   }
 
   const oscillator = audioContext.createOscillator();
@@ -3134,6 +3145,9 @@ async function startSendingTone(){
 
 
 function stopSendingTone(){
+
+  // Invalidates an async tone request that has not created its oscillator yet.
+  sendingToneRequest++;
 
   if(!sendingTone){
     return;
@@ -3161,6 +3175,8 @@ function beginSendingPress(){
   const now = performance.now();
   sendingGap = sendingLastRelease ? now - sendingLastRelease : null;
   sendingPressStart = now;
+  clearTimeout(sendingSafetyTimer);
+  sendingSafetyTimer = setTimeout(endSendingPress, 2000);
   document.getElementById("telegraphKey").classList.add("pressed");
   document.getElementById("telegraphKey").textContent = "ĐANG PHÁT";
   startSendingTone();
@@ -3175,6 +3191,7 @@ function endSendingPress(){
   }
 
   const now = performance.now();
+  clearTimeout(sendingSafetyTimer);
   const duration = now - sendingPressStart;
   const dotMs = (1.2 / speedWpm) * 1000;
   const symbol = duration < dotMs * 2 ? "." : "-";
@@ -3198,6 +3215,7 @@ function endSendingPress(){
 function resetSendingInput(){
 
   clearTimeout(sendingTimer);
+  clearTimeout(sendingSafetyTimer);
   stopSendingTone();
   sendingPressStart = 0;
   sendingLastRelease = 0;
@@ -3351,8 +3369,12 @@ const telegraphKey = document.getElementById("telegraphKey");
 
 telegraphKey.addEventListener("pointerdown", event=>{
   event.preventDefault();
-  telegraphKey.setPointerCapture(event.pointerId);
   beginSendingPress();
+  try{
+    telegraphKey.setPointerCapture(event.pointerId);
+  }catch(error){
+    // Some mobile browsers do not support pointer capture consistently.
+  }
 });
 
 telegraphKey.addEventListener("pointerup", event=>{
@@ -3361,6 +3383,20 @@ telegraphKey.addEventListener("pointerup", event=>{
 });
 
 telegraphKey.addEventListener("pointercancel", endSendingPress);
+telegraphKey.addEventListener("lostpointercapture", endSendingPress);
+telegraphKey.addEventListener("contextmenu", event=>event.preventDefault());
+
+// Fallback release listeners prevent a tone from sticking when the finger
+// leaves the button or the browser drops pointer capture on mobile.
+document.addEventListener("pointerup", endSendingPress);
+document.addEventListener("pointercancel", endSendingPress);
+window.addEventListener("blur", endSendingPress);
+document.addEventListener("visibilitychange", ()=>{
+  if(document.hidden){
+    endSendingPress();
+    stopSendingTone();
+  }
+});
 
 document.addEventListener("keydown", event=>{
   if(
