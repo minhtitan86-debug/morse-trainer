@@ -91,6 +91,24 @@ button {
   font-weight: 800;
 }
 
+.challenge-status {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-top: 13px;
+  padding: 11px 13px;
+  border-radius: 15px;
+  background: rgba(255,171,58,.13);
+  border: 1px solid rgba(255,202,111,.3);
+  font-weight: 800;
+}
+
+.hearts {
+  letter-spacing: 4px;
+  font-size: 19px;
+}
+
 .pill {
   padding: 10px 13px;
   border-radius: 16px;
@@ -290,6 +308,16 @@ h1 {
 
   border-color:
     #88b8ff;
+}
+
+.level-btn.challenge {
+  background: linear-gradient(145deg, rgba(255,171,58,.22), rgba(221,82,116,.18));
+  border-color: rgba(255,202,111,.42);
+}
+
+.level-btn.challenge.active {
+  background: linear-gradient(145deg, rgba(255,171,58,.48), rgba(221,82,116,.38));
+  border-color: #ffd27a;
 }
 
 .level-btn.locked {
@@ -858,6 +886,11 @@ h1 {
         Mẹo: nhấn Space để nghe lại, nhấn chữ cái để trả lời.
       </div>
 
+      <div class="challenge-status hidden" id="challengeStatus">
+        <span>⚡ 15 câu đúng liên tiếp để vượt sớm</span>
+        <span class="hearts" id="hearts">❤️❤️❤️</span>
+      </div>
+
 
       <div class="progress-label">
 
@@ -1089,7 +1122,7 @@ const MORSE = {
    RANDOM ĐỘC LẬP
 ===================================================== */
 
-const LEVELS = [
+const LESSONS = [
 
   {
     level: 1,
@@ -1372,6 +1405,33 @@ const LEVELS = [
 ];
 
 
+/* Insert one mandatory review challenge after every two lessons. */
+const LEVELS = [];
+
+LESSONS.forEach((lesson, index)=>{
+
+  LEVELS.push({
+    ...lesson,
+    type: "lesson"
+  });
+
+  if((index + 1) % 2 === 0){
+
+    const challengeNumber = (index + 1) / 2;
+
+    LEVELS.push({
+      type: "challenge",
+      challenge: challengeNumber,
+      name: `Ôn tập Level ${index}–${index + 1}`,
+      newLetters: [],
+      letters: [...lesson.letters]
+    });
+
+  }
+
+});
+
+
 /* =====================================================
    KEYBOARD
 ===================================================== */
@@ -1391,12 +1451,16 @@ const KEYBOARD_ROWS = [
    STATE
 ===================================================== */
 
-let unlockedLevel =
-  Number(
-    localStorage.getItem(
-      "morseUnlockedLevel"
-    )
-  ) || 1;
+const savedStep =
+  Number(localStorage.getItem("morseUnlockedStep"));
+
+const legacyLevel =
+  Number(localStorage.getItem("morseUnlockedLevel")) || 1;
+
+let unlockedLevel = savedStep || Math.min(
+  legacyLevel + Math.floor((legacyLevel - 1) / 2),
+  LEVELS.length
+);
 
 
 if(
@@ -1431,6 +1495,8 @@ let tries = 0;
 let combo = 0;
 
 let maxCombo = 0;
+
+let hearts = 3;
 
 let locked = false;
 
@@ -1530,7 +1596,9 @@ function createLevels(){
   grid.innerHTML = "";
 
 
-  LEVELS.forEach(item=>{
+  LEVELS.forEach((item, index)=>{
+
+    const step = index + 1;
 
     const button =
       document.createElement(
@@ -1539,12 +1607,16 @@ function createLevels(){
 
 
     const isUnlocked =
-      item.level <=
+      step <=
       unlockedLevel;
 
 
     button.className =
       "level-btn";
+
+    if(item.type === "challenge"){
+      button.classList.add("challenge");
+    }
 
 
     if(
@@ -1561,7 +1633,7 @@ function createLevels(){
 
 
     if(
-      item.level ===
+      step ===
       selectedLevel &&
       isUnlocked
     ){
@@ -1577,7 +1649,7 @@ function createLevels(){
 
       <div class="level-number">
 
-        Level ${item.level}
+        ${levelLabel(item)}
 
         ${
           isUnlocked
@@ -1589,7 +1661,11 @@ function createLevels(){
 
       <div class="new-letters">
 
-        + ${item.newLetters.join(" ")}
+        ${
+          item.type === "challenge"
+          ? "⚡ KIỂM TRA TỔNG HỢP"
+          : `+ ${item.newLetters.join(" ")}`
+        }
 
       </div>
 
@@ -1617,7 +1693,7 @@ function createLevels(){
         ()=>{
 
           selectedLevel =
-            item.level;
+            step;
 
           createLevels();
 
@@ -1634,6 +1710,15 @@ function createLevels(){
   });
 
   updateBestScore();
+
+}
+
+
+function levelLabel(item){
+
+  return item.type === "challenge"
+    ? `Thử thách ${item.challenge}`
+    : `Level ${item.level}`;
 
 }
 
@@ -1657,7 +1742,7 @@ function updateHome(){
   const current = LEVELS[unlockedLevel - 1];
 
   document.getElementById("playLevelTitle").textContent =
-    `PLAY · LEVEL ${current.level}`;
+    `PLAY · ${levelLabel(current).toUpperCase()}`;
 
   document.getElementById("playLevelDetail").textContent =
     `${current.name} · ${current.letters.join(" ")}`;
@@ -1696,11 +1781,7 @@ function showLevels(){
 function startLevel(){
 
   const data =
-    LEVELS.find(
-      item =>
-        item.level ===
-        selectedLevel
-    );
+    LEVELS[selectedLevel - 1];
 
 
   if(!data){
@@ -1731,12 +1812,24 @@ function startLevel(){
 
   maxCombo = 0;
 
+  hearts = 3;
+
   locked = false;
 
   sessionLength = 20 + randomIndex(11);
 
   document.getElementById("questionGoal").textContent =
     `${sessionLength} câu đúng`;
+
+  const challengeStatus =
+    document.getElementById("challengeStatus");
+
+  challengeStatus.classList.toggle(
+    "hidden",
+    data.type !== "challenge"
+  );
+
+  updateHearts();
 
 
   document
@@ -1777,13 +1870,13 @@ function startLevel(){
   document.getElementById(
     "currentLevelTitle"
   ).textContent =
-    `Level ${data.level} · ${data.name}`;
+    `${levelLabel(data)} · ${data.name}`;
 
 
   document.getElementById(
     "currentLetters"
   ).textContent =
-    data.level === 1
+    data.type === "lesson" && data.level === 1
 
     ? "Làm quen: E · T"
 
@@ -1954,6 +2047,14 @@ function createLetterCards(){
 
     }
   );
+
+}
+
+
+function updateHearts(){
+
+  document.getElementById("hearts").textContent =
+    "❤️".repeat(hearts) + "🖤".repeat(3 - hearts);
 
 }
 
@@ -2276,6 +2377,11 @@ function answer(
     combo =
       0;
 
+    if(LEVELS[selectedLevel - 1].type === "challenge"){
+      hearts = Math.max(0, hearts - 1);
+      updateHearts();
+    }
+
 
     key.classList.add(
       "wrong"
@@ -2316,7 +2422,18 @@ function answer(
       );
 
 
-      if(score >= sessionLength){
+      const isChallenge =
+        LEVELS[selectedLevel - 1].type === "challenge";
+
+      if(isChallenge && hearts === 0){
+
+        failChallenge();
+
+      }else if(isChallenge && combo >= 15){
+
+        finishLevel();
+
+      }else if(score >= sessionLength){
 
         finishLevel();
 
@@ -2346,6 +2463,20 @@ function answer(
     1000
 
   );
+
+}
+
+
+function failChallenge(){
+
+  locked = true;
+
+  document.getElementById("completeCard").classList.remove("hidden");
+  document.getElementById("completeTitle").textContent =
+    "💔 Thử thách thất bại";
+  document.getElementById("completeText").textContent =
+    `Bạn đã mất cả 3 tim sau ${tries} lượt. Hãy ôn lại các ký tự rồi thử lại.`;
+  document.getElementById("nextLevelBtn").style.display = "none";
 
 }
 
@@ -2404,8 +2535,18 @@ function finishLevel(){
   const accuracy =
     Math.round((score / tries) * 100);
 
+  const isChallenge =
+    LEVELS[selectedLevel - 1].type === "challenge";
+
+  const wonByStreak =
+    isChallenge && combo >= 15;
+
   const passed =
-    accuracy >= 80;
+    accuracy >= 80 || wonByStreak;
+
+  const resultSummary = wonByStreak
+    ? `Bạn đạt chuỗi 15 câu đúng liên tiếp sau ${tries} lượt (${accuracy}%). `
+    : `Bạn hoàn thành ${sessionLength} câu đúng sau ${tries} lượt trả lời (${accuracy}%). `;
 
   const bestKey =
     `morseBestLevel${selectedLevel}`;
@@ -2432,7 +2573,9 @@ function finishLevel(){
     document.getElementById(
       "completeTitle"
     ).textContent =
-      "🏆 Hoàn thành Level!";
+      LEVELS[selectedLevel - 1].type === "challenge"
+        ? "🏆 Vượt qua thử thách!"
+        : "🏆 Hoàn thành Level!";
 
 
     if(
@@ -2455,7 +2598,7 @@ function finishLevel(){
 
 
         localStorage.setItem(
-          "morseUnlockedLevel",
+          "morseUnlockedStep",
           unlockedLevel
         );
 
@@ -2468,8 +2611,8 @@ function finishLevel(){
         "completeText"
       ).textContent =
 
-        `Bạn hoàn thành ${sessionLength} câu đúng sau ${tries} lần trả lời (${accuracy}%). ` +
-        `Level ${nextLevel} đã được mở khóa!`;
+        resultSummary +
+        `${levelLabel(LEVELS[nextLevel - 1])} đã được mở khóa!`;
 
 
       document.getElementById(
@@ -2482,7 +2625,7 @@ function finishLevel(){
       document.getElementById(
         "completeText"
       ).textContent =
-        `Bạn hoàn thành ${sessionLength} câu đúng sau ${tries} lần trả lời (${accuracy}%). Bạn đã mở khóa toàn bộ bảng chữ cái Morse!`;
+        resultSummary + "Bạn đã mở khóa toàn bộ bảng chữ cái Morse!";
 
 
       document.getElementById(
@@ -2512,7 +2655,7 @@ function finishLevel(){
       "completeText"
     ).textContent =
 
-      `Bạn hoàn thành ${sessionLength} câu đúng sau ${tries} lần trả lời (${accuracy}%). ` +
+      resultSummary +
       `Cần ít nhất 80% để mở Level tiếp theo.`;
 
 
