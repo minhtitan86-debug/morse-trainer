@@ -8,6 +8,8 @@
 - Sau mỗi hai level có một thử thách tổng hợp bắt buộc; phải đạt 80% mới được học tiếp.
 - Thử thách có 3 tim, sai một câu mất một tim và hết tim sẽ thất bại.
 - Chuỗi 15 câu đúng liên tiếp giúp vượt qua thử thách sớm.
+- Chế độ Luyện phát Morse dùng một phím điện báo tròn để nhập chấm/gạch bằng chuột, cảm ứng hoặc phím Space.
+- App phát tone 650 Hz và đánh giá chuỗi ký hiệu, độ dài âm cùng khoảng nghỉ.
 - Màn hình chính gọn với `Play · Level hiện tại` và `Levels`.
 - Điều chỉnh tốc độ từ 8 đến 24 WPM.
 - Mỗi lượt đặt mục tiêu ngẫu nhiên từ 20 đến 30 câu đúng.

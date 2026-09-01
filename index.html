@@ -200,6 +200,12 @@ h1 {
   background: linear-gradient(145deg, rgba(116,86,238,.8), rgba(58,75,154,.8));
 }
 
+.sending-btn {
+  grid-column: 1 / -1;
+  min-height: 96px;
+  background: linear-gradient(135deg, rgba(255,151,55,.88), rgba(214,68,112,.84));
+}
+
 .home-btn-icon {
   display: block;
   margin-bottom: 10px;
@@ -218,6 +224,100 @@ h1 {
   color: rgba(255,255,255,.8);
   font-size: 13px;
   font-weight: 700;
+}
+
+.sending-modes {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
+  margin-top: 14px;
+}
+
+.mode-btn {
+  min-height: 125px;
+  padding: 18px;
+  border: 1px solid rgba(255,255,255,.15);
+  border-radius: 20px;
+  color: white;
+  text-align: left;
+  cursor: pointer;
+  background: rgba(255,255,255,.07);
+}
+
+.mode-btn strong {
+  display: block;
+  margin: 8px 0 5px;
+  font-size: 18px;
+}
+
+.sending-target {
+  margin-top: 14px;
+  text-align: center;
+}
+
+.target-letter {
+  font-size: clamp(65px, 18vw, 105px);
+  font-weight: 900;
+  line-height: 1;
+}
+
+.target-code {
+  min-height: 34px;
+  margin-top: 8px;
+  color: #8fe8ff;
+  font-size: 25px;
+  font-weight: 900;
+  letter-spacing: 7px;
+}
+
+.telegraph-wrap {
+  display: grid;
+  place-items: center;
+  margin: 18px 0 10px;
+}
+
+.telegraph-key {
+  width: min(230px, 62vw);
+  aspect-ratio: 1;
+  border: 8px solid rgba(255,255,255,.16);
+  border-radius: 50%;
+  color: #092341;
+  font-size: 21px;
+  font-weight: 900;
+  cursor: pointer;
+  touch-action: none;
+  user-select: none;
+  background: radial-gradient(circle at 35% 28%, #d8fff4, #67d7ba 58%, #269a83);
+  box-shadow: 0 16px 36px rgba(0,0,0,.28), inset 0 -10px 18px rgba(0,0,0,.14);
+  transition: transform .08s, box-shadow .08s;
+}
+
+.telegraph-key.pressed {
+  transform: scale(.94) translateY(5px);
+  box-shadow: 0 7px 15px rgba(0,0,0,.25), inset 0 8px 20px rgba(0,0,0,.18);
+}
+
+.sending-readout {
+  min-height: 48px;
+  padding: 10px;
+  border-radius: 14px;
+  color: #a8e8ff;
+  text-align: center;
+  font-family: monospace;
+  font-size: 26px;
+  font-weight: 900;
+  letter-spacing: 6px;
+  background: rgba(3,9,27,.35);
+}
+
+.sending-meta {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+  margin-top: 12px;
+  color: #d4dcfa;
+  font-size: 13px;
+  font-weight: 800;
 }
 
 @keyframes floatRobot {
@@ -711,6 +811,10 @@ h1 {
     min-height: 105px;
   }
 
+  .sending-modes {
+    grid-template-columns: 1fr;
+  }
+
   .level-grid {
     grid-template-columns: 1fr;
   }
@@ -801,6 +905,62 @@ h1 {
       <span class="home-btn-title">LEVELS</span>
       <span class="home-btn-detail">Xem và luyện lại</span>
     </button>
+
+    <button class="home-btn sending-btn" id="sendingBtn">
+      <span class="home-btn-icon">📡</span>
+      <span class="home-btn-title">LUYỆN PHÁT MORSE</span>
+      <span class="home-btn-detail">Tự gửi dấu chấm, dấu gạch và luyện đúng nhịp</span>
+    </button>
+  </section>
+
+
+  <!-- SENDING MODE SELECT -->
+
+  <section class="card hidden" id="sendingMenuScreen">
+    <div class="card-title">📡 Luyện phát tín hiệu</div>
+    <div class="small">Dùng phím điện báo để tự tạo âm Morse.</div>
+
+    <div class="sending-modes">
+      <button class="mode-btn" id="learnSendingBtn">
+        <span>🎓</span>
+        <strong>Học phát tín hiệu</strong>
+        <span class="small">Có mã gợi ý và được thử lại tự do.</span>
+      </button>
+      <button class="mode-btn" id="challengeSendingBtn">
+        <span>⚡</span>
+        <strong>Thử thách Sending</strong>
+        <span class="small">10 chữ, 3 tim, cần đúng ít nhất 80%.</span>
+      </button>
+    </div>
+
+    <button class="secondary-btn" id="sendingMenuBackBtn">← Trang chính</button>
+  </section>
+
+
+  <!-- SENDING PRACTICE -->
+
+  <section class="card hidden" id="sendingPracticeScreen">
+    <div class="card-title" id="sendingModeTitle">🎓 Học phát tín hiệu</div>
+    <div class="sending-meta">
+      <span id="sendingProgress">Luyện tập tự do</span>
+      <span id="sendingLives"></span>
+    </div>
+
+    <div class="sending-target">
+      <div class="small">Hãy gửi chữ</div>
+      <div class="target-letter" id="sendingTarget">E</div>
+      <div class="target-code" id="sendingHint">•</div>
+    </div>
+
+    <div class="telegraph-wrap">
+      <button class="telegraph-key" id="telegraphKey">NHẤN &amp; GIỮ</button>
+    </div>
+
+    <div class="sending-readout" id="sendingReadout">•••</div>
+    <div id="sendingFeedback">Nhấn ngắn = chấm · nhấn dài = gạch.</div>
+
+    <button class="secondary-btn" id="sendingRetryBtn">↻ Xóa và gửi lại</button>
+    <button class="secondary-btn" id="sendingPracticeBackBtn">← Chọn chế độ khác</button>
   </section>
 
 
@@ -1507,6 +1667,19 @@ let sessionLength = 20;
 let speedWpm =
   Number(localStorage.getItem("morseSpeedWpm")) || 12;
 
+let sendingMode = "learn";
+let sendingLetter = "E";
+let sendingMarks = [];
+let sendingPressStart = 0;
+let sendingLastRelease = 0;
+let sendingGap = null;
+let sendingTimer = null;
+let sendingTone = null;
+let sendingLocked = false;
+let sendingAttempts = 0;
+let sendingCorrect = 0;
+let sendingHearts = 3;
+
 
 /* =====================================================
    HELPERS
@@ -1752,8 +1925,13 @@ function updateHome(){
 
 function showHome(){
 
+  clearTimeout(sendingTimer);
+  stopSendingTone();
+  sendingPressStart = 0;
   document.getElementById("gameScreen").classList.add("hidden");
   document.getElementById("levelScreen").classList.add("hidden");
+  document.getElementById("sendingMenuScreen").classList.add("hidden");
+  document.getElementById("sendingPracticeScreen").classList.add("hidden");
   document.getElementById("homeScreen").classList.remove("hidden");
 
   selectedLevel = unlockedLevel;
@@ -1766,6 +1944,8 @@ function showLevels(){
 
   document.getElementById("homeScreen").classList.add("hidden");
   document.getElementById("gameScreen").classList.add("hidden");
+  document.getElementById("sendingMenuScreen").classList.add("hidden");
+  document.getElementById("sendingPracticeScreen").classList.add("hidden");
   document.getElementById("levelScreen").classList.remove("hidden");
 
   selectedLevel = unlockedLevel;
@@ -1847,6 +2027,9 @@ function startLevel(){
     .classList.add(
       "hidden"
     );
+
+  document.getElementById("sendingMenuScreen").classList.add("hidden");
+  document.getElementById("sendingPracticeScreen").classList.add("hidden");
 
 
   document
@@ -2849,6 +3032,264 @@ function loadStats(){
 
 
 /* =====================================================
+   SENDING PRACTICE
+===================================================== */
+
+function showSendingMenu(){
+
+  stopSendingTone();
+  clearTimeout(sendingTimer);
+  sendingPressStart = 0;
+  document.getElementById("homeScreen").classList.add("hidden");
+  document.getElementById("sendingPracticeScreen").classList.add("hidden");
+  document.getElementById("sendingMenuScreen").classList.remove("hidden");
+
+}
+
+
+function learnedLetters(){
+
+  return [...LEVELS[unlockedLevel - 1].letters];
+
+}
+
+
+function startSending(mode){
+
+  sendingMode = mode;
+  sendingAttempts = 0;
+  sendingCorrect = 0;
+  sendingHearts = 3;
+
+  document.getElementById("sendingMenuScreen").classList.add("hidden");
+  document.getElementById("sendingPracticeScreen").classList.remove("hidden");
+  document.getElementById("sendingModeTitle").textContent =
+    mode === "learn" ? "🎓 Học phát tín hiệu" : "⚡ Thử thách Sending";
+
+  nextSendingQuestion();
+
+}
+
+
+function nextSendingQuestion(){
+
+  const letters = learnedLetters();
+  sendingLetter = letters[randomIndex(letters.length)];
+  sendingMarks = [];
+  sendingLastRelease = 0;
+  sendingLocked = false;
+
+  document.getElementById("sendingTarget").textContent = sendingLetter;
+  document.getElementById("sendingHint").textContent =
+    sendingMode === "learn" ? symbolText(MORSE[sendingLetter]) : "?";
+  document.getElementById("sendingReadout").textContent = "•••";
+  document.getElementById("sendingFeedback").textContent =
+    "Nhấn ngắn = chấm · nhấn dài = gạch · Space cũng dùng được.";
+
+  updateSendingStats();
+
+}
+
+
+function updateSendingStats(){
+
+  document.getElementById("sendingProgress").textContent =
+    sendingMode === "learn"
+      ? "Luyện tập tự do"
+      : `${sendingAttempts}/10 · Đúng ${sendingCorrect}`;
+
+  document.getElementById("sendingLives").textContent =
+    sendingMode === "challenge"
+      ? "❤️".repeat(sendingHearts) + "🖤".repeat(3 - sendingHearts)
+      : "Có mã gợi ý";
+
+}
+
+
+async function startSendingTone(){
+
+  const AudioCtx = window.AudioContext || window.webkitAudioContext;
+  if(!AudioCtx){
+    return;
+  }
+
+  if(!audioContext){
+    audioContext = new AudioCtx();
+  }
+
+  if(audioContext.state === "suspended"){
+    await audioContext.resume();
+  }
+
+  const oscillator = audioContext.createOscillator();
+  const gain = audioContext.createGain();
+  oscillator.frequency.value = 650;
+  oscillator.type = "sine";
+  gain.gain.value = .22;
+  oscillator.connect(gain).connect(audioContext.destination);
+  oscillator.start();
+  sendingTone = { oscillator, gain };
+
+}
+
+
+function stopSendingTone(){
+
+  if(!sendingTone){
+    return;
+  }
+
+  try{
+    sendingTone.gain.gain.setValueAtTime(.0001, audioContext.currentTime);
+    sendingTone.oscillator.stop(audioContext.currentTime + .02);
+  }catch(error){
+    // The oscillator may already be stopped after an interrupted pointer event.
+  }
+
+  sendingTone = null;
+
+}
+
+
+function beginSendingPress(){
+
+  if(sendingLocked || sendingPressStart){
+    return;
+  }
+
+  clearTimeout(sendingTimer);
+  const now = performance.now();
+  sendingGap = sendingLastRelease ? now - sendingLastRelease : null;
+  sendingPressStart = now;
+  document.getElementById("telegraphKey").classList.add("pressed");
+  document.getElementById("telegraphKey").textContent = "ĐANG PHÁT";
+  startSendingTone();
+
+}
+
+
+function endSendingPress(){
+
+  if(!sendingPressStart){
+    return;
+  }
+
+  const now = performance.now();
+  const duration = now - sendingPressStart;
+  const dotMs = (1.2 / speedWpm) * 1000;
+  const symbol = duration < dotMs * 2 ? "." : "-";
+
+  sendingMarks.push({ symbol, duration, gap: sendingGap });
+  sendingPressStart = 0;
+  sendingLastRelease = now;
+  stopSendingTone();
+
+  document.getElementById("telegraphKey").classList.remove("pressed");
+  document.getElementById("telegraphKey").textContent = "NHẤN & GIỮ";
+  document.getElementById("sendingReadout").textContent =
+    symbolText(sendingMarks.map(mark => mark.symbol).join(""));
+
+  const finishDelay = Math.max(700, dotMs * 4);
+  sendingTimer = setTimeout(evaluateSending, finishDelay);
+
+}
+
+
+function resetSendingInput(){
+
+  clearTimeout(sendingTimer);
+  stopSendingTone();
+  sendingPressStart = 0;
+  sendingLastRelease = 0;
+  sendingMarks = [];
+  sendingLocked = false;
+  document.getElementById("telegraphKey").classList.remove("pressed");
+  document.getElementById("telegraphKey").textContent = "NHẤN & GIỮ";
+  document.getElementById("sendingReadout").textContent = "•••";
+  document.getElementById("sendingFeedback").textContent = "Sẵn sàng gửi lại.";
+
+}
+
+
+function evaluateSending(){
+
+  if(!sendingMarks.length || sendingLocked){
+    return;
+  }
+
+  sendingLocked = true;
+  const expected = MORSE[sendingLetter];
+  const actual = sendingMarks.map(mark => mark.symbol).join("");
+  const dotMs = (1.2 / speedWpm) * 1000;
+  const codeCorrect = actual === expected;
+
+  const durationCorrect = codeCorrect && sendingMarks.every((mark, index)=>{
+    const target = expected[index] === "." ? dotMs : dotMs * 3;
+    return Math.abs(mark.duration - target) <= target * .55;
+  });
+
+  const gapsCorrect = sendingMarks.slice(1).every(mark =>
+    Math.abs(mark.gap - dotMs) <= dotMs * .8
+  );
+
+  const correct = codeCorrect && durationCorrect && gapsCorrect;
+  let message = "✅ Tín hiệu và nhịp đều chính xác!";
+
+  if(!codeCorrect){
+    message = `❌ Chuỗi đúng là ${symbolText(expected)}.`;
+  }else if(!durationCorrect){
+    message = "⏱️ Đúng ký hiệu, nhưng độ dài chấm hoặc gạch chưa chuẩn.";
+  }else if(!gapsCorrect){
+    message = "⏸️ Đúng ký hiệu, nhưng khoảng nghỉ giữa các nhịp chưa đều.";
+  }
+
+  document.getElementById("sendingFeedback").textContent = message;
+
+  if(sendingMode === "challenge"){
+    sendingAttempts++;
+    if(correct){
+      sendingCorrect++;
+      addXP(10);
+    }else{
+      sendingHearts--;
+    }
+    updateSendingStats();
+  }
+
+  sendingTimer = setTimeout(()=>{
+    if(sendingMode === "challenge" && (sendingHearts === 0 || sendingAttempts >= 10)){
+      finishSendingChallenge();
+    }else if(sendingMode === "learn" && !correct){
+      sendingMarks = [];
+      sendingLastRelease = 0;
+      sendingLocked = false;
+      document.getElementById("sendingReadout").textContent = "•••";
+      document.getElementById("sendingFeedback").textContent =
+        "Hãy nhìn mã gợi ý và thử lại chính chữ này.";
+    }else{
+      nextSendingQuestion();
+    }
+  }, 1400);
+
+}
+
+
+function finishSendingChallenge(){
+
+  sendingLocked = true;
+  const passed = sendingCorrect >= 8 && sendingHearts > 0;
+  document.getElementById("sendingTarget").textContent = passed ? "🏆" : "💔";
+  document.getElementById("sendingHint").textContent = passed ? "HOÀN THÀNH" : "THỬ LẠI";
+  document.getElementById("sendingReadout").textContent =
+    `${sendingCorrect}/10 câu chính xác`;
+  document.getElementById("sendingFeedback").textContent = passed
+    ? "Bạn đã vượt qua thử thách Sending!"
+    : "Bạn chưa đạt 80% hoặc đã hết 3 tim.";
+
+}
+
+
+/* =====================================================
    EVENTS
 ===================================================== */
 
@@ -2868,6 +3309,79 @@ document
 document
   .getElementById("levelsBackBtn")
   .addEventListener("click", showHome);
+
+
+document
+  .getElementById("sendingBtn")
+  .addEventListener("click", showSendingMenu);
+
+
+document
+  .getElementById("sendingMenuBackBtn")
+  .addEventListener("click", showHome);
+
+
+document
+  .getElementById("learnSendingBtn")
+  .addEventListener("click", ()=>startSending("learn"));
+
+
+document
+  .getElementById("challengeSendingBtn")
+  .addEventListener("click", ()=>startSending("challenge"));
+
+
+document
+  .getElementById("sendingPracticeBackBtn")
+  .addEventListener("click", showSendingMenu);
+
+
+document
+  .getElementById("sendingRetryBtn")
+  .addEventListener("click", ()=>{
+    if(sendingMode === "challenge" && (sendingAttempts >= 10 || sendingHearts === 0)){
+      startSending("challenge");
+    }else{
+      resetSendingInput();
+    }
+  });
+
+
+const telegraphKey = document.getElementById("telegraphKey");
+
+telegraphKey.addEventListener("pointerdown", event=>{
+  event.preventDefault();
+  telegraphKey.setPointerCapture(event.pointerId);
+  beginSendingPress();
+});
+
+telegraphKey.addEventListener("pointerup", event=>{
+  event.preventDefault();
+  endSendingPress();
+});
+
+telegraphKey.addEventListener("pointercancel", endSendingPress);
+
+document.addEventListener("keydown", event=>{
+  if(
+    event.code === "Space" &&
+    !event.repeat &&
+    !document.getElementById("sendingPracticeScreen").classList.contains("hidden")
+  ){
+    event.preventDefault();
+    beginSendingPress();
+  }
+});
+
+document.addEventListener("keyup", event=>{
+  if(
+    event.code === "Space" &&
+    !document.getElementById("sendingPracticeScreen").classList.contains("hidden")
+  ){
+    event.preventDefault();
+    endSendingPress();
+  }
+});
 
 document
   .getElementById(
