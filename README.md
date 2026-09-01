@@ -9,7 +9,8 @@
 - Thử thách có 3 tim, sai một câu mất một tim và hết tim sẽ thất bại.
 - Chuỗi 15 câu đúng liên tiếp giúp vượt qua thử thách sớm.
 - Chế độ Luyện phát Morse dùng một phím điện báo tròn để nhập chấm/gạch bằng chuột, cảm ứng hoặc phím Space.
-- App phát tone 650 Hz và đánh giá chuỗi ký hiệu, độ dài âm cùng khoảng nghỉ.
+- Sending dùng preset kiểu LCWO 20 WPM/600 Hz, cho phép chỉnh 10–30 WPM và 400–800 Hz.
+- App chấm đúng theo chuỗi ký hiệu; độ dài âm và khoảng nghỉ được góp ý riêng để cảm ứng dễ sử dụng hơn.
 - Chế độ Học có nút nghe âm mẫu chuẩn của từng chữ trước khi thực hành theo.
 - Màn hình chính gọn với `Play · Level hiện tại` và `Levels`.
 - Điều chỉnh tốc độ từ 8 đến 24 WPM.

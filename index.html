@@ -932,6 +932,25 @@ h1 {
     <div class="card-title">📡 Luyện phát tín hiệu</div>
     <div class="small">Dùng phím điện báo để tự tạo âm Morse.</div>
 
+    <div class="settings-grid">
+      <div class="setting">
+        <label for="sendingSpeedInput">
+          <span>⚡ Tốc độ ký tự</span>
+          <span id="sendingSpeedValue">20 WPM</span>
+        </label>
+        <input id="sendingSpeedInput" type="range" min="10" max="30" step="1" value="20">
+      </div>
+      <div class="setting">
+        <label for="sendingToneInput">
+          <span>🎵 Tần số âm</span>
+          <span id="sendingToneValue">600 Hz</span>
+        </label>
+        <input id="sendingToneInput" type="range" min="400" max="800" step="25" value="600">
+      </div>
+    </div>
+
+    <div class="small">Preset LCWO: 20 WPM · 600 Hz. Có thể chỉnh theo tai nghe của bạn.</div>
+
     <div class="sending-modes">
       <button class="mode-btn" id="learnSendingBtn">
         <span>🎓</span>
@@ -1694,6 +1713,12 @@ let sendingLocked = false;
 let sendingAttempts = 0;
 let sendingCorrect = 0;
 let sendingHearts = 3;
+
+let sendingWpm =
+  Number(localStorage.getItem("morseSendingWpm")) || 20;
+
+let sendingToneHz =
+  Number(localStorage.getItem("morseSendingToneHz")) || 600;
 
 
 /* =====================================================
@@ -3162,17 +3187,17 @@ async function playSendingExample(){
     return;
   }
 
-  const dot = 1.2 / speedWpm;
+  const dot = 1.2 / sendingWpm;
   let time = audioContext.currentTime + .06;
 
   [...MORSE[sampleLetter]].forEach(symbol=>{
     const duration = symbol === "." ? dot : dot * 3;
     const oscillator = audioContext.createOscillator();
     const gain = audioContext.createGain();
-    oscillator.frequency.value = 650;
+    oscillator.frequency.value = sendingToneHz;
     oscillator.type = "sine";
     gain.gain.setValueAtTime(.0001, time);
-    gain.gain.exponentialRampToValueAtTime(.22, time + .01);
+    gain.gain.exponentialRampToValueAtTime(.22, time + .005);
     gain.gain.setValueAtTime(.22, time + Math.max(.01, duration - .015));
     gain.gain.exponentialRampToValueAtTime(.0001, time + duration);
     oscillator.connect(gain).connect(audioContext.destination);
@@ -3219,9 +3244,10 @@ async function startSendingTone(){
 
   const oscillator = audioContext.createOscillator();
   const gain = audioContext.createGain();
-  oscillator.frequency.value = 650;
+  oscillator.frequency.value = sendingToneHz;
   oscillator.type = "sine";
-  gain.gain.value = .22;
+  gain.gain.setValueAtTime(.0001, audioContext.currentTime);
+  gain.gain.exponentialRampToValueAtTime(.22, audioContext.currentTime + .005);
   oscillator.connect(gain).connect(audioContext.destination);
   oscillator.start();
   sendingTone = { oscillator, gain };
@@ -3239,7 +3265,10 @@ function stopSendingTone(){
   }
 
   try{
-    sendingTone.gain.gain.setValueAtTime(.0001, audioContext.currentTime);
+    const now = audioContext.currentTime;
+    sendingTone.gain.gain.cancelScheduledValues(now);
+    sendingTone.gain.gain.setValueAtTime(.22, now);
+    sendingTone.gain.gain.exponentialRampToValueAtTime(.0001, now + .005);
     sendingTone.oscillator.stop(audioContext.currentTime + .02);
   }catch(error){
     // The oscillator may already be stopped after an interrupted pointer event.
@@ -3278,8 +3307,10 @@ function endSendingPress(){
   const now = performance.now();
   clearTimeout(sendingSafetyTimer);
   const duration = now - sendingPressStart;
-  const dotMs = (1.2 / speedWpm) * 1000;
-  const symbol = duration < dotMs * 2 ? "." : "-";
+  const dotMs = (1.2 / sendingWpm) * 1000;
+  // A wider touch threshold makes short taps reliable on mobile screens.
+  const touchThreshold = Math.max(dotMs * 2, 180);
+  const symbol = duration < touchThreshold ? "." : "-";
 
   sendingMarks.push({ symbol, duration, gap: sendingGap });
   sendingPressStart = 0;
@@ -3323,7 +3354,7 @@ function evaluateSending(){
   sendingLocked = true;
   const expected = MORSE[sendingLetter];
   const actual = sendingMarks.map(mark => mark.symbol).join("");
-  const dotMs = (1.2 / speedWpm) * 1000;
+  const dotMs = (1.2 / sendingWpm) * 1000;
   const codeCorrect = actual === expected;
 
   const durationCorrect = codeCorrect && sendingMarks.every((mark, index)=>{
@@ -3335,15 +3366,17 @@ function evaluateSending(){
     Math.abs(mark.gap - dotMs) <= dotMs * .8
   );
 
-  const correct = codeCorrect && durationCorrect && gapsCorrect;
+  // Rhythm is coached separately; a correct Morse sequence is never rejected
+  // merely because a mobile touch was a few milliseconds early or late.
+  const correct = codeCorrect;
   let message = "✅ Tín hiệu và nhịp đều chính xác!";
 
   if(!codeCorrect){
     message = `❌ Chuỗi đúng là ${symbolText(expected)}.`;
   }else if(!durationCorrect){
-    message = "⏱️ Đúng ký hiệu, nhưng độ dài chấm hoặc gạch chưa chuẩn.";
+    message = "✅ Đúng ký tự! Gợi ý: điều chỉnh độ dài chấm/gạch gần âm mẫu hơn.";
   }else if(!gapsCorrect){
-    message = "⏸️ Đúng ký hiệu, nhưng khoảng nghỉ giữa các nhịp chưa đều.";
+    message = "✅ Đúng ký tự! Gợi ý: giữ khoảng nghỉ giữa các nhịp đều hơn.";
   }
 
   document.getElementById("sendingFeedback").textContent = message;
@@ -3565,6 +3598,12 @@ document
 const speedInput =
   document.getElementById("speedInput");
 
+const sendingSpeedInput =
+  document.getElementById("sendingSpeedInput");
+
+const sendingToneInput =
+  document.getElementById("sendingToneInput");
+
 speedInput.value = speedWpm;
 document.getElementById("speedValue").textContent = `${speedWpm} WPM`;
 
@@ -3572,6 +3611,23 @@ speedInput.addEventListener("input", event=>{
   speedWpm = Number(event.target.value);
   document.getElementById("speedValue").textContent = `${speedWpm} WPM`;
   localStorage.setItem("morseSpeedWpm", speedWpm);
+});
+
+sendingSpeedInput.value = sendingWpm;
+sendingToneInput.value = sendingToneHz;
+document.getElementById("sendingSpeedValue").textContent = `${sendingWpm} WPM`;
+document.getElementById("sendingToneValue").textContent = `${sendingToneHz} Hz`;
+
+sendingSpeedInput.addEventListener("input", event=>{
+  sendingWpm = Number(event.target.value);
+  document.getElementById("sendingSpeedValue").textContent = `${sendingWpm} WPM`;
+  localStorage.setItem("morseSendingWpm", sendingWpm);
+});
+
+sendingToneInput.addEventListener("input", event=>{
+  sendingToneHz = Number(event.target.value);
+  document.getElementById("sendingToneValue").textContent = `${sendingToneHz} Hz`;
+  localStorage.setItem("morseSendingToneHz", sendingToneHz);
 });
 
 document.addEventListener("keydown", event=>{
