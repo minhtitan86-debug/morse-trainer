@@ -10,6 +10,7 @@
 - Chuỗi 15 câu đúng liên tiếp giúp vượt qua thử thách sớm.
 - Chế độ Luyện phát Morse dùng một phím điện báo tròn để nhập chấm/gạch bằng chuột, cảm ứng hoặc phím Space.
 - App phát tone 650 Hz và đánh giá chuỗi ký hiệu, độ dài âm cùng khoảng nghỉ.
+- Chế độ Học có nút nghe âm mẫu chuẩn của từng chữ trước khi thực hành theo.
 - Màn hình chính gọn với `Play · Level hiện tại` và `Levels`.
 - Điều chỉnh tốc độ từ 8 đến 24 WPM.
 - Mỗi lượt đặt mục tiêu ngẫu nhiên từ 20 đến 30 câu đúng.

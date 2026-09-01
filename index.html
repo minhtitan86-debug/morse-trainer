@@ -270,6 +270,18 @@ h1 {
   letter-spacing: 7px;
 }
 
+.sample-btn {
+  min-height: 44px;
+  margin-top: 10px;
+  padding: 0 18px;
+  border: 1px solid rgba(143,232,255,.35);
+  border-radius: 999px;
+  color: white;
+  font-weight: 900;
+  cursor: pointer;
+  background: rgba(75,145,225,.24);
+}
+
 .telegraph-wrap {
   display: grid;
   place-items: center;
@@ -950,6 +962,7 @@ h1 {
       <div class="small">Hãy gửi chữ</div>
       <div class="target-letter" id="sendingTarget">E</div>
       <div class="target-code" id="sendingHint">•</div>
+      <button class="sample-btn" id="sendingSampleBtn">🔊 NGHE ÂM MẪU</button>
     </div>
 
     <div class="telegraph-wrap">
@@ -3070,6 +3083,11 @@ function startSending(mode){
   document.getElementById("sendingModeTitle").textContent =
     mode === "learn" ? "🎓 Học phát tín hiệu" : "⚡ Thử thách Sending";
 
+  document.getElementById("sendingSampleBtn").classList.toggle(
+    "hidden",
+    mode !== "learn"
+  );
+
   nextSendingQuestion();
 
 }
@@ -3106,6 +3124,73 @@ function updateSendingStats(){
     sendingMode === "challenge"
       ? "❤️".repeat(sendingHearts) + "🖤".repeat(3 - sendingHearts)
       : "Có mã gợi ý";
+
+}
+
+
+async function playSendingExample(){
+
+  if(sendingMode !== "learn" || sendingPressStart || sendingLocked){
+    return;
+  }
+
+  const AudioCtx = window.AudioContext || window.webkitAudioContext;
+  if(!AudioCtx){
+    document.getElementById("sendingFeedback").textContent =
+      "Thiết bị chưa hỗ trợ âm thanh.";
+    return;
+  }
+
+  clearTimeout(sendingTimer);
+  stopSendingTone();
+  sendingLocked = true;
+  const sampleLetter = sendingLetter;
+  const sampleButton = document.getElementById("sendingSampleBtn");
+  sampleButton.disabled = true;
+
+  if(!audioContext){
+    audioContext = new AudioCtx();
+  }
+
+  if(audioContext.state === "suspended"){
+    await audioContext.resume();
+  }
+
+  if(sendingMode !== "learn" || sampleLetter !== sendingLetter){
+    sampleButton.disabled = false;
+    sendingLocked = false;
+    return;
+  }
+
+  const dot = 1.2 / speedWpm;
+  let time = audioContext.currentTime + .06;
+
+  [...MORSE[sampleLetter]].forEach(symbol=>{
+    const duration = symbol === "." ? dot : dot * 3;
+    const oscillator = audioContext.createOscillator();
+    const gain = audioContext.createGain();
+    oscillator.frequency.value = 650;
+    oscillator.type = "sine";
+    gain.gain.setValueAtTime(.0001, time);
+    gain.gain.exponentialRampToValueAtTime(.22, time + .01);
+    gain.gain.setValueAtTime(.22, time + Math.max(.01, duration - .015));
+    gain.gain.exponentialRampToValueAtTime(.0001, time + duration);
+    oscillator.connect(gain).connect(audioContext.destination);
+    oscillator.start(time);
+    oscillator.stop(time + duration + .02);
+    time += duration + dot;
+  });
+
+  const waitMs = Math.max(200, (time - audioContext.currentTime) * 1000);
+  document.getElementById("sendingFeedback").textContent =
+    `Đang phát mẫu chữ ${sampleLetter} — hãy nghe nhịp rồi thực hành theo.`;
+
+  sendingTimer = setTimeout(()=>{
+    sampleButton.disabled = false;
+    sendingLocked = false;
+    document.getElementById("sendingFeedback").textContent =
+      "Đến lượt bạn: nhấn và giữ phím điện báo theo âm mẫu.";
+  }, waitMs);
 
 }
 
@@ -3347,6 +3432,11 @@ document
 document
   .getElementById("challengeSendingBtn")
   .addEventListener("click", ()=>startSending("challenge"));
+
+
+document
+  .getElementById("sendingSampleBtn")
+  .addEventListener("click", playSendingExample);
 
 
 document
