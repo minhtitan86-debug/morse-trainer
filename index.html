@@ -730,13 +730,13 @@ h1 {
       </div>
 
       <div class="setting">
-        <label for="questionCount">
-          <span>🎯 Độ dài bài</span>
+        <label>
+          <span>🎯 Mục tiêu ngẫu nhiên</span>
+          <span id="questionGoal">20–30 câu</span>
         </label>
-        <select id="questionCount">
-          <option value="10">10 câu · Nhanh</option>
-          <option value="20">20 câu · Thử thách</option>
-        </select>
+        <div class="small">
+          Sai sẽ làm lại chính câu đó. Cần đạt ít nhất 80% chính xác.
+        </div>
       </div>
     </div>
 
@@ -858,7 +858,7 @@ h1 {
 
         <div class="stat">
 
-          Câu
+          Lượt trả lời
 
           <strong id="tries">
             0
@@ -1361,8 +1361,7 @@ let locked = false;
 
 let audioContext = null;
 
-let sessionLength =
-  Number(localStorage.getItem("morseQuestionCount")) || 10;
+let sessionLength = 20;
 
 let speedWpm =
   Number(localStorage.getItem("morseSpeedWpm")) || 12;
@@ -1622,9 +1621,10 @@ function startLevel(){
 
   locked = false;
 
-  sessionLength = Number(
-    document.getElementById("questionCount").value
-  );
+  sessionLength = 20 + randomIndex(11);
+
+  document.getElementById("questionGoal").textContent =
+    `${sessionLength} câu đúng`;
 
 
   document
@@ -2196,21 +2196,21 @@ function answer(
       );
 
 
-      if(
-        tries < sessionLength
-      ){
+      if(score >= sessionLength){
 
-        newQuestion();
+        finishLevel();
 
+      }else{
+
+        // A wrong answer does not advance progress: repeat the same signal.
+        if(correct){
+          newQuestion();
+        }
 
         setTimeout(
           playMorse,
           250
         );
-
-      }else{
-
-        finishLevel();
 
       }
 
@@ -2249,7 +2249,7 @@ function updateGame(){
 
   const completed =
     Math.min(
-      tries,
+      score,
       sessionLength
     );
 
@@ -2275,7 +2275,7 @@ function updateGame(){
 function finishLevel(){
 
   const accuracy =
-    Math.round((score / sessionLength) * 100);
+    Math.round((score / tries) * 100);
 
   const passed =
     accuracy >= 80;
@@ -2339,7 +2339,7 @@ function finishLevel(){
         "completeText"
       ).textContent =
 
-        `Bạn đạt ${score}/${sessionLength} (${accuracy}%). ` +
+        `Bạn hoàn thành ${sessionLength} câu đúng sau ${tries} lần trả lời (${accuracy}%). ` +
         `Level ${nextLevel} đã được mở khóa!`;
 
 
@@ -2353,7 +2353,7 @@ function finishLevel(){
       document.getElementById(
         "completeText"
       ).textContent =
-        `Bạn đạt ${score}/${sessionLength} (${accuracy}%). Bạn đã mở khóa toàn bộ bảng chữ cái Morse!`;
+        `Bạn hoàn thành ${sessionLength} câu đúng sau ${tries} lần trả lời (${accuracy}%). Bạn đã mở khóa toàn bộ bảng chữ cái Morse!`;
 
 
       document.getElementById(
@@ -2383,7 +2383,7 @@ function finishLevel(){
       "completeText"
     ).textContent =
 
-      `Bạn đạt ${score}/${sessionLength} (${accuracy}%). ` +
+      `Bạn hoàn thành ${sessionLength} câu đúng sau ${tries} lần trả lời (${accuracy}%). ` +
       `Cần ít nhất 80% để mở Level tiếp theo.`;
 
 
@@ -2658,22 +2658,13 @@ document
 const speedInput =
   document.getElementById("speedInput");
 
-const questionCount =
-  document.getElementById("questionCount");
-
 speedInput.value = speedWpm;
-questionCount.value = sessionLength;
 document.getElementById("speedValue").textContent = `${speedWpm} WPM`;
 
 speedInput.addEventListener("input", event=>{
   speedWpm = Number(event.target.value);
   document.getElementById("speedValue").textContent = `${speedWpm} WPM`;
   localStorage.setItem("morseSpeedWpm", speedWpm);
-});
-
-questionCount.addEventListener("change", event=>{
-  sessionLength = Number(event.target.value);
-  localStorage.setItem("morseQuestionCount", sessionLength);
 });
 
 document.addEventListener("keydown", event=>{
