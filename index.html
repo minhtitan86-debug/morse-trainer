@@ -156,6 +156,52 @@ h1 {
   animation: floatRobot 3s ease-in-out infinite;
 }
 
+.home-actions {
+  display: grid;
+  grid-template-columns: 1.35fr .65fr;
+  gap: 12px;
+  margin-top: 16px;
+}
+
+.home-btn {
+  min-height: 124px;
+  padding: 18px;
+  border: 1px solid rgba(255,255,255,.16);
+  border-radius: 24px;
+  color: white;
+  text-align: left;
+  cursor: pointer;
+  box-shadow: 0 14px 30px rgba(0,0,0,.18);
+}
+
+.play-btn {
+  background: linear-gradient(135deg, #27c79a, #347fe5);
+}
+
+.levels-btn {
+  background: linear-gradient(145deg, rgba(116,86,238,.8), rgba(58,75,154,.8));
+}
+
+.home-btn-icon {
+  display: block;
+  margin-bottom: 10px;
+  font-size: 28px;
+}
+
+.home-btn-title {
+  display: block;
+  font-size: 21px;
+  font-weight: 900;
+}
+
+.home-btn-detail {
+  display: block;
+  margin-top: 5px;
+  color: rgba(255,255,255,.8);
+  font-size: 13px;
+  font-weight: 700;
+}
+
 @keyframes floatRobot {
 
   0%,100% {
@@ -629,6 +675,14 @@ h1 {
     grid-template-columns: 1fr;
   }
 
+  .home-actions {
+    grid-template-columns: 1fr;
+  }
+
+  .home-btn {
+    min-height: 105px;
+  }
+
   .level-grid {
     grid-template-columns: 1fr;
   }
@@ -705,10 +759,27 @@ h1 {
   </section>
 
 
+  <!-- HOME -->
+
+  <section id="homeScreen" class="home-actions">
+    <button class="home-btn play-btn" id="playBtn">
+      <span class="home-btn-icon">▶</span>
+      <span class="home-btn-title" id="playLevelTitle">PLAY · LEVEL 1</span>
+      <span class="home-btn-detail" id="playLevelDetail">Tiếp tục hành trình Morse</span>
+    </button>
+
+    <button class="home-btn levels-btn" id="levelsBtn">
+      <span class="home-btn-icon">🗺️</span>
+      <span class="home-btn-title">LEVELS</span>
+      <span class="home-btn-detail">Xem và luyện lại</span>
+    </button>
+  </section>
+
+
   <!-- LEVEL SELECT -->
 
   <section
-    class="card"
+    class="card hidden"
     id="levelScreen">
 
     <div class="card-title">
@@ -754,6 +825,10 @@ h1 {
       class="main-btn"
       id="startBtn">
       ▶ BẮT ĐẦU LEVEL
+    </button>
+
+    <button class="secondary-btn" id="levelsBackBtn">
+      ← Trang chính
     </button>
 
   </section>
@@ -945,7 +1020,7 @@ h1 {
       class="secondary-btn"
       id="backBtn">
 
-      ← Chọn Level khác
+      ← Trang chính
 
     </button>
 
@@ -1577,6 +1652,43 @@ function updateBestScore(){
 }
 
 
+function updateHome(){
+
+  const current = LEVELS[unlockedLevel - 1];
+
+  document.getElementById("playLevelTitle").textContent =
+    `PLAY · LEVEL ${current.level}`;
+
+  document.getElementById("playLevelDetail").textContent =
+    `${current.name} · ${current.letters.join(" ")}`;
+
+}
+
+
+function showHome(){
+
+  document.getElementById("gameScreen").classList.add("hidden");
+  document.getElementById("levelScreen").classList.add("hidden");
+  document.getElementById("homeScreen").classList.remove("hidden");
+
+  selectedLevel = unlockedLevel;
+  updateHome();
+
+}
+
+
+function showLevels(){
+
+  document.getElementById("homeScreen").classList.add("hidden");
+  document.getElementById("gameScreen").classList.add("hidden");
+  document.getElementById("levelScreen").classList.remove("hidden");
+
+  selectedLevel = unlockedLevel;
+  createLevels();
+
+}
+
+
 /* =====================================================
    START LEVEL
 ===================================================== */
@@ -1630,6 +1742,14 @@ function startLevel(){
   document
     .getElementById(
       "levelScreen"
+    )
+    .classList.add(
+      "hidden"
+    );
+
+  document
+    .getElementById(
+      "homeScreen"
     )
     .classList.add(
       "hidden"
@@ -2332,6 +2452,8 @@ function finishLevel(){
           unlockedLevel
         );
 
+        updateHome();
+
       }
 
 
@@ -2581,6 +2703,23 @@ function loadStats(){
 ===================================================== */
 
 document
+  .getElementById("playBtn")
+  .addEventListener("click", ()=>{
+    selectedLevel = unlockedLevel;
+    startLevel();
+  });
+
+
+document
+  .getElementById("levelsBtn")
+  .addEventListener("click", showLevels);
+
+
+document
+  .getElementById("levelsBackBtn")
+  .addEventListener("click", showHome);
+
+document
   .getElementById(
     "startBtn"
   )
@@ -2606,29 +2745,7 @@ document
   )
   .addEventListener(
     "click",
-    ()=>{
-
-      document
-        .getElementById(
-          "gameScreen"
-        )
-        .classList.add(
-          "hidden"
-        );
-
-
-      document
-        .getElementById(
-          "levelScreen"
-        )
-        .classList.remove(
-          "hidden"
-        );
-
-
-      createLevels();
-
-    }
+    showHome
   );
 
 
@@ -2697,6 +2814,8 @@ document.addEventListener("keydown", event=>{
 loadStats();
 
 createLevels();
+
+updateHome();
 
 </script>
 

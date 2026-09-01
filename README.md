@@ -5,6 +5,7 @@
 ## Tính năng
 
 - 13 cấp độ mở dần toàn bộ bảng chữ cái.
+- Màn hình chính gọn với `Play · Level hiện tại` và `Levels`.
 - Điều chỉnh tốc độ từ 8 đến 24 WPM.
 - Mỗi lượt đặt mục tiêu ngẫu nhiên từ 20 đến 30 câu đúng.
 - Trả lời sai phải nghe và làm lại chính câu đó; tiến độ không tăng.
