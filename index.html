@@ -4,13 +4,20 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="theme-color" content="#070d24">
-  <meta name="description" content="Morse Space Cadet - á»¨ng dá»¥ng luyá»‡n táº­p mÃ£ Morse trá»±c quan, Ä‘a giÃ¡c quan vÃ  vui nhá»™n dÃ nh cho thiáº¿u nhi vÃ  ngÆ°á»i má»›i báº¯t Ä‘áº§u.">
-  <title>Morse Space Cadet ðŸš€ Â· PhiÃªu LÆ°u MÃ£ Morse Thiáº¿u Nhi</title>
+  <meta name="description" content="Morse Space Cadet - Ứng dụng luyện tập mã Morse trực quan, đa giác quan và vui nhộn dành cho thiếu nhi và người mới bắt đầu.">
+  <title>Morse Space Cadet 🚀 · Phiêu Lưu Mã Morse Thiếu Nhi</title>
 
   <!-- Google Fonts: Fredoka (Friendly Display), Outfit (Modern Clean), JetBrains Mono -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=JetBrains+Mono:wght@700;800&family=Outfit:wght@400;600;800;900&display=swap" rel="stylesheet">
+
+  <!-- PWA & iOS Mobile App Support -->
+  <link rel="manifest" href="manifest.json">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Morse Cadet">
+  <link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
 
   <style>
 /* ==========================================================================
@@ -1351,29 +1358,29 @@ input, select {
     <header class="top-hud">
       <div class="hud-left">
         <div class="hud-pill xp-pill">
-          <span>â­</span>
+          <span>⭐</span>
           <span id="hudXp">0 XP</span>
         </div>
         <div class="hud-pill streak-pill">
-          <span>ðŸ”¥</span>
-          <span id="hudStreak">1 ngÃ y</span>
+          <span>🔥</span>
+          <span id="hudStreak">1 ngày</span>
         </div>
       </div>
 
       <div class="hud-right">
         <!-- Sound Skin Selector -->
         <div class="skin-selector">
-          <span>ðŸŽµ Ã‚m sáº¯c:</span>
+          <span>🎵 Âm sắc:</span>
           <select id="hudSkinSelect" class="skin-select-dropdown">
-            <option value="arcade">ðŸŽ® 8-Bit Arcade</option>
-            <option value="laser">ðŸš€ Laser Blaster</option>
-            <option value="sonar">ðŸ›¸ Cosmic Sonar</option>
-            <option value="classic">ðŸ“» Cá»• Äiá»ƒn LCWO</option>
+            <option value="arcade">🎮 8-Bit Arcade</option>
+            <option value="laser">🚀 Laser Blaster</option>
+            <option value="sonar">🛸 Cosmic Sonar</option>
+            <option value="classic">📻 Cổ Điển LCWO</option>
           </select>
         </div>
 
-        <button class="icon-btn" id="hudBadgesBtn" title="Tá»§ Danh Hiá»‡u & Huy Hiá»‡u">ðŸ†</button>
-        <button class="icon-btn" id="hudSettingsBtn" title="CÃ i Äáº·t">âš™ï¸</button>
+        <button class="icon-btn" id="hudBadgesBtn" title="Tủ Danh Hiệu & Huy Hiệu">🏆</button>
+        <button class="icon-btn" id="hudSettingsBtn" title="Cài Đặt">⚙️</button>
       </div>
     </header>
 
@@ -1381,8 +1388,8 @@ input, select {
          SIGNAL BEACON LAMP (SYNCHRONIZED LIGHT FLASH)
          ==================================================================== -->
     <div class="signal-beacon-wrap">
-      <div class="beacon-label">ÄÃ¨n TÃ­n Hiá»‡u:</div>
-      <div class="beacon-lamp" id="beaconLamp" title="ÄÃ¨n tÃ­n hiá»‡u quang há»c chá»›p sÃ¡ng Ä‘á»“ng bá»™ theo nhá»‹p Morse">
+      <div class="beacon-label">Đèn Tín Hiệu:</div>
+      <div class="beacon-lamp" id="beaconLamp" title="Đèn tín hiệu quang học chớp sáng đồng bộ theo nhịp Morse">
         <div class="beacon-core"></div>
       </div>
     </div>
@@ -1391,10 +1398,10 @@ input, select {
          MASCOT BEEP-BOT GREETING & STATUS
          ==================================================================== -->
     <div class="mascot-container">
-      <div class="mascot-bot" id="mascotBot">ðŸ¤–</div>
+      <div class="mascot-bot" id="mascotBot">🤖</div>
       <div class="mascot-bubble">
-        <div class="mascot-name"><span>Beep-Bot</span> <span>âš¡</span></div>
-        <div class="mascot-msg" id="mascotMsg">Sáºµn sÃ ng thÃ¡m hiá»ƒm khÃ´ng gian mÃ£ Morse cÃ¹ng báº¡n!</div>
+        <div class="mascot-name"><span>Beep-Bot</span> <span>⚡</span></div>
+        <div class="mascot-msg" id="mascotMsg">Sẵn sàng thám hiểm không gian mã Morse cùng bạn!</div>
       </div>
     </div>
 
@@ -1403,24 +1410,24 @@ input, select {
          ==================================================================== -->
     <nav class="nav-tabs" role="tablist">
       <button class="tab-btn active" id="tabAdventure" role="tab">
-        <span class="tab-icon">ðŸš€</span>
-        <span>VÆ°á»£t áº¢i</span>
+        <span class="tab-icon">🚀</span>
+        <span>Vượt Ải</span>
       </button>
       <button class="tab-btn" id="tabSending" role="tab">
-        <span class="tab-icon">ðŸ“¡</span>
-        <span>GÃµ Äiá»‡n BÃ¡o</span>
+        <span class="tab-icon">📡</span>
+        <span>Gõ Điện Báo</span>
       </button>
       <button class="tab-btn" id="tabWordDecoder" role="tab">
-        <span class="tab-icon">ðŸ•µï¸</span>
-        <span>Giáº£i MÃ£ Tá»«</span>
+        <span class="tab-icon">🕵️</span>
+        <span>Giải Mã Từ</span>
       </button>
       <button class="tab-btn" id="tabTranslator" role="tab">
-        <span class="tab-icon">ðŸ“Ÿ</span>
-        <span>Há»™p Máº­t MÃ£</span>
+        <span class="tab-icon">📟</span>
+        <span>Hộp Mật Mã</span>
       </button>
       <button class="tab-btn" id="tabFlashcards" role="tab">
-        <span class="tab-icon">ðŸ“–</span>
-        <span>Tra Cá»©u</span>
+        <span class="tab-icon">📖</span>
+        <span>Tra Cứu</span>
       </button>
     </nav>
 
@@ -1432,8 +1439,8 @@ input, select {
       <section id="levelSelectView" class="game-card">
         <div class="card-header">
           <div>
-            <h1 class="card-title">ðŸš€ Báº£n Äá»“ HÃ nh Tinh Morse</h1>
-            <p class="card-subtitle">Há»c dáº§n tá»«ng chá»¯ cÃ¡i theo phÆ°Æ¡ng phÃ¡p Koch chuáº©n quá»‘c táº¿.</p>
+            <h1 class="card-title">🚀 Bản Đồ Hành Tinh Morse</h1>
+            <p class="card-subtitle">Học dần từng chữ cái theo phương pháp Koch chuẩn quốc tế.</p>
           </div>
         </div>
         <div class="level-map-grid" id="levelMapGrid"></div>
@@ -1443,21 +1450,21 @@ input, select {
       <section id="adventurePlayView" class="game-card hidden">
         <div class="card-header">
           <div>
-            <h2 class="card-title" id="advLevelTitle">ðŸš€ Level 1 Â· TÃ­n Hiá»‡u Äáº§u TiÃªn</h2>
-            <p class="card-subtitle" id="advLevelLetters">KÃ½ tá»±: E Â· T</p>
+            <h2 class="card-title" id="advLevelTitle">🚀 Level 1 · Tín Hiệu Đầu Tiên</h2>
+            <p class="card-subtitle" id="advLevelLetters">Ký tự: E · T</p>
           </div>
-          <button class="btn btn-ghost btn-sm" id="advBackToMapTopBtn">ðŸ—ºï¸ Äá»•i MÃ n</button>
+          <button class="btn btn-ghost btn-sm" id="advBackToMapTopBtn">🗺️ Đổi Màn</button>
         </div>
 
         <!-- Boss Challenge Hearts & Status -->
         <div class="challenge-hud hidden" id="advChallengeHud">
-          <span>âš¡ 15 cÃ¢u Ä‘Ãºng liÃªn tiáº¿p Ä‘á»ƒ vÆ°á»£t áº£i sá»›m!</span>
-          <span class="hearts-display" id="advHearts">â¤ï¸â¤ï¸â¤ï¸</span>
+          <span>⚡ 15 câu đúng liên tiếp để vượt ải sớm!</span>
+          <span class="hearts-display" id="advHearts">❤️❤️❤️</span>
         </div>
 
         <!-- Progress Track -->
         <div style="display: flex; justify-content: space-between; font-size: 0.88rem; font-weight: 800; color: var(--text-secondary);">
-          <span>Tiáº¿n trÃ¬nh cÃ¢u há»i</span>
+          <span>Tiến trình câu hỏi</span>
           <span id="advProgressText">0 / 15</span>
         </div>
         <div class="progress-bar-container">
@@ -1466,16 +1473,16 @@ input, select {
 
         <!-- Newly Introduced Letters in this Level -->
         <div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap; margin-bottom: 12px;">
-          <span style="font-size: 0.85rem; font-weight: 800; color: var(--text-muted);">KÃ½ tá»± má»›i mÃ n nÃ y:</span>
+          <span style="font-size: 0.85rem; font-weight: 800; color: var(--text-muted);">Ký tự mới màn này:</span>
           <div id="advNewLetterCards" style="display: flex; gap: 6px; flex-wrap: wrap;"></div>
         </div>
 
         <!-- Central Signal & Question Hero Display -->
         <div class="quiz-hero-display">
-          <div class="quiz-signal-dots" id="advSignalDots">â€¢ â€¢ â€¢</div>
-          <div class="quiz-feedback" id="advFeedback">Láº¯ng nghe tÃ­n hiá»‡u rá»“i chá»n chá»¯ cÃ¡i tÆ°Æ¡ng á»©ng!</div>
+          <div class="quiz-signal-dots" id="advSignalDots">• • •</div>
+          <div class="quiz-feedback" id="advFeedback">Lắng nghe tín hiệu rồi chọn chữ cái tương ứng!</div>
           <div style="margin-top: 14px; display: flex; gap: 10px;">
-            <button class="btn btn-primary" id="advReplayAudioBtn">ðŸ”Š Nghe Láº¡i (PhÃ­m Space)</button>
+            <button class="btn btn-primary" id="advReplayAudioBtn">🔊 Nghe Lại (Phím Space)</button>
           </div>
         </div>
 
@@ -1490,39 +1497,39 @@ input, select {
     <section id="viewSending" class="game-card hidden">
       <div class="card-header">
         <div>
-          <h2 class="card-title">ðŸ“¡ Tráº¡m PhÃ¡t TÃ­n Hiá»‡u Äiá»‡n BÃ¡o</h2>
-          <p class="card-subtitle">Nháº¥n giá»¯ phÃ­m trÃ²n Ä‘á»ƒ tá»± táº¡o cháº¥m ngáº¯n vÃ  gáº¡ch dÃ i.</p>
+          <h2 class="card-title">📡 Trạm Phát Tín Hiệu Điện Báo</h2>
+          <p class="card-subtitle">Nhấn giữ phím tròn để tự tạo chấm ngắn và gạch dài.</p>
         </div>
         <div style="display: flex; gap: 8px;">
-          <button class="btn btn-ghost btn-sm active" id="sendingSubLearnBtn">ðŸŽ“ Há»c GÃµ</button>
-          <button class="btn btn-ghost btn-sm" id="sendingSubChallengeBtn">âš¡ Thá»­ ThÃ¡ch</button>
+          <button class="btn btn-ghost btn-sm active" id="sendingSubLearnBtn">🎓 Học Gõ</button>
+          <button class="btn btn-ghost btn-sm" id="sendingSubChallengeBtn">⚡ Thử Thách</button>
         </div>
       </div>
 
       <!-- Challenge HUD -->
       <div class="challenge-hud hidden" id="sendingChallengeHud">
         <span id="sendingProgressText">1 / 10</span>
-        <span class="hearts-display" id="sendingHearts">â¤ï¸â¤ï¸â¤ï¸</span>
+        <span class="hearts-display" id="sendingHearts">❤️❤️❤️</span>
       </div>
 
       <div class="keyer-station">
         <div>
-          <div style="font-size: 0.9rem; color: var(--text-muted); font-weight: 700;">HÃ£y phÃ¡t chá»¯:</div>
+          <div style="font-size: 0.9rem; color: var(--text-muted); font-weight: 700;">Hãy phát chữ:</div>
           <div style="font-size: clamp(3.5rem, 10vw, 5rem); font-family: var(--font-family-display); font-weight: 900; line-height: 1.1; color: #fff;" id="sendingTargetLetter">E</div>
-          <div style="font-size: 1.5rem; color: var(--neon-cyan); letter-spacing: 6px; font-weight: 900;" id="sendingTargetHint">â€¢</div>
-          <button class="btn btn-ghost btn-sm" style="margin-top: 8px;" id="sendingSampleAudioBtn">ðŸ”Š Nghe Máº«u</button>
+          <div style="font-size: 1.5rem; color: var(--neon-cyan); letter-spacing: 6px; font-weight: 900;" id="sendingTargetHint">•</div>
+          <button class="btn btn-ghost btn-sm" style="margin-top: 8px;" id="sendingSampleAudioBtn">🔊 Nghe Mẫu</button>
         </div>
 
         <!-- Large Tactile Telegraph Key Button -->
         <div class="telegraph-key-outer">
-          <button class="telegraph-key-btn" id="telegraphKeyBtn">NHáº¤N &amp; GIá»®<br><span style="font-size: 0.8rem; opacity: 0.85;">(Hoáº·c Space)</span></button>
+          <button class="telegraph-key-btn" id="telegraphKeyBtn">NHẤN &amp; GIỮ<br><span style="font-size: 0.8rem; opacity: 0.85;">(Hoặc Space)</span></button>
         </div>
 
-        <div class="sending-readout-box" id="sendingReadout">â€¢ â€¢ â€¢</div>
-        <div id="sendingFeedbackMsg" style="min-height: 24px; font-size: 0.95rem; font-weight: 700; color: var(--text-secondary);">Nháº¥n ngáº¯n = Cháº¥m (â€¢) Â· Nháº¥n lÃ¢u hÆ¡n = Gáº¡ch (â€”)</div>
+        <div class="sending-readout-box" id="sendingReadout">• • •</div>
+        <div id="sendingFeedbackMsg" style="min-height: 24px; font-size: 0.95rem; font-weight: 700; color: var(--text-secondary);">Nhấn ngắn = Chấm (•) · Nhấn lâu hơn = Gạch (—)</div>
 
         <div style="display: flex; gap: 10px;">
-          <button class="btn btn-ghost btn-sm" id="sendingResetBufferBtn">â†» XÃ³a Bá»™ Nhá»› Äá»‡m</button>
+          <button class="btn btn-ghost btn-sm" id="sendingResetBufferBtn">↻ Xóa Bộ Nhớ Đệm</button>
         </div>
       </div>
     </section>
@@ -1533,23 +1540,23 @@ input, select {
     <section id="viewWordDecoder" class="game-card hidden">
       <div class="card-header">
         <div>
-          <h2 class="card-title">ðŸ•µï¸ Äiá»‡p ViÃªn Giáº£i MÃ£ Tá»« BÃ­ Máº­t</h2>
-          <p class="card-subtitle">Nghe tá»«ng kÃ½ tá»± Ä‘á»ƒ ghÃ©p thÃ nh tá»« vá»±ng hoÃ n chá»‰nh.</p>
+          <h2 class="card-title">🕵️ Điệp Viên Giải Mã Từ Bí Mật</h2>
+          <p class="card-subtitle">Nghe từng ký tự để ghép thành từ vựng hoàn chỉnh.</p>
         </div>
-        <button class="btn btn-accent btn-sm" id="wordNextMissionBtn">Tá»« KhÃ¡c â†»</button>
+        <button class="btn btn-accent btn-sm" id="wordNextMissionBtn">Từ Khác ↻</button>
       </div>
 
       <div class="word-mission-box">
-        <div class="word-clue-pill" id="wordCategoryClue">Chá»§ Ä‘á»: Äá»™ng váº­t Â· Gá»£i Ã½: "Báº¡n mÃ¨o kÃªu meo meo"</div>
+        <div class="word-clue-pill" id="wordCategoryClue">Chủ đề: Động vật · Gợi ý: "Bạn mèo kêu meo meo"</div>
 
         <!-- Mystery Letter Slots -->
         <div class="mystery-slots" id="wordMysterySlots"></div>
 
-        <div id="wordFeedbackMsg" style="font-size: 1rem; font-weight: 800; color: var(--text-secondary); min-height: 24px;">Láº¯ng nghe tÃ­n hiá»‡u cá»§a Ã´ Ä‘ang sÃ¡ng!</div>
+        <div id="wordFeedbackMsg" style="font-size: 1rem; font-weight: 800; color: var(--text-secondary); min-height: 24px;">Lắng nghe tín hiệu của ô đang sáng!</div>
 
         <div style="display: flex; gap: 10px;">
-          <button class="btn btn-primary" id="wordPlayLetterBtn">ðŸ”Š Nghe KÃ½ Tá»± NÃ y</button>
-          <button class="btn btn-ghost" id="wordPlayFullBtn">ðŸŽµ Nghe Cáº£ Tá»«</button>
+          <button class="btn btn-primary" id="wordPlayLetterBtn">🔊 Nghe Ký Tự Này</button>
+          <button class="btn btn-ghost" id="wordPlayFullBtn">🎵 Nghe Cả Từ</button>
         </div>
 
         <!-- Keyboard for Word Guesses -->
@@ -1563,36 +1570,36 @@ input, select {
     <section id="viewTranslator" class="game-card hidden">
       <div class="card-header">
         <div>
-          <h2 class="card-title">ðŸ“Ÿ Há»™p Máº­t MÃ£ &amp; PhÃ¡t SÃ³ng ToÃ n Cáº§u</h2>
-          <p class="card-subtitle">Dá»‹ch vÄƒn báº£n sang Morse vÃ  phÃ¡t sÃ³ng Ã¢m thanh + Ä‘Ã¨n flash.</p>
+          <h2 class="card-title">📟 Hộp Mật Mã &amp; Phát Sóng Toàn Cầu</h2>
+          <p class="card-subtitle">Dịch văn bản sang Morse và phát sóng âm thanh + đèn flash.</p>
         </div>
       </div>
 
       <!-- Quick Preset Phrases -->
       <div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap; margin-bottom: 16px;">
-        <span style="font-size: 0.85rem; font-weight: 800; color: var(--text-muted);">Máº«u cÃ¢u nhanh:</span>
-        <button class="hud-pill trans-preset-btn" data-text="SOS">ðŸ†˜ SOS</button>
-        <button class="hud-pill trans-preset-btn" data-text="HELLO">ðŸ‘‹ HELLO</button>
-        <button class="hud-pill trans-preset-btn" data-text="SPACE CADET">ðŸš€ SPACE CADET</button>
-        <button class="hud-pill trans-preset-btn" data-text="I LOVE YOU">â¤ï¸ I LOVE YOU</button>
+        <span style="font-size: 0.85rem; font-weight: 800; color: var(--text-muted);">Mẫu câu nhanh:</span>
+        <button class="hud-pill trans-preset-btn" data-text="SOS">🆘 SOS</button>
+        <button class="hud-pill trans-preset-btn" data-text="HELLO">👋 HELLO</button>
+        <button class="hud-pill trans-preset-btn" data-text="SPACE CADET">🚀 SPACE CADET</button>
+        <button class="hud-pill trans-preset-btn" data-text="I LOVE YOU">❤️ I LOVE YOU</button>
       </div>
 
       <div class="translator-grid">
         <div class="trans-box">
-          <label style="font-weight: 800; color: var(--text-secondary);">VÄƒn Báº£n BÃ¬nh ThÆ°á»ng (Tiáº¿ng Viá»‡t / English):</label>
-          <textarea id="transTextInput" placeholder="Nháº­p tin nháº¯n bÃ­ máº­t cá»§a báº¡n á»Ÿ Ä‘Ã¢y... (VÃ­ dá»¥: XIN CHAO)"></textarea>
+          <label style="font-weight: 800; color: var(--text-secondary);">Văn Bản Bình Thường (Tiếng Việt / English):</label>
+          <textarea id="transTextInput" placeholder="Nhập tin nhắn bí mật của bạn ở đây... (Ví dụ: XIN CHAO)"></textarea>
         </div>
 
         <div class="trans-box">
-          <label style="font-weight: 800; color: var(--neon-cyan);">MÃ£ Morse TÆ°Æ¡ng á»¨ng:</label>
-          <textarea id="transMorseInput" class="morse-area" placeholder="Hoáº·c gÃµ mÃ£ Morse á»Ÿ Ä‘Ã¢y... (VÃ­ dá»¥: ... --- ...)"></textarea>
+          <label style="font-weight: 800; color: var(--neon-cyan);">Mã Morse Tương Ứng:</label>
+          <textarea id="transMorseInput" class="morse-area" placeholder="Hoặc gõ mã Morse ở đây... (Ví dụ: ... --- ...)"></textarea>
         </div>
       </div>
 
       <div style="display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; margin-top: 20px;">
-        <button class="btn btn-success btn-lg" id="transBroadcastBtn">ðŸ“¡ PhÃ¡t TÃ­n Hiá»‡u (Loa + ÄÃ¨n)</button>
-        <button class="btn btn-danger" id="transStopBtn">â¹ Dá»«ng PhÃ¡t</button>
-        <button class="btn btn-ghost" id="transCopyMorseBtn">ðŸ“‹ Sao ChÃ©p MÃ£ Morse</button>
+        <button class="btn btn-success btn-lg" id="transBroadcastBtn">📡 Phát Tín Hiệu (Loa + Đèn)</button>
+        <button class="btn btn-danger" id="transStopBtn">⏹ Dừng Phát</button>
+        <button class="btn btn-ghost" id="transCopyMorseBtn">📋 Sao Chép Mã Morse</button>
       </div>
     </section>
 
@@ -1602,13 +1609,13 @@ input, select {
     <section id="viewFlashcards" class="game-card hidden">
       <div class="card-header">
         <div>
-          <h2 class="card-title">ðŸ“– ThÆ° Viá»‡n Tra Cá»©u &amp; Tháº» Gá»£i Nhá»› (Mnemonics)</h2>
-          <p class="card-subtitle">Báº¥m vÃ o tá»«ng tháº» Ä‘á»ƒ nghe Ã¢m thanh chuáº©n vÃ  xem máº¹o ghi nhá»› hÃ¬nh áº£nh.</p>
+          <h2 class="card-title">📖 Thư Viện Tra Cứu &amp; Thẻ Gợi Nhớ (Mnemonics)</h2>
+          <p class="card-subtitle">Bấm vào từng thẻ để nghe âm thanh chuẩn và xem mẹo ghi nhớ hình ảnh.</p>
         </div>
         <div style="display: flex; gap: 6px;">
-          <button class="btn btn-ghost btn-sm active flashcard-filter-btn" data-filter="all">Táº¥t Cáº£</button>
-          <button class="btn btn-ghost btn-sm flashcard-filter-btn" data-filter="alpha">Chá»¯ CÃ¡i (A-Z)</button>
-          <button class="btn btn-ghost btn-sm flashcard-filter-btn" data-filter="num">Chá»¯ Sá»‘ (0-9)</button>
+          <button class="btn btn-ghost btn-sm active flashcard-filter-btn" data-filter="all">Tất Cả</button>
+          <button class="btn btn-ghost btn-sm flashcard-filter-btn" data-filter="alpha">Chữ Cái (A-Z)</button>
+          <button class="btn btn-ghost btn-sm flashcard-filter-btn" data-filter="num">Chữ Số (0-9)</button>
         </div>
       </div>
 
@@ -1679,7 +1686,7 @@ Object.entries(MORSE).forEach(([char, code]) => {
 // Convert standard dots/dashes to visual symbols
 function formatMorseSymbols(code) {
   if (!code) return "";
-  return code.replaceAll(".", "â€¢").replaceAll("-", "â€”");
+  return code.replaceAll(".", "•").replaceAll("-", "—");
 }
 
 /* ==========================================================================
@@ -1688,94 +1695,94 @@ function formatMorseSymbols(code) {
 const LESSONS_DATA = [
   {
     level: 1,
-    name: "TÃ­n Hiá»‡u Äáº§u TiÃªn",
+    name: "Tín Hiệu Đầu Tiên",
     newLetters: ["E", "T"],
     letters: ["E", "T"],
-    desc: "LÃ m quen vá»›i Cháº¥m ngáº¯n (E) vÃ  Gáº¡ch dÃ i (T)."
+    desc: "Làm quen với Chấm ngắn (E) và Gạch dài (T)."
   },
   {
     level: 2,
-    name: "Bá»‘n TÃ­n Hiá»‡u CÆ¡ Báº£n",
+    name: "Bốn Tín Hiệu Cơ Bản",
     newLetters: ["A", "N"],
     letters: ["E", "T", "A", "N"],
-    desc: "Má»Ÿ rá»™ng vá»›i A (â€¢â€”) vÃ  N (â€”â€¢)."
+    desc: "Mở rộng với A (•—) và N (—•)."
   },
   {
     level: 3,
-    name: "TÃ¢n Binh KhÃ´ng Gian",
+    name: "Tân Binh Không Gian",
     newLetters: ["I", "M"],
     letters: ["E", "T", "A", "N", "I", "M"],
-    desc: "ThÃªm I (â€¢â€¢) vÃ  M (â€”â€”) cho nhá»‹p Ä‘iá»‡u."
+    desc: "Thêm I (••) và M (——) cho nhịp điệu."
   },
   {
     level: 4,
-    name: "NhÃ  ThÃ¡m Hiá»ƒm SÃ³ng",
+    name: "Nhà Thám Hiểm Sóng",
     newLetters: ["S", "O"],
     letters: ["E", "T", "A", "N", "I", "M", "S", "O"],
-    desc: "Há»c tÃ­n hiá»‡u huyá»n thoáº¡i SOS (S â€¢â€¢â€¢, O â€”â€”â€”)."
+    desc: "Học tín hiệu huyền thoại SOS (S •••, O ———)."
   },
   {
     level: 5,
-    name: "Äiá»‡p ViÃªn Radar",
+    name: "Điệp Viên Radar",
     newLetters: ["R", "K"],
     letters: ["E", "T", "A", "N", "I", "M", "S", "O", "R", "K"],
-    desc: "Pháº£n xáº¡ nhanh vá»›i R (â€¢â€”â€¢) vÃ  K (â€”â€¢â€”)."
+    desc: "Phản xạ nhanh với R (•—•) và K (—•—)."
   },
   {
     level: 6,
-    name: "Trinh SÃ¡t VÅ© Trá»¥",
+    name: "Trinh Sát Vũ Trụ",
     newLetters: ["D", "G"],
     letters: ["E", "T", "A", "N", "I", "M", "S", "O", "R", "K", "D", "G"],
-    desc: "Giáº£i mÃ£ cÃ¡c Ã¢m thanh tráº§m D (â€”â€¢â€¢) vÃ  G (â€”â€”â€¢)."
+    desc: "Giải mã các âm thanh trầm D (—••) và G (——•)."
   },
   {
     level: 7,
-    name: "Phi CÃ´ng Phi Thuyá»n",
+    name: "Phi Công Phi Thuyền",
     newLetters: ["U", "W"],
     letters: ["E", "T", "A", "N", "I", "M", "S", "O", "R", "K", "D", "G", "U", "W"],
-    desc: "Chinh phá»¥c U (â€¢â€¢â€”) vÃ  W (â€¢â€”â€”)."
+    desc: "Chinh phục U (••—) và W (•——)."
   },
   {
     level: 8,
-    name: "Thá»£ SÄƒn TÃ­n Hiá»‡u",
+    name: "Thợ Săn Tín Hiệu",
     newLetters: ["H", "V"],
     letters: ["E", "T", "A", "N", "I", "M", "S", "O", "R", "K", "D", "G", "U", "W", "H", "V"],
-    desc: "H (â€¢â€¢â€¢â€¢) 4 cháº¥m dá»“n dáº­p vÃ  V (â€¢â€¢â€¢â€”) khÃºc kháº£i hoÃ n."
+    desc: "H (••••) 4 chấm dồn dập và V (•••—) khúc khải hoàn."
   },
   {
     level: 9,
-    name: "NhÃ  Du HÃ nh Morse",
+    name: "Nhà Du Hành Morse",
     newLetters: ["F", "L"],
     letters: ["E", "T", "A", "N", "I", "M", "S", "O", "R", "K", "D", "G", "U", "W", "H", "V", "F", "L"],
-    desc: "Luyá»‡n Ä‘Ã´i tai sáº¯c bÃ©n vá»›i F (â€¢â€¢â€”â€¢) vÃ  L (â€¢â€”â€¢â€¢)."
+    desc: "Luyện đôi tai sắc bén với F (••—•) và L (•—••)."
   },
   {
     level: 10,
-    name: "Chá»‰ Huy Tráº¡m KhÃ´ng Gian",
+    name: "Chỉ Huy Trạm Không Gian",
     newLetters: ["P", "J"],
     letters: ["E", "T", "A", "N", "I", "M", "S", "O", "R", "K", "D", "G", "U", "W", "H", "V", "F", "L", "P", "J"],
-    desc: "PhÃ¡t Ã¢m dÃ i P (â€¢â€”â€”â€¢) vÃ  J (â€¢â€”â€”â€”)."
+    desc: "Phát âm dài P (•——•) và J (•———)."
   },
   {
     level: 11,
-    name: "Cao Thá»§ Máº­t MÃ£",
+    name: "Cao Thủ Mật Mã",
     newLetters: ["B", "X"],
     letters: ["E", "T", "A", "N", "I", "M", "S", "O", "R", "K", "D", "G", "U", "W", "H", "V", "F", "L", "P", "J", "B", "X"],
-    desc: "Giáº£i mÃ£ B (â€”â€¢â€¢â€¢) vÃ  X (â€”â€¢â€¢â€”)."
+    desc: "Giải mã B (—•••) và X (—••—)."
   },
   {
     level: 12,
-    name: "ChuyÃªn Gia Radar",
+    name: "Chuyên Gia Radar",
     newLetters: ["C", "Y"],
     letters: ["E", "T", "A", "N", "I", "M", "S", "O", "R", "K", "D", "G", "U", "W", "H", "V", "F", "L", "P", "J", "B", "X", "C", "Y"],
-    desc: "Chuáº©n bá»‹ vá» Ä‘Ã­ch vá»›i C (â€”â€¢â€”â€¢) vÃ  Y (â€”â€¢â€”â€”)."
+    desc: "Chuẩn bị về đích với C (—•—•) và Y (—•——)."
   },
   {
     level: 13,
-    name: "Äáº¡i Sá»© Morse VÅ© Trá»¥",
+    name: "Đại Sứ Morse Vũ Trụ",
     newLetters: ["Z", "Q"],
     letters: ["E", "T", "A", "N", "I", "M", "S", "O", "R", "K", "D", "G", "U", "W", "H", "V", "F", "L", "P", "J", "B", "X", "C", "Y", "Z", "Q"],
-    desc: "Má»Ÿ khÃ³a toÃ n bá»™ 26 chá»¯ cÃ¡i vá»›i Z (â€”â€”â€¢â€¢) vÃ  Q (â€”â€”â€¢â€”)!"
+    desc: "Mở khóa toàn bộ 26 chữ cái với Z (——••) và Q (——•—)!"
   }
 ];
 
@@ -1795,97 +1802,97 @@ LESSONS_DATA.forEach((lesson, index) => {
       type: "challenge",
       challengeId: challengeNum,
       levelNumber: LEVELS_LIST.length + 1,
-      name: `âš¡ Thá»­ ThÃ¡ch Boss ${challengeNum}`,
+      name: `⚡ Thử Thách Boss ${challengeNum}`,
       newLetters: [],
       letters: [...lesson.letters],
-      desc: `Ã”n táº­p tá»•ng há»£p cáº¥p Ä‘á»™ 1 Ä‘áº¿n ${index + 1}. CÃ³ 3 Tim!`
+      desc: `Ôn tập tổng hợp cấp độ 1 đến ${index + 1}. Có 3 Tim!`
     });
   }
 });
 
 /* ==========================================================================
-   VISUAL MNEMONICS (HÃŒNH Gá»¢I NHá»š TRáºº EM)
+   VISUAL MNEMONICS (HÌNH GỢI NHỚ TRẺ EM)
    ========================================================================== */
 const MNEMONICS = {
-  A: { icon: "âœˆï¸", word: "Airplane", hint: "MÃ¡y bay cáº¥t cÃ¡nh (ngáº¯n - dÃ i)", code: ".-" },
-  B: { icon: "ðŸŒ", word: "Banana", hint: "Má»™t náº£i chuá»‘i (dÃ i - ngáº¯n - ngáº¯n - ngáº¯n)", code: "-..." },
-  C: { icon: "ðŸ¬", word: "Candy", hint: "Káº¹o ngá»t ngÃ o (dÃ i - ngáº¯n - dÃ i - ngáº¯n)", code: "-.-." },
-  D: { icon: "ðŸ¶", word: "Dog", hint: "ChÃº cÃºn váº«y Ä‘uÃ´i (dÃ i - ngáº¯n - ngáº¯n)", code: "-.." },
-  E: { icon: "ðŸ‘ï¸", word: "Eye", hint: "Má»™t chá»›p máº¯t ngáº¯n (cháº¥m)", code: "." },
-  F: { icon: "ðŸ¦Š", word: "Fox", hint: "CÃ¡o thÃ´ng minh (ngáº¯n - ngáº¯n - dÃ i - ngáº¯n)", code: "..-." },
-  G: { icon: "ðŸ¦’", word: "Giraffe", hint: "HÆ°Æ¡u cao cá»• (dÃ i - dÃ i - ngáº¯n)", code: "--." },
-  H: { icon: "ðŸ ", word: "Home", hint: "4 bá»©c tÆ°á»ng nhÃ  (4 cháº¥m)", code: "...." },
-  I: { icon: "ðŸ¦", word: "Ice cream", hint: "2 viÃªn kem ngon (2 cháº¥m)", code: ".." },
-  J: { icon: "ðŸ¤¹", word: "Juggler", hint: "Tung 3 bÃ³ng dÃ i (ngáº¯n - dÃ i - dÃ i - dÃ i)", code: ".---" },
-  K: { icon: "ðŸ¦˜", word: "Kangaroo", hint: "Chuá»™t tÃºi nháº£y (dÃ i - ngáº¯n - dÃ i)", code: "-.-" },
-  L: { icon: "ðŸ‹", word: "Lemon", hint: "Quáº£ chanh má»ng (ngáº¯n - dÃ i - ngáº¯n - ngáº¯n)", code: ".-.." },
-  M: { icon: "ðŸŒ™", word: "Moon", hint: "2 váº§ng trÄƒng sÃ¡ng (2 gáº¡ch)", code: "--" },
-  N: { icon: "ðŸ¥œ", word: "Nut", hint: "Háº¡t dáº» cáº¯n Ä‘Ã´i (dÃ i - ngáº¯n)", code: "-." },
-  O: { icon: "ðŸ¦‰", word: "Owl", hint: "CÃº mÃ¨o cÃº vá» (3 gáº¡ch dÃ i)", code: "---" },
-  P: { icon: "ðŸ§", word: "Penguin", hint: "Chim cÃ¡nh cá»¥t (ngáº¯n - dÃ i - dÃ i - ngáº¯n)", code: ".--." },
-  Q: { icon: "ðŸ‘‘", word: "Queen", hint: "VÆ°Æ¡ng miá»‡n láº¥p lÃ¡nh (dÃ i - dÃ i - ngáº¯n - dÃ i)", code: "--.-" },
-  R: { icon: "ðŸ¤–", word: "Robot", hint: "Robot Beep-Bot (ngáº¯n - dÃ i - ngáº¯n)", code: ".-." },
-  S: { icon: "ðŸ“", word: "Strawberry", hint: "3 quáº£ dÃ¢u tÃ¢y (3 cháº¥m)", code: "..." },
-  T: { icon: "ðŸŒ²", word: "Tree", hint: "ThÃ¢n cÃ¢y tháº³ng Ä‘á»©ng (1 gáº¡ch)", code: "-" },
-  U: { icon: "ðŸ¦„", word: "Unicorn", hint: "Ká»³ lÃ¢n ká»³ diá»‡u (ngáº¯n - ngáº¯n - dÃ i)", code: "..-" },
-  V: { icon: "ðŸŽ»", word: "Violin", hint: "Nháº¡c giao hÆ°á»Ÿng (3 ngáº¯n - 1 dÃ i)", code: "...-" },
-  W: { icon: "ðŸŒŠ", word: "Wave", hint: "SÃ³ng biá»ƒn dáº­p dá»nh (ngáº¯n - dÃ i - dÃ i)", code: ".--" },
-  X: { icon: "âš”ï¸", word: "Xylophone", hint: "Hai thanh kiáº¿m chÃ©o (dÃ i - 2 ngáº¯n - dÃ i)", code: "-..-" },
-  Y: { icon: "â›µ", word: "Yacht", hint: "Thuyá»n buá»“m ra khÆ¡i (dÃ i - ngáº¯n - 2 dÃ i)", code: "-.--" },
-  Z: { icon: "ðŸ¦“", word: "Zebra", hint: "Ngá»±a váº±n dÅ©ng cáº£m (2 dÃ i - 2 ngáº¯n)", code: "--.." }
+  A: { icon: "✈️", word: "Airplane", hint: "Máy bay cất cánh (ngắn - dài)", code: ".-" },
+  B: { icon: "🍌", word: "Banana", hint: "Một nải chuối (dài - ngắn - ngắn - ngắn)", code: "-..." },
+  C: { icon: "🍬", word: "Candy", hint: "Kẹo ngọt ngào (dài - ngắn - dài - ngắn)", code: "-.-." },
+  D: { icon: "🐶", word: "Dog", hint: "Chú cún vẫy đuôi (dài - ngắn - ngắn)", code: "-.." },
+  E: { icon: "👁️", word: "Eye", hint: "Một chớp mắt ngắn (chấm)", code: "." },
+  F: { icon: "🦊", word: "Fox", hint: "Cáo thông minh (ngắn - ngắn - dài - ngắn)", code: "..-." },
+  G: { icon: "🦒", word: "Giraffe", hint: "Hươu cao cổ (dài - dài - ngắn)", code: "--." },
+  H: { icon: "🏠", word: "Home", hint: "4 bức tường nhà (4 chấm)", code: "...." },
+  I: { icon: "🍦", word: "Ice cream", hint: "2 viên kem ngon (2 chấm)", code: ".." },
+  J: { icon: "🤹", word: "Juggler", hint: "Tung 3 bóng dài (ngắn - dài - dài - dài)", code: ".---" },
+  K: { icon: "🦘", word: "Kangaroo", hint: "Chuột túi nhảy (dài - ngắn - dài)", code: "-.-" },
+  L: { icon: "🍋", word: "Lemon", hint: "Quả chanh mọng (ngắn - dài - ngắn - ngắn)", code: ".-.." },
+  M: { icon: "🌙", word: "Moon", hint: "2 vầng trăng sáng (2 gạch)", code: "--" },
+  N: { icon: "🥜", word: "Nut", hint: "Hạt dẻ cắn đôi (dài - ngắn)", code: "-." },
+  O: { icon: "🦉", word: "Owl", hint: "Cú mèo cú vọ (3 gạch dài)", code: "---" },
+  P: { icon: "🐧", word: "Penguin", hint: "Chim cánh cụt (ngắn - dài - dài - ngắn)", code: ".--." },
+  Q: { icon: "👑", word: "Queen", hint: "Vương miện lấp lánh (dài - dài - ngắn - dài)", code: "--.-" },
+  R: { icon: "🤖", word: "Robot", hint: "Robot Beep-Bot (ngắn - dài - ngắn)", code: ".-." },
+  S: { icon: "🍓", word: "Strawberry", hint: "3 quả dâu tây (3 chấm)", code: "..." },
+  T: { icon: "🌲", word: "Tree", hint: "Thân cây thẳng đứng (1 gạch)", code: "-" },
+  U: { icon: "🦄", word: "Unicorn", hint: "Kỳ lân kỳ diệu (ngắn - ngắn - dài)", code: "..-" },
+  V: { icon: "🎻", word: "Violin", hint: "Nhạc giao hưởng (3 ngắn - 1 dài)", code: "...-" },
+  W: { icon: "🌊", word: "Wave", hint: "Sóng biển dập dềnh (ngắn - dài - dài)", code: ".--" },
+  X: { icon: "⚔️", word: "Xylophone", hint: "Hai thanh kiếm chéo (dài - 2 ngắn - dài)", code: "-..-" },
+  Y: { icon: "⛵", word: "Yacht", hint: "Thuyền buồm ra khơi (dài - ngắn - 2 dài)", code: "-.--" },
+  Z: { icon: "🦓", word: "Zebra", hint: "Ngựa vằn dũng cảm (2 dài - 2 ngắn)", code: "--.." }
 };
 
 /* ==========================================================================
    SECRET WORDS FOR WORD DECODER MISSION
    ========================================================================== */
 const SECRET_WORDS = [
-  // Cáº¥p Ä‘á»™ 1: 2-3 chá»¯ cÃ¡i
-  { word: "HI", clue: "Lá»i chÃ o thÃ¢n thiá»‡n!", category: "Giao tiáº¿p", icon: "ðŸ‘‹" },
-  { word: "SOS", clue: "TÃ­n hiá»‡u cáº¥p cá»©u vÅ© trá»¥!", category: "Kháº©n cáº¥p", icon: "ðŸ†˜" },
-  { word: "CAT", clue: "Báº¡n mÃ¨o kÃªu meo meo", category: "Äá»™ng váº­t", icon: "ðŸ±" },
-  { word: "DOG", clue: "Báº¡n cÃºn trung thÃ nh", category: "Äá»™ng váº­t", icon: "ðŸ¶" },
-  { word: "SUN", clue: "Máº·t trá»i áº¥m Ã¡p", category: "VÅ© trá»¥", icon: "â˜€ï¸" },
-  { word: "EGG", clue: "Quáº£ trá»©ng ná»Ÿ ra chim non", category: "Thá»©c Äƒn", icon: "ðŸ¥š" },
-  { word: "ICE", clue: "ÄÃ¡ láº¡nh mÃ¡t rÆ°á»£i", category: "ThiÃªn nhiÃªn", icon: "ðŸ§Š" },
-  { word: "RED", clue: "MÃ u Ä‘á» rá»±c rá»¡", category: "MÃ u sáº¯c", icon: "ðŸ”´" },
-  { word: "FOX", clue: "CÃ¡o thÃ´ng minh nhanh nháº¹n", category: "Äá»™ng váº­t", icon: "ðŸ¦Š" },
+  // Cấp độ 1: 2-3 chữ cái
+  { word: "HI", clue: "Lời chào thân thiện!", category: "Giao tiếp", icon: "👋" },
+  { word: "SOS", clue: "Tín hiệu cấp cứu vũ trụ!", category: "Khẩn cấp", icon: "🆘" },
+  { word: "CAT", clue: "Bạn mèo kêu meo meo", category: "Động vật", icon: "🐱" },
+  { word: "DOG", clue: "Bạn cún trung thành", category: "Động vật", icon: "🐶" },
+  { word: "SUN", clue: "Mặt trời ấm áp", category: "Vũ trụ", icon: "☀️" },
+  { word: "EGG", clue: "Quả trứng nở ra chim non", category: "Thức ăn", icon: "🥚" },
+  { word: "ICE", clue: "Đá lạnh mát rượi", category: "Thiên nhiên", icon: "🧊" },
+  { word: "RED", clue: "Màu đỏ rực rỡ", category: "Màu sắc", icon: "🔴" },
+  { word: "FOX", clue: "Cáo thông minh nhanh nhẹn", category: "Động vật", icon: "🦊" },
 
-  // Cáº¥p Ä‘á»™ 2: 4 chá»¯ cÃ¡i
-  { word: "STAR", clue: "NgÃ´i sao láº¥p lÃ¡nh trÃªn trá»i", category: "VÅ© trá»¥", icon: "â­" },
-  { word: "MOON", clue: "Máº·t trÄƒng trÃ²n Ä‘Ãªm ráº±m", category: "VÅ© trá»¥", icon: "ðŸŒ™" },
-  { word: "SHIP", clue: "Phi thuyá»n thÃ¡m hiá»ƒm ngÃ¢n hÃ ", category: "VÅ© trá»¥", icon: "ðŸš€" },
-  { word: "HERO", clue: "NgÆ°á»i hÃ¹ng nhÃ­ dÅ©ng cáº£m", category: "NhÃ¢n váº­t", icon: "ðŸ¦¸" },
-  { word: "LION", clue: "ChÃºa sÆ¡n lÃ¢m dÅ©ng mÃ£nh", category: "Äá»™ng váº­t", icon: "ðŸ¦" },
-  { word: "BEAR", clue: "ChÃº gáº¥u thÃ­ch máº­t ong", category: "Äá»™ng váº­t", icon: "ðŸ»" },
-  { word: "CODE", clue: "Máº­t mÃ£ bÃ­ máº­t", category: "Khoa há»c", icon: "ðŸ’»" },
-  { word: "GAME", clue: "TrÃ² chÆ¡i siÃªu thÃº vá»‹", category: "Giáº£i trÃ­", icon: "ðŸŽ®" },
-  { word: "BIRD", clue: "ChÃº chim hÃ³t lÃ­u lo", category: "Äá»™ng váº­t", icon: "ðŸ¦" },
+  // Cấp độ 2: 4 chữ cái
+  { word: "STAR", clue: "Ngôi sao lấp lánh trên trời", category: "Vũ trụ", icon: "⭐" },
+  { word: "MOON", clue: "Mặt trăng tròn đêm rằm", category: "Vũ trụ", icon: "🌙" },
+  { word: "SHIP", clue: "Phi thuyền thám hiểm ngân hà", category: "Vũ trụ", icon: "🚀" },
+  { word: "HERO", clue: "Người hùng nhí dũng cảm", category: "Nhân vật", icon: "🦸" },
+  { word: "LION", clue: "Chúa sơn lâm dũng mãnh", category: "Động vật", icon: "🦁" },
+  { word: "BEAR", clue: "Chú gấu thích mật ong", category: "Động vật", icon: "🐻" },
+  { word: "CODE", clue: "Mật mã bí mật", category: "Khoa học", icon: "💻" },
+  { word: "GAME", clue: "Trò chơi siêu thú vị", category: "Giải trí", icon: "🎮" },
+  { word: "BIRD", clue: "Chú chim hót líu lo", category: "Động vật", icon: "🐦" },
 
-  // Cáº¥p Ä‘á»™ 3: 5 chá»¯ cÃ¡i
-  { word: "ROBOT", clue: "NgÆ°á»i báº¡n mÃ¡y Beep-Bot", category: "CÃ´ng nghá»‡", icon: "ðŸ¤–" },
-  { word: "SPACE", clue: "KhÃ´ng gian vÅ© trá»¥ bao la", category: "VÅ© trá»¥", icon: "ðŸŒŒ" },
-  { word: "MAGIC", clue: "PhÃ©p thuáº­t ká»³ diá»‡u", category: "Huyá»n bÃ­", icon: "âœ¨" },
-  { word: "EARTH", clue: "TrÃ¡i Äáº¥t hÃ nh tinh xanh", category: "VÅ© trá»¥", icon: "ðŸŒ" },
-  { word: "BRAVE", clue: "DÅ©ng cáº£m vÆ°á»£t qua thá»­ thÃ¡ch", category: "Pháº©m cháº¥t", icon: "ðŸ›¡ï¸" },
-  { word: "WATER", clue: "Nguá»“n nÆ°á»›c trong lÃ nh", category: "ThiÃªn nhiÃªn", icon: "ðŸ’§" }
+  // Cấp độ 3: 5 chữ cái
+  { word: "ROBOT", clue: "Người bạn máy Beep-Bot", category: "Công nghệ", icon: "🤖" },
+  { word: "SPACE", clue: "Không gian vũ trụ bao la", category: "Vũ trụ", icon: "🌌" },
+  { word: "MAGIC", clue: "Phép thuật kỳ diệu", category: "Huyền bí", icon: "✨" },
+  { word: "EARTH", clue: "Trái Đất hành tinh xanh", category: "Vũ trụ", icon: "🌍" },
+  { word: "BRAVE", clue: "Dũng cảm vượt qua thử thách", category: "Phẩm chất", icon: "🛡️" },
+  { word: "WATER", clue: "Nguồn nước trong lành", category: "Thiên nhiên", icon: "💧" }
 ];
 
 /* ==========================================================================
    12 BADGES / ACHIEVEMENTS
    ========================================================================== */
 const BADGES_DEF = [
-  { id: "cadet", icon: "ðŸš€", title: "TÃ¢n Binh VÅ© Trá»¥", desc: "HoÃ n thÃ nh mÃ n há»c Ä‘áº§u tiÃªn (Level 1)." },
-  { id: "streak_5", icon: "ðŸ”¥", title: "BÃ n Tay Nhanh Nháº¹n", desc: "Äáº¡t chuá»—i 5 cÃ¢u Ä‘Ãºng liÃªn tiáº¿p." },
-  { id: "streak_15", icon: "âš¡", title: "Tia Chá»›p Morse", desc: "Äáº¡t chuá»—i 15 cÃ¢u Ä‘Ãºng liÃªn tiáº¿p." },
-  { id: "boss_slayer", icon: "ðŸ‘‘", title: "VÆ°á»£t áº¢i Boss", desc: "Chiáº¿n tháº¯ng má»™t mÃ n Thá»­ ThÃ¡ch Boss." },
-  { id: "word_hunter", icon: "ðŸ•µï¸", title: "ThÃ¡m Tá»­ Máº­t MÃ£", desc: "Giáº£i mÃ£ thÃ nh cÃ´ng 3 tá»« bÃ­ máº­t." },
-  { id: "broadcaster", icon: "ðŸ“¡", title: "Tráº¡m PhÃ¡t SÃ³ng", desc: "PhÃ¡t sÃ³ng 1 thÃ´ng Ä‘iá»‡p bÃ­ máº­t." },
-  { id: "keyer_master", icon: "ðŸŽ¹", title: "Nghá»‡ SÄ© Äiá»‡n BÃ¡o", desc: "PhÃ¡t Ä‘Ãºng 5 chá»¯ cÃ¡i á»Ÿ cháº¿ Ä‘á»™ Luyá»‡n GÃµ." },
-  { id: "halfway", icon: "ðŸª", title: "ThÃ¡m Hiá»ƒm Ná»­a NgÃ¢n HÃ ", desc: "Má»Ÿ khÃ³a thÃ nh cÃ´ng Level 7." },
-  { id: "all_letters", icon: "ðŸ†", title: "Äáº¡i Sá»© Morse ToÃ n NÄƒng", desc: "Má»Ÿ khÃ³a toÃ n bá»™ 13 Level báº£ng chá»¯ cÃ¡i." },
-  { id: "star_collector", icon: "â­", title: "Báº§u Trá»i NgÃ´i Sao", desc: "Thu tháº­p Ä‘á»§ 15 ngÃ´i sao vÃ ng." },
-  { id: "sound_explorer", icon: "ðŸŽµ", title: "ÄÃ´i Tai Ã‚m Nháº¡c", desc: "Thá»­ qua cáº£ 4 bá»™ Ã¢m thanh khÃ¡c nhau." },
-  { id: "perfect_run", icon: "ðŸ’Ž", title: "Tuyá»‡t Äá»‘i HoÃ n Háº£o", desc: "VÆ°á»£t qua má»™t bÃ i há»c vá»›i Ä‘á»™ chÃ­nh xÃ¡c 100%." }
+  { id: "cadet", icon: "🚀", title: "Tân Binh Vũ Trụ", desc: "Hoàn thành màn học đầu tiên (Level 1)." },
+  { id: "streak_5", icon: "🔥", title: "Bàn Tay Nhanh Nhẹn", desc: "Đạt chuỗi 5 câu đúng liên tiếp." },
+  { id: "streak_15", icon: "⚡", title: "Tia Chớp Morse", desc: "Đạt chuỗi 15 câu đúng liên tiếp." },
+  { id: "boss_slayer", icon: "👑", title: "Vượt Ải Boss", desc: "Chiến thắng một màn Thử Thách Boss." },
+  { id: "word_hunter", icon: "🕵️", title: "Thám Tử Mật Mã", desc: "Giải mã thành công 3 từ bí mật." },
+  { id: "broadcaster", icon: "📡", title: "Trạm Phát Sóng", desc: "Phát sóng 1 thông điệp bí mật." },
+  { id: "keyer_master", icon: "🎹", title: "Nghệ Sĩ Điện Báo", desc: "Phát đúng 5 chữ cái ở chế độ Luyện Gõ." },
+  { id: "halfway", icon: "🪐", title: "Thám Hiểm Nửa Ngân Hà", desc: "Mở khóa thành công Level 7." },
+  { id: "all_letters", icon: "🏆", title: "Đại Sứ Morse Toàn Năng", desc: "Mở khóa toàn bộ 13 Level bảng chữ cái." },
+  { id: "star_collector", icon: "⭐", title: "Bầu Trời Ngôi Sao", desc: "Thu thập đủ 15 ngôi sao vàng." },
+  { id: "sound_explorer", icon: "🎵", title: "Đôi Tai Âm Nhạc", desc: "Thử qua cả 4 bộ âm thanh khác nhau." },
+  { id: "perfect_run", icon: "💎", title: "Tuyệt Đối Hoàn Hảo", desc: "Vượt qua một bài học với độ chính xác 100%." }
 ];
 
 /* ==========================================================================
@@ -2057,12 +2064,12 @@ class AudioEngine {
 
       const char = code[i];
 
-      if (char === "." || char === "â€¢") {
+      if (char === "." || char === "•") {
         this.startTone();
         await this._sleep(ditMs);
         this.stopTone();
         await this._sleep(elementGapMs);
-      } else if (char === "-" || char === "â€”") {
+      } else if (char === "-" || char === "—") {
         this.startTone();
         await this._sleep(dahMs);
         this.stopTone();
@@ -2254,14 +2261,14 @@ class VisualEngine {
     if (this.mascotBotEl) {
       // Set robot avatar emoji/icon
       const icons = {
-        happy: "ðŸ¤–",
-        cheer: "ðŸ¥³",
-        thinking: "ðŸ§",
-        oops: "ðŸ˜…",
-        dance: "ðŸš€",
-        hero: "â­"
+        happy: "🤖",
+        cheer: "🥳",
+        thinking: "🧐",
+        oops: "😅",
+        dance: "🚀",
+        hero: "⭐"
       };
-      this.mascotBotEl.textContent = icons[emotion] || "ðŸ¤–";
+      this.mascotBotEl.textContent = icons[emotion] || "🤖";
     }
   }
 
@@ -2483,11 +2490,11 @@ class StorageManager {
     modal.innerHTML = `
       <div class="modal-box">
         <div class="modal-icon">${badge.icon}</div>
-        <div class="modal-title">Huy Hiá»‡u Má»›i Má»Ÿ KhÃ³a!</div>
+        <div class="modal-title">Huy Hiệu Mới Mở Khóa!</div>
         <h3 style="color: var(--neon-amber); margin-bottom: 8px;">${badge.title}</h3>
         <p class="modal-desc">${badge.desc}</p>
-        <p style="color: var(--neon-cyan); font-weight: 800; margin-bottom: 16px;">+100 XP ThÆ°á»Ÿng</p>
-        <button class="btn btn-primary" id="closeBadgeModalBtn">Tuyá»‡t Vá»i! ðŸš€</button>
+        <p style="color: var(--neon-cyan); font-weight: 800; margin-bottom: 16px;">+100 XP Thưởng</p>
+        <button class="btn btn-primary" id="closeBadgeModalBtn">Tuyệt Vời! 🚀</button>
       </div>
     `;
 
@@ -2501,7 +2508,7 @@ class StorageManager {
     const xpEl = document.getElementById("hudXp");
     const streakEl = document.getElementById("hudStreak");
     if (xpEl) xpEl.textContent = `${this.data.xp} XP`;
-    if (streakEl) streakEl.textContent = `${this.data.streak} ngÃ y`;
+    if (streakEl) streakEl.textContent = `${this.data.streak} ngày`;
   }
 }
 
@@ -2547,16 +2554,16 @@ class AdventureMode {
       card.className = `level-card-btn ${isUnlocked ? "" : "locked"} ${isChallenge ? "challenge" : ""} ${level.levelNumber === storage.data.unlockedLevel ? "current" : ""}`;
       
       const starsHtml = isUnlocked
-        ? "â˜…".repeat(starsCount) + "â˜†".repeat(3 - starsCount)
-        : "ðŸ”’ KhÃ³a";
+        ? "★".repeat(starsCount) + "☆".repeat(3 - starsCount)
+        : "🔒 Khóa";
 
       card.innerHTML = `
         <div style="display: flex; justify-content: space-between; align-items: center;">
-          <span class="level-num-badge">${isChallenge ? "ðŸ‘‘ BOSS" : `LEVEL ${level.levelNumber}`}</span>
+          <span class="level-num-badge">${isChallenge ? "👑 BOSS" : `LEVEL ${level.levelNumber}`}</span>
           <span class="level-stars">${starsHtml}</span>
         </div>
         <div style="font-size: 1.05rem; font-weight: 800; color: #fff;">${level.name}</div>
-        <div class="level-letters-tag">${level.letters.join(" Â· ")}</div>
+        <div class="level-letters-tag">${level.letters.join(" · ")}</div>
       `;
 
       if (isUnlocked) {
@@ -2588,8 +2595,8 @@ class AdventureMode {
     document.getElementById("adventurePlayView").classList.remove("hidden");
 
     // Update Headers
-    document.getElementById("advLevelTitle").textContent = `${this.levelData.type === "challenge" ? "ðŸ‘‘ " : "ðŸš€ "}${this.levelData.name}`;
-    document.getElementById("advLevelLetters").textContent = `KÃ½ tá»±: ${this.levelData.letters.join(" Â· ")}`;
+    document.getElementById("advLevelTitle").textContent = `${this.levelData.type === "challenge" ? "👑 " : "🚀 "}${this.levelData.name}`;
+    document.getElementById("advLevelLetters").textContent = `Ký tự: ${this.levelData.letters.join(" · ")}`;
     
     const challengeHud = document.getElementById("advChallengeHud");
     if (this.levelData.type === "challenge") {
@@ -2604,7 +2611,7 @@ class AdventureMode {
     this.updateProgress();
 
     visualEngine.setMascotState(
-      `ChÃ o má»«ng Ä‘áº¿n vá»›i ${this.levelData.name}! HÃ£y láº¯ng nghe tháº­t ká»¹ nhÃ©!`,
+      `Chào mừng đến với ${this.levelData.name}! Hãy lắng nghe thật kỹ nhé!`,
       "cheer"
     );
 
@@ -2678,8 +2685,8 @@ class AdventureMode {
       this.currentLetter = pool[Math.floor(Math.random() * pool.length)];
     }
 
-    document.getElementById("advSignalDots").textContent = "â€¢ â€¢ â€¢";
-    document.getElementById("advFeedback").textContent = "Nháº¥n [Nghe TÃ­n Hiá»‡u] hoáº·c PhÃ­m Space Ä‘á»ƒ nghe!";
+    document.getElementById("advSignalDots").textContent = "• • •";
+    document.getElementById("advFeedback").textContent = "Nhấn [Nghe Tín Hiệu] hoặc Phím Space để nghe!";
 
     // Automatically play the Morse sound
     setTimeout(() => {
@@ -2717,8 +2724,8 @@ class AdventureMode {
       if (this.combo >= 15) storage.unlockBadge("streak_15");
 
       document.getElementById("advSignalDots").textContent = `${this.currentLetter} = ${formatMorseSymbols(MORSE[this.currentLetter])}`;
-      document.getElementById("advFeedback").textContent = `ChÃ­nh xÃ¡c! Chuá»—i: ${this.combo} ðŸ”¥`;
-      visualEngine.setMascotState(`Xuáº¥t sáº¯c! Báº¡n Ä‘oÃ¡n Ä‘Ãºng chá»¯ ${this.currentLetter}!`, "cheer");
+      document.getElementById("advFeedback").textContent = `Chính xác! Chuỗi: ${this.combo} 🔥`;
+      visualEngine.setMascotState(`Xuất sắc! Bạn đoán đúng chữ ${this.currentLetter}!`, "cheer");
 
       this.currentQuestionIndex++;
       this.updateProgress();
@@ -2745,9 +2752,9 @@ class AdventureMode {
       this.combo = 0;
       soundEngine.playWrongBoop();
       if (btnEl) btnEl.classList.add("wrong-burst");
-      visualEngine.setMascotState(`Ã”i suÃ½t Ä‘Ãºng! HÃ£y nghe láº¡i chá»¯ ${this.currentLetter} nhÃ©!`, "oops");
+      visualEngine.setMascotState(`Ôi suýt đúng! Hãy nghe lại chữ ${this.currentLetter} nhé!`, "oops");
 
-      document.getElementById("advFeedback").textContent = `ChÆ°a Ä‘Ãºng rá»“i! HÃ£y thá»­ láº¡i cÃ¢u nÃ y nhÃ©.`;
+      document.getElementById("advFeedback").textContent = `Chưa đúng rồi! Hãy thử lại câu này nhé.`;
 
       if (this.levelData.type === "challenge") {
         this.hearts--;
@@ -2768,7 +2775,7 @@ class AdventureMode {
   updateHeartsDisplay() {
     const heartsEl = document.getElementById("advHearts");
     if (heartsEl) {
-      heartsEl.textContent = "â¤ï¸".repeat(this.hearts) + "ðŸ–¤".repeat(3 - this.hearts);
+      heartsEl.textContent = "❤️".repeat(this.hearts) + "🖤".repeat(3 - this.hearts);
     }
   }
 
@@ -2809,19 +2816,19 @@ class AdventureMode {
   gameOverChallenge() {
     this.isLocked = true;
     soundEngine.playWrongBoop();
-    this.showCompleteModal(false, 0, 0, false, "Báº¡n Ä‘Ã£ háº¿t tim trong thá»­ thÃ¡ch Boss!");
+    this.showCompleteModal(false, 0, 0, false, "Bạn đã hết tim trong thử thách Boss!");
   }
 
   showCompleteModal(isSuccess, stars, accuracy, isEarly, customMsg = "") {
     const modal = document.createElement("div");
     modal.className = "modal-overlay";
 
-    const starIcons = "â­".repeat(stars) + "â˜†".repeat(3 - stars);
-    const title = isSuccess ? "CHIáº¾N THáº®NG MÃ€N Há»ŒC! ðŸš€" : "CHÆ¯A HOÃ€N THÃ€NH";
-    const icon = isSuccess ? "ðŸ†" : "ðŸ’ª";
+    const starIcons = "⭐".repeat(stars) + "☆".repeat(3 - stars);
+    const title = isSuccess ? "CHIẾN THẮNG MÀN HỌC! 🚀" : "CHƯA HOÀN THÀNH";
+    const icon = isSuccess ? "🏆" : "💪";
     const desc = customMsg || (isSuccess
-      ? `Äá»™ chÃ­nh xÃ¡c: ${accuracy}% Â· Chuá»—i cao nháº¥t: ${this.maxCombo}${isEarly ? " (VÆ°á»£t sá»›m nhá» 15 combo!)" : ""}`
-      : `Äá»™ chÃ­nh xÃ¡c Ä‘áº¡t ${accuracy}%. Cáº§n tá»‘i thiá»ƒu 80% Ä‘á»ƒ má»Ÿ khÃ³a mÃ n tiáº¿p theo!`);
+      ? `Độ chính xác: ${accuracy}% · Chuỗi cao nhất: ${this.maxCombo}${isEarly ? " (Vượt sớm nhờ 15 combo!)" : ""}`
+      : `Độ chính xác đạt ${accuracy}%. Cần tối thiểu 80% để mở khóa màn tiếp theo!`);
 
     modal.innerHTML = `
       <div class="modal-box">
@@ -2830,8 +2837,8 @@ class AdventureMode {
         ${isSuccess ? `<div style="font-size: 2rem; color: var(--neon-amber); margin-bottom: 12px;">${starIcons}</div>` : ""}
         <p class="modal-desc">${desc}</p>
         <div class="modal-actions">
-          <button class="btn btn-ghost" id="advBackToMapBtn">ðŸ—ºï¸ Báº£n Äá»“ Cáº¥p Äá»™</button>
-          <button class="btn btn-primary" id="advReplayLevelBtn">â†» ${isSuccess ? "Luyá»‡n Láº¡i" : "Thá»­ Láº¡i Ngay"}</button>
+          <button class="btn btn-ghost" id="advBackToMapBtn">🗺️ Bản Đồ Cấp Độ</button>
+          <button class="btn btn-primary" id="advReplayLevelBtn">↻ ${isSuccess ? "Luyện Lại" : "Thử Lại Ngay"}</button>
         </div>
       </div>
     `;
@@ -2957,7 +2964,7 @@ class SendingMode {
     const letters = Object.keys(MORSE).filter((k) => k.length === 1 && /[A-Z]/.test(k));
     this.currentTarget = letters[Math.floor(Math.random() * letters.length)];
     this.updateTargetDisplay();
-    visualEngine.setMascotState(`HÃ£y gÃµ chá»¯ ${this.currentTarget} (${formatMorseSymbols(MORSE[this.currentTarget])}) nÃ o!`, "cheer");
+    visualEngine.setMascotState(`Hãy gõ chữ ${this.currentTarget} (${formatMorseSymbols(MORSE[this.currentTarget])}) nào!`, "cheer");
   }
 
   startChallenge() {
@@ -2982,7 +2989,7 @@ class SendingMode {
   updateChallengeHearts() {
     const heartsEl = document.getElementById("sendingHearts");
     if (heartsEl) {
-      heartsEl.textContent = "â¤ï¸".repeat(this.challengeHearts) + "ðŸ–¤".repeat(3 - this.challengeHearts);
+      heartsEl.textContent = "❤️".repeat(this.challengeHearts) + "🖤".repeat(3 - this.challengeHearts);
     }
   }
 
@@ -3031,7 +3038,7 @@ class SendingMode {
     if (!readoutEl) return;
 
     if (this.currentMarks.length === 0) {
-      readoutEl.textContent = "â€¢ â€¢ â€¢";
+      readoutEl.textContent = "• • •";
     } else {
       readoutEl.textContent = formatMorseSymbols(this.currentMarks.join(""));
     }
@@ -3056,9 +3063,9 @@ class SendingMode {
       }
 
       if (feedbackEl) {
-        feedbackEl.innerHTML = `<span style="color:var(--neon-green); font-weight:800;">ChÃ­nh xÃ¡c! Báº¡n vá»«a gá»­i chá»¯ ${decodedLetter}! ðŸŒŸ</span>`;
+        feedbackEl.innerHTML = `<span style="color:var(--neon-green); font-weight:800;">Chính xác! Bạn vừa gửi chữ ${decodedLetter}! 🌟</span>`;
       }
-      visualEngine.setMascotState(`Chuáº©n tá»«ng nhá»‹p! Báº¡n vá»«a phÃ¡t chá»¯ ${decodedLetter}!`, "cheer");
+      visualEngine.setMascotState(`Chuẩn từng nhịp! Bạn vừa phát chữ ${decodedLetter}!`, "cheer");
 
       if (this.mode === "challenge") {
         this.challengeScore++;
@@ -3083,9 +3090,9 @@ class SendingMode {
       // Wrong
       soundEngine.playWrongBoop();
       if (feedbackEl) {
-        feedbackEl.innerHTML = `<span style="color:var(--neon-pink); font-weight:800;">Báº¡n vá»«a gÃµ: <strong>${decodedLetter}</strong> (${formatMorseSymbols(code)}). Cáº§n gÃµ: <strong>${this.currentTarget}</strong> (${formatMorseSymbols(MORSE[this.currentTarget])})</span>`;
+        feedbackEl.innerHTML = `<span style="color:var(--neon-pink); font-weight:800;">Bạn vừa gõ: <strong>${decodedLetter}</strong> (${formatMorseSymbols(code)}). Cần gõ: <strong>${this.currentTarget}</strong> (${formatMorseSymbols(MORSE[this.currentTarget])})</span>`;
       }
-      visualEngine.setMascotState(`ChÆ°a khá»›p rá»“i! HÃ£y thá»­ láº¡i theo nhá»‹p nhÃ©!`, "oops");
+      visualEngine.setMascotState(`Chưa khớp rồi! Hãy thử lại theo nhịp nhé!`, "oops");
 
       if (this.mode === "challenge") {
         this.challengeHearts--;
@@ -3106,11 +3113,11 @@ class SendingMode {
     modal.className = "modal-overlay";
     modal.innerHTML = `
       <div class="modal-box">
-        <div class="modal-icon">ðŸ†</div>
-        <div class="modal-title">HOÃ€N THÃ€NH THá»¬ THÃCH GÃ•!</div>
-        <p class="modal-desc">Báº¡n Ä‘Ã£ gÃµ chÃ­nh xÃ¡c cáº£ 10 chá»¯ cÃ¡i cá»§a tráº¡m phÃ¡t sÃ³ng!</p>
-        <p style="color:var(--neon-amber); font-weight:800; margin-bottom: 20px;">+150 XP ThÆ°á»Ÿng</p>
-        <button class="btn btn-primary" id="sendingFinishBtn">Tuyá»‡t Vá»i! ðŸš€</button>
+        <div class="modal-icon">🏆</div>
+        <div class="modal-title">HOÀN THÀNH THỬ THÁCH GÕ!</div>
+        <p class="modal-desc">Bạn đã gõ chính xác cả 10 chữ cái của trạm phát sóng!</p>
+        <p style="color:var(--neon-amber); font-weight:800; margin-bottom: 20px;">+150 XP Thưởng</p>
+        <button class="btn btn-primary" id="sendingFinishBtn">Tuyệt Vời! 🚀</button>
       </div>
     `;
     document.body.appendChild(modal);
@@ -3126,10 +3133,10 @@ class SendingMode {
     modal.className = "modal-overlay";
     modal.innerHTML = `
       <div class="modal-box">
-        <div class="modal-icon">ðŸ’”</div>
-        <div class="modal-title">Háº¾T TIM Rá»’I!</div>
-        <p class="modal-desc">Äá»«ng náº£n lÃ²ng, hÃ£y luyá»‡n táº­p thÃªm Ä‘á»ƒ báº¯t Ä‘Ãºng nhá»‹p nhÃ©!</p>
-        <button class="btn btn-primary" id="sendingRetryChallengeBtn">Thá»­ Láº¡i â†»</button>
+        <div class="modal-icon">💔</div>
+        <div class="modal-title">HẾT TIM RỒI!</div>
+        <p class="modal-desc">Đừng nản lòng, hãy luyện tập thêm để bắt đúng nhịp nhé!</p>
+        <button class="btn btn-primary" id="sendingRetryChallengeBtn">Thử Lại ↻</button>
       </div>
     `;
     document.body.appendChild(modal);
@@ -3180,13 +3187,13 @@ class WordDecoderMode {
     const randomIndex = Math.floor(Math.random() * SECRET_WORDS.length);
     this.wordData = SECRET_WORDS[randomIndex];
 
-    document.getElementById("wordCategoryClue").textContent = `Chá»§ Ä‘á»: ${this.wordData.category} Â· Gá»£i Ã½: "${this.wordData.clue}"`;
-    document.getElementById("wordFeedbackMsg").textContent = "Láº¯ng nghe tÃ­n hiá»‡u cá»§a Ã´ Ä‘ang chá»n!";
+    document.getElementById("wordCategoryClue").textContent = `Chủ đề: ${this.wordData.category} · Gợi ý: "${this.wordData.clue}"`;
+    document.getElementById("wordFeedbackMsg").textContent = "Lắng nghe tín hiệu của ô đang chọn!";
 
     this.renderSlots();
     this.renderKeyboard();
 
-    visualEngine.setMascotState(`Nhiá»‡m vá»¥ bÃ­ máº­t: HÃ£y giáº£i mÃ£ tá»« ${this.wordData.word.length} chá»¯ cÃ¡i nÃ y!`, "thinking");
+    visualEngine.setMascotState(`Nhiệm vụ bí mật: Hãy giải mã từ ${this.wordData.word.length} chữ cái này!`, "thinking");
 
     setTimeout(() => {
       this.playCurrentLetterAudio();
@@ -3271,14 +3278,14 @@ class WordDecoderMode {
         const nextSlot = document.getElementById(`wordSlot_${this.currentLetterIdx}`);
         if (nextSlot) nextSlot.classList.add("current");
 
-        document.getElementById("wordFeedbackMsg").textContent = `ChÃ­nh xÃ¡c! Tiáº¿p tá»¥c giáº£i chá»¯ thá»© ${this.currentLetterIdx + 1}.`;
+        document.getElementById("wordFeedbackMsg").textContent = `Chính xác! Tiếp tục giải chữ thứ ${this.currentLetterIdx + 1}.`;
         setTimeout(() => this.playCurrentLetterAudio(), 500);
       }
     } else {
       // Wrong letter
       soundEngine.playWrongBoop();
       if (btnEl) btnEl.classList.add("wrong-burst");
-      document.getElementById("wordFeedbackMsg").textContent = `ChÆ°a Ä‘Ãºng! HÃ£y nghe láº¡i chá»¯ nÃ y nhÃ©.`;
+      document.getElementById("wordFeedbackMsg").textContent = `Chưa đúng! Hãy nghe lại chữ này nhé.`;
       setTimeout(() => {
         if (btnEl) btnEl.classList.remove("wrong-burst");
         this.playCurrentLetterAudio();
@@ -3298,7 +3305,7 @@ class WordDecoderMode {
 
     visualEngine.launchConfetti();
     soundEngine.playLevelUpFanfare();
-    visualEngine.setMascotState(`Hoan hÃ´! Báº¡n vá»«a giáº£i mÃ£ thÃ nh cÃ´ng tá»« "${this.wordData.word}"!`, "cheer");
+    visualEngine.setMascotState(`Hoan hô! Bạn vừa giải mã thành công từ "${this.wordData.word}"!`, "cheer");
 
     const modal = document.createElement("div");
     modal.className = "modal-overlay";
@@ -3307,10 +3314,10 @@ class WordDecoderMode {
         <div class="modal-icon">${this.wordData.icon}</div>
         <div class="modal-title">${this.wordData.word}</div>
         <p style="font-size:1.1rem; color:var(--neon-cyan); margin-bottom: 8px;">"${this.wordData.clue}"</p>
-        <p class="modal-desc">Báº¡n vá»«a giáº£i mÃ£ thÃ nh cÃ´ng bá»©c Ä‘iá»‡n tÃ­n bÃ­ máº­t!</p>
-        <p style="color:var(--neon-amber); font-weight:800; margin-bottom: 20px;">+50 XP ThÆ°á»Ÿng</p>
+        <p class="modal-desc">Bạn vừa giải mã thành công bức điện tín bí mật!</p>
+        <p style="color:var(--neon-amber); font-weight:800; margin-bottom: 20px;">+50 XP Thưởng</p>
         <div class="modal-actions">
-          <button class="btn btn-primary btn-lg" id="wordNextModalBtn">Tá»« BÃ­ Máº­t Tiáº¿p Theo ðŸš€</button>
+          <button class="btn btn-primary btn-lg" id="wordNextModalBtn">Từ Bí Mật Tiếp Theo 🚀</button>
         </div>
       </div>
     `;
@@ -3382,8 +3389,8 @@ class TranslatorMode {
     return str
       .normalize("NFD")
       .replace(/[\u0300-\u036f]/g, "")
-      .replace(/Ä‘/g, "d")
-      .replace(/Ä/g, "D");
+      .replace(/đ/g, "d")
+      .replace(/Đ/g, "D");
   }
 
   handleTextChange() {
@@ -3414,7 +3421,7 @@ class TranslatorMode {
     }
 
     // Replace unicode dot/dash with standard ./ -
-    const standardMorse = rawMorse.replaceAll("â€¢", ".").replaceAll("â€”", "-");
+    const standardMorse = rawMorse.replaceAll("•", ".").replaceAll("—", "-");
     const words = standardMorse.split(/\s*\/\s*|\s*\|\s*/);
 
     const textWords = words.map((w) => {
@@ -3430,22 +3437,22 @@ class TranslatorMode {
   handleBroadcast() {
     const morseCode = this.morseInputEl.value.trim();
     if (!morseCode) {
-      visualEngine.setMascotState("HÃ£y nháº­p tin nháº¯n trÆ°á»›c khi phÃ¡t sÃ³ng nhÃ©!", "thinking");
+      visualEngine.setMascotState("Hãy nhập tin nhắn trước khi phát sóng nhé!", "thinking");
       return;
     }
 
     this.isBroadcasting = true;
     storage.unlockBadge("broadcaster");
-    visualEngine.setMascotState("Äang phÃ¡t sÃ³ng tÃ­n hiá»‡u Morse ra toÃ n tráº¡m vÅ© trá»¥...", "hero");
+    visualEngine.setMascotState("Đang phát sóng tín hiệu Morse ra toàn trạm vũ trụ...", "hero");
 
-    const standardCode = morseCode.replaceAll("â€¢", ".").replaceAll("â€”", "-");
+    const standardCode = morseCode.replaceAll("•", ".").replaceAll("—", "-");
     soundEngine.playMorse(standardCode);
   }
 
   stopBroadcast() {
     this.isBroadcasting = false;
     soundEngine.stopSequence();
-    visualEngine.setMascotState("ÄÃ£ dá»«ng phÃ¡t sÃ³ng tÃ­n hiá»‡u!", "happy");
+    visualEngine.setMascotState("Đã dừng phát sóng tín hiệu!", "happy");
   }
 
   copyMorseToClipboard() {
@@ -3453,7 +3460,7 @@ class TranslatorMode {
     if (!code) return;
 
     navigator.clipboard.writeText(code).then(() => {
-      visualEngine.setMascotState("ÄÃ£ sao chÃ©p mÃ£ Morse vÃ o bá»™ nhá»› táº¡m! Báº¡n cÃ³ thá»ƒ dÃ¡n Ä‘á»ƒ gá»­i cho báº¡n bÃ¨!", "cheer");
+      visualEngine.setMascotState("Đã sao chép mã Morse vào bộ nhớ tạm! Bạn có thể dán để gửi cho bạn bè!", "cheer");
       soundEngine.playSuccessChime();
     });
   }
@@ -3501,9 +3508,9 @@ class FlashcardsMode {
       if (this.currentFilter === "num" && !isNum) return;
 
       const mnemonic = MNEMONICS[char] || {
-        icon: isNum ? "ðŸ”¢" : "âœ¨",
-        word: `KÃ½ tá»± ${char}`,
-        hint: `MÃ£ Morse cá»§a ${char}`
+        icon: isNum ? "🔢" : "✨",
+        word: `Ký tự ${char}`,
+        hint: `Mã Morse của ${char}`
       };
 
       const card = document.createElement("div");
@@ -3685,7 +3692,16 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 
   // Welcome Mascot Greeting
-  visualEngine.setMascotState("ChÃ o má»«ng báº¡n Ä‘áº¿n vá»›i Morse Space Cadet! HÃ£y chá»n má»™t cháº¿ Ä‘á»™ Ä‘á»ƒ báº¯t Ä‘áº§u khÃ¡m phÃ¡!", "happy");
+  visualEngine.setMascotState("Chào mừng bạn đến với Morse Space Cadet! Hãy chọn một chế độ để bắt đầu khám phá!", "happy");
+
+  // Register PWA Service Worker for Offline Caching
+  if ("serviceWorker" in navigator) {
+    window.addEventListener("load", () => {
+      navigator.serviceWorker.register("./sw.js")
+        .then((reg) => console.log("PWA ServiceWorker registered:", reg.scope))
+        .catch((err) => console.log("PWA ServiceWorker registration failed:", err));
+    });
+  }
 });
 
 /* ==========================================================================
@@ -3707,7 +3723,7 @@ function showBadgesCabinet() {
         <div class="badge-title">${badge.title}</div>
         <div class="badge-desc">${badge.desc}</div>
         <div style="font-size: 0.75rem; font-weight:800; color: ${isUnlocked ? "var(--neon-green)" : "var(--text-muted)"}">
-          ${isUnlocked ? "âœ“ ÄÃ£ má»Ÿ" : "ðŸ”’ ChÆ°a Ä‘áº¡t"}
+          ${isUnlocked ? "✓ Đã mở" : "🔒 Chưa đạt"}
         </div>
       </div>
     `;
@@ -3715,12 +3731,12 @@ function showBadgesCabinet() {
 
   modal.innerHTML = `
     <div class="modal-box" style="max-width: 680px; max-height: 88vh; overflow-y: auto;">
-      <div class="modal-title">ðŸ† Tá»§ Danh Hiá»‡u Cá»§a Báº¡n</div>
-      <p class="modal-desc">ÄÃ£ má»Ÿ khÃ³a: <strong>${unlockedCount} / ${totalBadges}</strong> danh hiá»‡u</p>
+      <div class="modal-title">🏆 Tủ Danh Hiệu Của Bạn</div>
+      <p class="modal-desc">Đã mở khóa: <strong>${unlockedCount} / ${totalBadges}</strong> danh hiệu</p>
       <div class="badge-grid" style="margin-bottom: 24px;">
         ${badgesHtml}
       </div>
-      <button class="btn btn-primary" id="closeCabinetBtn">ÄÃ³ng</button>
+      <button class="btn btn-primary" id="closeCabinetBtn">Đóng</button>
     </div>
   `;
 
@@ -3737,31 +3753,31 @@ function showSettingsModal() {
 
   modal.innerHTML = `
     <div class="modal-box" style="max-width: 480px; text-align: left;">
-      <div class="modal-title" style="text-align: center; margin-bottom: 18px;">âš™ï¸ CÃ i Äáº·t KhÃ´ng Gian</div>
+      <div class="modal-title" style="text-align: center; margin-bottom: 18px;">⚙️ Cài Đặt Không Gian</div>
       
       <div style="margin-bottom: 16px;">
         <label style="display: flex; justify-content: space-between; font-weight: 800; margin-bottom: 6px;">
-          <span>âš¡ Tá»‘c Äá»™ PhÃ¡t (WPM):</span>
+          <span>⚡ Tốc Độ Phát (WPM):</span>
           <span id="setWpmValue" style="color: var(--neon-cyan);">${soundEngine.wpm} WPM</span>
         </label>
         <input type="range" id="setWpmRange" min="8" max="26" value="${soundEngine.wpm}" style="width: 100%; accent-color: var(--neon-cyan);">
-        <div style="font-size: 0.78rem; color: var(--text-muted); margin-top: 4px;">NgÆ°á»i má»›i nÃªn Ä‘á»ƒ 10-14 WPM; quen tai cÃ³ thá»ƒ tÄƒng 18-24 WPM.</div>
+        <div style="font-size: 0.78rem; color: var(--text-muted); margin-top: 4px;">Người mới nên để 10-14 WPM; quen tai có thể tăng 18-24 WPM.</div>
       </div>
 
       <div style="margin-bottom: 16px;">
         <label style="display: flex; justify-content: space-between; font-weight: 800; margin-bottom: 6px;">
-          <span>ðŸŽµ Táº§n Sá»‘ Ã‚m Thanh (Hz):</span>
+          <span>🎵 Tần Số Âm Thanh (Hz):</span>
           <span id="setToneValue" style="color: var(--neon-amber);">${soundEngine.frequency} Hz</span>
         </label>
         <input type="range" id="setToneRange" min="400" max="850" step="25" value="${soundEngine.frequency}" style="width: 100%; accent-color: var(--neon-amber);">
       </div>
 
       <div style="margin-bottom: 24px;">
-        <button class="btn btn-danger btn-sm" id="resetProgressBtn" style="width: 100%;">âš ï¸ XÃ³a vÃ  Äáº·t Láº¡i Tiáº¿n TrÃ¬nh</button>
+        <button class="btn btn-danger btn-sm" id="resetProgressBtn" style="width: 100%;">⚠️ Xóa và Đặt Lại Tiến Trình</button>
       </div>
 
       <div style="display: flex; justify-content: flex-end; gap: 10px;">
-        <button class="btn btn-primary" id="saveSettingsBtn">LÆ°u & ÄÃ³ng</button>
+        <button class="btn btn-primary" id="saveSettingsBtn">Lưu & Đóng</button>
       </div>
     </div>
   `;
@@ -3781,7 +3797,7 @@ function showSettingsModal() {
   });
 
   modal.querySelector("#resetProgressBtn").addEventListener("click", () => {
-    if (confirm("Báº¡n cÃ³ cháº¯c cháº¯n muá»‘n xÃ³a toÃ n bá»™ tiáº¿n trÃ¬nh há»c vÃ  cÃ¡c huy hiá»‡u Ä‘Ã£ má»Ÿ?")) {
+    if (confirm("Bạn có chắc chắn muốn xóa toàn bộ tiến trình học và các huy hiệu đã mở?")) {
       localStorage.clear();
       location.reload();
     }
