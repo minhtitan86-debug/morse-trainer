@@ -4,18 +4,1339 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="theme-color" content="#070d24">
-  <meta name="description" content="Morse Space Cadet - Ứng dụng luyện tập mã Morse trực quan, đa giác quan và vui nhộn dành cho thiếu nhi và người mới bắt đầu.">
-  <title>Morse Space Cadet 🚀 · Phiêu Lưu Mã Morse Thiếu Nhi</title>
+  <meta name="description" content="Morse Space Cadet - á»¨ng dá»¥ng luyá»‡n táº­p mÃ£ Morse trá»±c quan, Ä‘a giÃ¡c quan vÃ  vui nhá»™n dÃ nh cho thiáº¿u nhi vÃ  ngÆ°á»i má»›i báº¯t Ä‘áº§u.">
+  <title>Morse Space Cadet ðŸš€ Â· PhiÃªu LÆ°u MÃ£ Morse Thiáº¿u Nhi</title>
 
   <!-- Google Fonts: Fredoka (Friendly Display), Outfit (Modern Clean), JetBrains Mono -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=JetBrains+Mono:wght@700;800&family=Outfit:wght@400;600;800;900&display=swap" rel="stylesheet">
 
-  <!-- Modular Styles -->
-  <link rel="stylesheet" href="css/main.css">
-  <link rel="stylesheet" href="css/theme-space.css">
-  <link rel="stylesheet" href="css/animations.css">
+  <style>
+/* ==========================================================================
+   MORSE SPACE CADET - MAIN DESIGN SYSTEM
+   ========================================================================== */
+
+:root {
+  /* Color Palette: Space Adventure */
+  --bg-space-dark: #070d24;
+  --bg-space-medium: #0d183d;
+  --bg-space-light: #162456;
+  --bg-card: rgba(23, 37, 86, 0.75);
+  --bg-card-hover: rgba(30, 49, 114, 0.85);
+  --bg-glass: rgba(255, 255, 255, 0.08);
+  --border-glass: rgba(255, 255, 255, 0.16);
+  --border-glass-bright: rgba(255, 255, 255, 0.35);
+
+  /* Primary & Accent Glows */
+  --neon-cyan: #00f0ff;
+  --neon-cyan-glow: rgba(0, 240, 255, 0.45);
+  --neon-amber: #ffb703;
+  --neon-amber-glow: rgba(255, 183, 3, 0.45);
+  --neon-green: #06d6a0;
+  --neon-green-glow: rgba(6, 214, 160, 0.45);
+  --neon-pink: #ff2a85;
+  --neon-pink-glow: rgba(255, 42, 133, 0.45);
+  --neon-purple: #9d4edd;
+  --neon-purple-glow: rgba(157, 78, 221, 0.45);
+
+  /* Typography */
+  --font-family-display: 'Fredoka', 'Outfit', system-ui, -apple-system, sans-serif;
+  --font-family-body: 'Outfit', system-ui, -apple-system, sans-serif;
+  --font-family-mono: 'JetBrains Mono', 'Courier New', monospace;
+
+  /* Text Colors */
+  --text-primary: #ffffff;
+  --text-secondary: #c2d2ff;
+  --text-muted: #8aa1db;
+  --text-inverse: #070d24;
+
+  /* UI Tokens */
+  --radius-sm: 10px;
+  --radius-md: 18px;
+  --radius-lg: 26px;
+  --radius-full: 9999px;
+  --shadow-card: 0 16px 36px rgba(0, 0, 0, 0.35);
+  --shadow-glow-cyan: 0 0 25px var(--neon-cyan-glow);
+  --shadow-glow-amber: 0 0 25px var(--neon-amber-glow);
+  --shadow-glow-green: 0 0 25px var(--neon-green-glow);
+  --transition-fast: 0.15s cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-bounce: 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+/* ==========================================================================
+   RESET & BASE
+   ========================================================================== */
+
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  font-size: 16px;
+  scroll-behavior: smooth;
+  -webkit-tap-highlight-color: transparent;
+}
+
+body {
+  min-height: 100vh;
+  font-family: var(--font-family-body);
+  color: var(--text-primary);
+  background-color: var(--bg-space-dark);
+  background-image: 
+    radial-gradient(circle at 15% 15%, rgba(157, 78, 221, 0.22) 0%, transparent 40%),
+    radial-gradient(circle at 85% 25%, rgba(0, 240, 255, 0.18) 0%, transparent 45%),
+    radial-gradient(circle at 50% 85%, rgba(6, 214, 160, 0.16) 0%, transparent 50%),
+    linear-gradient(175deg, #070d24 0%, #0c183a 50%, #060b1e 100%);
+  background-attachment: fixed;
+  overflow-x: hidden;
+  line-height: 1.5;
+}
+
+/* Cosmic Twinkle Stars Background */
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  background-image: 
+    radial-gradient(2px 2px at 20px 30px, #ffffff, rgba(0,0,0,0)),
+    radial-gradient(2px 2px at 40px 70px, rgba(255,255,255,0.7), rgba(0,0,0,0)),
+    radial-gradient(1.5px 1.5px at 90px 40px, #00f0ff, rgba(0,0,0,0)),
+    radial-gradient(2px 2px at 160px 120px, #ffd166, rgba(0,0,0,0)),
+    radial-gradient(1.5px 1.5px at 230px 190px, rgba(255,255,255,0.8), rgba(0,0,0,0)),
+    radial-gradient(2px 2px at 300px 90px, #ff2a85, rgba(0,0,0,0));
+  background-repeat: repeat;
+  background-size: 350px 350px;
+  opacity: 0.65;
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* Container */
+.app-container {
+  position: relative;
+  width: min(920px, 94vw);
+  margin: 0 auto;
+  padding: 16px 8px 48px;
+  z-index: 1;
+}
+
+button {
+  font-family: inherit;
+  border: none;
+  background: none;
+  cursor: pointer;
+  outline: none;
+}
+
+input, select {
+  font-family: inherit;
+}
+
+/* Accessibility */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  border: 0;
+}
+
+.hidden {
+  display: none !important;
+}
+
+/* ==========================================================================
+   MORSE SPACE CADET - THEME SPACE & COMPONENTS (OPTIMIZED FOR MOBILE & DESKTOP)
+   ========================================================================== */
+
+/* Header & Top Status HUD */
+.top-hud {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 16px;
+  padding: 10px 16px;
+  background: var(--bg-card);
+  border: 1px solid var(--border-glass);
+  border-radius: var(--radius-lg);
+  backdrop-filter: blur(16px);
+  box-shadow: var(--shadow-card);
+}
+
+.hud-left, .hud-right {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.hud-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 6px 12px;
+  background: var(--bg-glass);
+  border: 1px solid var(--border-glass);
+  border-radius: var(--radius-full);
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: var(--text-secondary);
+  transition: var(--transition-fast);
+  user-select: none;
+}
+
+.hud-pill:hover {
+  background: rgba(255, 255, 255, 0.14);
+  border-color: var(--border-glass-bright);
+}
+
+.hud-pill.xp-pill {
+  color: var(--neon-amber);
+  border-color: rgba(255, 183, 3, 0.35);
+  background: rgba(255, 183, 3, 0.12);
+}
+
+.hud-pill.streak-pill {
+  color: var(--neon-pink);
+  border-color: rgba(255, 42, 133, 0.35);
+  background: rgba(255, 42, 133, 0.12);
+}
+
+/* Sound Skin Selector & Controls */
+.skin-selector {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  padding: 5px 10px;
+  background: rgba(0, 240, 255, 0.1);
+  border: 1px solid rgba(0, 240, 255, 0.3);
+  border-radius: var(--radius-full);
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: var(--neon-cyan);
+}
+
+.skin-select-dropdown {
+  background: var(--bg-space-dark);
+  color: #fff;
+  border: 1px solid var(--border-glass);
+  border-radius: 8px;
+  padding: 3px 6px;
+  font-size: 0.78rem;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.icon-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  background: var(--bg-glass);
+  border: 1px solid var(--border-glass);
+  border-radius: 50%;
+  color: #fff;
+  font-size: 1rem;
+  transition: var(--transition-fast);
+}
+
+.icon-btn:hover {
+  background: rgba(255, 255, 255, 0.18);
+  transform: scale(1.08);
+}
+
+.icon-btn.active {
+  background: var(--neon-cyan);
+  color: var(--text-inverse);
+  box-shadow: 0 0 12px var(--neon-cyan-glow);
+}
+
+/* ==========================================================================
+   SIGNAL BEACON HUD (LIGHT & SOUND VISUALIZER)
+   ========================================================================== */
+
+.signal-beacon-wrap {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  margin: 8px 0 16px;
+}
+
+.beacon-lamp {
+  position: relative;
+  width: 58px;
+  height: 58px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 35% 35%, #1e295d, #0d1330);
+  border: 3px solid rgba(255, 255, 255, 0.2);
+  box-shadow: inset 0 3px 8px rgba(0, 0, 0, 0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.05s ease;
+}
+
+.beacon-core {
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.15);
+  transition: all 0.05s ease;
+}
+
+.beacon-lamp.flashing {
+  border-color: #fff;
+  box-shadow: 
+    0 0 20px #ffea00,
+    0 0 45px #ffb703,
+    0 0 80px rgba(255, 183, 3, 0.8),
+    inset 0 0 15px #ffffff;
+  transform: scale(1.1);
+}
+
+.beacon-lamp.flashing .beacon-core {
+  background: #ffffff;
+  box-shadow: 0 0 25px #ffffff;
+}
+
+.beacon-label {
+  font-size: 0.82rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 1.2px;
+  color: var(--text-muted);
+}
+
+/* ==========================================================================
+   MASCOT BEEP-BOT
+   ========================================================================== */
+
+.mascot-container {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 16px;
+  padding: 12px 16px;
+  background: linear-gradient(135deg, rgba(157, 78, 221, 0.25), rgba(0, 240, 255, 0.18));
+  border: 1px solid var(--border-glass-bright);
+  border-radius: var(--radius-lg);
+  backdrop-filter: blur(12px);
+  position: relative;
+  overflow: hidden;
+}
+
+.mascot-bot {
+  position: relative;
+  font-size: 2.5rem;
+  line-height: 1;
+  flex-shrink: 0;
+  animation: floatBot 3s ease-in-out infinite;
+}
+
+.mascot-bubble {
+  position: relative;
+  flex: 1;
+  min-width: 0;
+}
+
+.mascot-name {
+  font-family: var(--font-family-display);
+  font-size: 0.95rem;
+  font-weight: 800;
+  color: var(--neon-cyan);
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.mascot-msg {
+  font-size: 0.88rem;
+  color: #fff;
+  margin-top: 2px;
+  font-weight: 500;
+  line-height: 1.35;
+  word-break: break-word;
+}
+
+/* ==========================================================================
+   MAIN NAVIGATION TABS (5 MODES)
+   ========================================================================== */
+
+.nav-tabs {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 6px;
+  margin-bottom: 18px;
+  width: 100%;
+}
+
+.tab-btn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  padding: 10px 4px;
+  background: var(--bg-card);
+  border: 1px solid var(--border-glass);
+  border-radius: var(--radius-md);
+  color: var(--text-secondary);
+  font-size: 0.78rem;
+  font-weight: 800;
+  text-align: center;
+  cursor: pointer;
+  transition: var(--transition-bounce);
+  user-select: none;
+  min-width: 0;
+}
+
+.tab-btn .tab-icon {
+  font-size: 1.35rem;
+  line-height: 1;
+  transition: transform var(--transition-bounce);
+}
+
+.tab-btn:hover {
+  background: var(--bg-card-hover);
+  border-color: var(--border-glass-bright);
+  color: #fff;
+  transform: translateY(-2px);
+}
+
+.tab-btn.active {
+  background: linear-gradient(135deg, rgba(0, 240, 255, 0.35), rgba(157, 78, 221, 0.35));
+  border-color: var(--neon-cyan);
+  color: #fff;
+  box-shadow: var(--shadow-glow-cyan);
+  transform: translateY(-2px);
+}
+
+.tab-btn.active .tab-icon {
+  transform: scale(1.15);
+}
+
+/* ==========================================================================
+   CARDS & PANELS
+   ========================================================================== */
+
+.game-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border-glass);
+  border-radius: var(--radius-lg);
+  padding: 20px 16px;
+  backdrop-filter: blur(14px);
+  box-shadow: var(--shadow-card);
+  margin-bottom: 20px;
+  position: relative;
+  overflow: hidden;
+  width: 100%;
+}
+
+.card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 16px;
+}
+
+.card-title {
+  font-family: var(--font-family-display);
+  font-size: clamp(1.2rem, 4.5vw, 1.45rem);
+  font-weight: 800;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.card-subtitle {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  margin-top: 3px;
+}
+
+/* ==========================================================================
+   BUTTONS
+   ========================================================================== */
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 10px 20px;
+  border-radius: var(--radius-full);
+  font-family: var(--font-family-display);
+  font-size: 0.95rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  transition: var(--transition-bounce);
+  cursor: pointer;
+  user-select: none;
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.25);
+  text-align: center;
+  white-space: nowrap;
+}
+
+.btn:hover {
+  transform: translateY(-2px) scale(1.02);
+}
+
+.btn:active {
+  transform: translateY(1px) scale(0.98);
+}
+
+.btn-primary {
+  background: linear-gradient(135deg, #00f0ff, #0099ff);
+  color: #070d24;
+  box-shadow: 0 0 16px var(--neon-cyan-glow);
+}
+
+.btn-success {
+  background: linear-gradient(135deg, #06d6a0, #05a077);
+  color: #070d24;
+  box-shadow: 0 0 16px var(--neon-green-glow);
+}
+
+.btn-danger {
+  background: linear-gradient(135deg, #ff2a85, #d90429);
+  color: #fff;
+  box-shadow: 0 0 16px var(--neon-pink-glow);
+}
+
+.btn-accent {
+  background: linear-gradient(135deg, #ffd166, #ff9f1c);
+  color: #070d24;
+  box-shadow: 0 0 16px var(--neon-amber-glow);
+}
+
+.btn-ghost {
+  background: var(--bg-glass);
+  color: var(--text-secondary);
+  border: 1px solid var(--border-glass);
+}
+
+.btn-ghost:hover {
+  background: rgba(255, 255, 255, 0.16);
+  color: #fff;
+  border-color: var(--border-glass-bright);
+}
+
+.btn-lg {
+  padding: 14px 28px;
+  font-size: 1.05rem;
+}
+
+.btn-sm {
+  padding: 6px 14px;
+  font-size: 0.8rem;
+}
+
+/* ==========================================================================
+   ADVENTURE MODE & QUIZ UI
+   ========================================================================== */
+
+.quiz-hero-display {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin: 12px 0 18px;
+  text-align: center;
+}
+
+.quiz-signal-dots {
+  font-family: var(--font-family-mono);
+  font-size: clamp(2.2rem, 7vw, 3.4rem);
+  font-weight: 900;
+  color: var(--neon-cyan);
+  letter-spacing: clamp(6px, 2vw, 12px);
+  min-height: 56px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-shadow: 0 0 15px var(--neon-cyan-glow);
+}
+
+.quiz-feedback {
+  font-size: clamp(0.9rem, 3.5vw, 1.05rem);
+  font-weight: 700;
+  color: var(--text-secondary);
+  margin-top: 6px;
+  min-height: 24px;
+}
+
+.challenge-hud {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 14px;
+  background: rgba(255, 183, 3, 0.14);
+  border: 1px solid rgba(255, 183, 3, 0.35);
+  border-radius: var(--radius-md);
+  margin-bottom: 12px;
+  font-size: 0.88rem;
+  font-weight: 800;
+}
+
+.hearts-display {
+  font-size: 1.2rem;
+  letter-spacing: 3px;
+}
+
+.progress-bar-container {
+  width: 100%;
+  height: 10px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: var(--radius-full);
+  overflow: hidden;
+  margin: 8px 0 16px;
+}
+
+.progress-bar-fill {
+  height: 100%;
+  width: 0%;
+  background: linear-gradient(90deg, var(--neon-cyan), var(--neon-green));
+  border-radius: var(--radius-full);
+  transition: width 0.3s ease;
+  box-shadow: 0 0 12px var(--neon-green-glow);
+}
+
+/* ==========================================================================
+   MOBILE-PERFECT INTERACTIVE MORSE KEYBOARD
+   ========================================================================== */
+
+.morse-keyboard {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  width: 100%;
+  max-width: 680px;
+  margin: 0 auto;
+  box-sizing: border-box;
+}
+
+.keyboard-row {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 4px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.key-btn {
+  flex: 1 1 0;
+  min-width: 0;
+  max-width: 58px;
+  height: 48px;
+  padding: 0 2px;
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid var(--border-glass);
+  color: #fff;
+  font-family: var(--font-family-display);
+  font-size: clamp(1.05rem, 3.8vw, 1.25rem);
+  font-weight: 800;
+  cursor: pointer;
+  transition: all 0.1s ease;
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+.key-btn.active {
+  background: linear-gradient(145deg, #1e3a8a, #2563eb);
+  border-color: #60a5fa;
+}
+
+.key-btn.active:hover {
+  background: linear-gradient(145deg, #2563eb, #3b82f6);
+  transform: translateY(-2px);
+  box-shadow: 0 5px 12px rgba(37, 99, 235, 0.4);
+}
+
+.key-btn.active:active {
+  transform: translateY(1px);
+}
+
+.key-btn.disabled {
+  opacity: 0.22;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+.key-btn.correct-burst {
+  background: var(--neon-green) !important;
+  color: #070d24 !important;
+  transform: scale(1.12) !important;
+  box-shadow: 0 0 16px var(--neon-green-glow) !important;
+}
+
+.key-btn.wrong-burst {
+  background: var(--neon-pink) !important;
+  color: #fff !important;
+  animation: shake 0.4s ease;
+}
+
+/* ==========================================================================
+   TELEGRAPH KEYER (SENDING MODE)
+   ========================================================================== */
+
+.keyer-station {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 16px;
+  width: 100%;
+}
+
+.telegraph-key-outer {
+  position: relative;
+  width: min(200px, 52vw);
+  aspect-ratio: 1;
+  border-radius: 50%;
+  padding: 12px;
+  background: radial-gradient(circle at 35% 35%, #2a3b75, #111a3d);
+  box-shadow: 0 12px 26px rgba(0, 0, 0, 0.4), inset 0 2px 6px rgba(255, 255, 255, 0.2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.telegraph-key-btn {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  background: radial-gradient(circle at 35% 30%, #7ff1d1, #06d6a0 60%, #039e75);
+  border: 4px solid rgba(255, 255, 255, 0.4);
+  color: #052a20;
+  font-family: var(--font-family-display);
+  font-size: clamp(1rem, 3.8vw, 1.25rem);
+  font-weight: 900;
+  cursor: pointer;
+  user-select: none;
+  touch-action: none;
+  box-shadow: 
+    0 8px 18px rgba(0, 0, 0, 0.3),
+    inset 0 -6px 10px rgba(0, 0, 0, 0.2),
+    inset 0 5px 10px rgba(255, 255, 255, 0.4);
+  transition: all 0.08s ease;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  line-height: 1.2;
+}
+
+.telegraph-key-btn.pressed {
+  transform: translateY(5px) scale(0.96);
+  background: radial-gradient(circle at 35% 30%, #a2ffe7, #06d6a0 70%, #02805e);
+  box-shadow: 
+    0 3px 8px rgba(0, 0, 0, 0.2),
+    0 0 22px var(--neon-green-glow),
+    inset 0 4px 10px rgba(0, 0, 0, 0.3);
+}
+
+.sending-readout-box {
+  width: 100%;
+  max-width: 440px;
+  min-height: 50px;
+  padding: 10px 16px;
+  background: rgba(4, 9, 26, 0.6);
+  border: 1px solid var(--border-glass);
+  border-radius: var(--radius-md);
+  font-family: var(--font-family-mono);
+  font-size: clamp(1.3rem, 5vw, 1.6rem);
+  font-weight: 800;
+  color: var(--neon-cyan);
+  letter-spacing: 5px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* ==========================================================================
+   WORD DECODER (SECRET WORD MISSION)
+   ========================================================================== */
+
+.word-mission-box {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+  width: 100%;
+}
+
+.mystery-slots {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  justify-content: center;
+  width: 100%;
+}
+
+.mystery-slot {
+  width: clamp(38px, 11vw, 54px);
+  height: clamp(48px, 14vw, 64px);
+  background: rgba(255, 255, 255, 0.08);
+  border: 2px dashed rgba(255, 255, 255, 0.25);
+  border-radius: var(--radius-md);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-family-display);
+  font-size: clamp(1.4rem, 5vw, 1.85rem);
+  font-weight: 900;
+  color: #fff;
+  transition: var(--transition-bounce);
+}
+
+.mystery-slot.revealed {
+  border: 2px solid var(--neon-cyan);
+  background: rgba(0, 240, 255, 0.15);
+  color: var(--neon-cyan);
+  box-shadow: 0 0 14px var(--neon-cyan-glow);
+  animation: popIn 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.mystery-slot.current {
+  border-color: var(--neon-amber);
+  background: rgba(255, 183, 3, 0.12);
+  box-shadow: 0 0 14px var(--neon-amber-glow);
+}
+
+.word-clue-pill {
+  padding: 6px 14px;
+  background: rgba(157, 78, 221, 0.15);
+  border: 1px solid rgba(157, 78, 221, 0.4);
+  border-radius: var(--radius-full);
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: #e0aaff;
+  text-align: center;
+}
+
+/* ==========================================================================
+   TRANSLATOR & BROADCASTER
+   ========================================================================== */
+
+.translator-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 14px;
+  width: 100%;
+}
+
+.trans-box {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.trans-box textarea {
+  width: 100%;
+  min-height: 100px;
+  padding: 12px;
+  border-radius: var(--radius-md);
+  background: rgba(6, 12, 33, 0.7);
+  border: 1px solid var(--border-glass);
+  color: #fff;
+  font-size: 0.95rem;
+  line-height: 1.45;
+  resize: vertical;
+}
+
+.trans-box textarea:focus {
+  outline: none;
+  border-color: var(--neon-cyan);
+  box-shadow: 0 0 12px var(--neon-cyan-glow);
+}
+
+.trans-box textarea.morse-area {
+  font-family: var(--font-family-mono);
+  letter-spacing: 3px;
+  color: var(--neon-cyan);
+}
+
+/* ==========================================================================
+   FLASHCARDS & MNEMONICS
+   ========================================================================== */
+
+.flashcard-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(110px, 1fr));
+  gap: 10px;
+  width: 100%;
+}
+
+.mnemonic-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border-glass);
+  border-radius: var(--radius-md);
+  padding: 12px 8px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  cursor: pointer;
+  transition: var(--transition-bounce);
+}
+
+.mnemonic-card:hover {
+  background: var(--bg-card-hover);
+  border-color: var(--neon-cyan);
+  transform: translateY(-3px);
+  box-shadow: 0 6px 16px rgba(0, 240, 255, 0.25);
+}
+
+.mnemonic-letter {
+  font-family: var(--font-family-display);
+  font-size: 1.75rem;
+  font-weight: 900;
+  color: #fff;
+}
+
+.mnemonic-code {
+  font-family: var(--font-family-mono);
+  font-size: 1.05rem;
+  font-weight: 800;
+  color: var(--neon-cyan);
+  letter-spacing: 2px;
+  margin: 3px 0;
+}
+
+.mnemonic-icon {
+  font-size: 1.4rem;
+  margin-top: 3px;
+}
+
+.mnemonic-word {
+  font-size: 0.74rem;
+  color: var(--text-muted);
+  font-weight: 600;
+}
+
+/* ==========================================================================
+   LEVEL SELECTION MAP
+   ========================================================================== */
+
+.level-map-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+  gap: 10px;
+  margin-top: 14px;
+  width: 100%;
+}
+
+.level-card-btn {
+  background: var(--bg-card);
+  border: 1px solid var(--border-glass);
+  border-radius: var(--radius-md);
+  padding: 14px 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  text-align: left;
+  cursor: pointer;
+  transition: var(--transition-bounce);
+  position: relative;
+}
+
+.level-card-btn:hover:not(.locked) {
+  background: var(--bg-card-hover);
+  border-color: var(--neon-cyan);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+}
+
+.level-card-btn.current {
+  border-color: var(--neon-cyan);
+  background: linear-gradient(145deg, rgba(0, 240, 255, 0.2), rgba(157, 78, 221, 0.2));
+  box-shadow: 0 0 16px var(--neon-cyan-glow);
+}
+
+.level-card-btn.challenge {
+  border-color: rgba(255, 183, 3, 0.4);
+  background: linear-gradient(145deg, rgba(255, 183, 3, 0.15), rgba(255, 42, 133, 0.15));
+}
+
+.level-card-btn.locked {
+  opacity: 0.45;
+  cursor: not-allowed;
+  filter: grayscale(0.8);
+}
+
+.level-stars {
+  color: var(--neon-amber);
+  font-size: 0.95rem;
+  letter-spacing: 2px;
+}
+
+.level-num-badge {
+  font-family: var(--font-family-display);
+  font-size: 0.8rem;
+  font-weight: 800;
+  color: var(--neon-cyan);
+}
+
+.level-letters-tag {
+  font-family: var(--font-family-mono);
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: var(--text-secondary);
+}
+
+/* ==========================================================================
+   BADGES & TROPHIES
+   ========================================================================== */
+
+.badge-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(110px, 1fr));
+  gap: 10px;
+  width: 100%;
+}
+
+.badge-item {
+  background: var(--bg-card);
+  border: 1px solid var(--border-glass);
+  border-radius: var(--radius-md);
+  padding: 12px 8px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 4px;
+  transition: var(--transition-fast);
+}
+
+.badge-item.unlocked {
+  border-color: var(--neon-amber);
+  background: rgba(255, 183, 3, 0.1);
+  box-shadow: 0 0 12px var(--neon-amber-glow);
+}
+
+.badge-item.locked {
+  opacity: 0.35;
+  filter: grayscale(1);
+}
+
+.badge-icon {
+  font-size: 1.8rem;
+}
+
+.badge-title {
+  font-family: var(--font-family-display);
+  font-size: 0.8rem;
+  font-weight: 800;
+  color: #fff;
+}
+
+.badge-desc {
+  font-size: 0.7rem;
+  color: var(--text-muted);
+}
+
+/* ==========================================================================
+   MODAL DIALOGS
+   ========================================================================== */
+
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(4, 8, 24, 0.85);
+  backdrop-filter: blur(8px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 14px;
+  z-index: 100;
+  animation: fadeIn 0.2s ease;
+}
+
+.modal-box {
+  width: min(500px, 94vw);
+  background: linear-gradient(160deg, #162456, #0d183d);
+  border: 1px solid var(--border-glass-bright);
+  border-radius: var(--radius-lg);
+  padding: 24px 18px;
+  text-align: center;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.6);
+  animation: popIn 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.modal-icon {
+  font-size: 3.5rem;
+  margin-bottom: 10px;
+}
+
+.modal-title {
+  font-family: var(--font-family-display);
+  font-size: clamp(1.4rem, 5vw, 1.7rem);
+  font-weight: 900;
+  color: #fff;
+  margin-bottom: 6px;
+}
+
+.modal-desc {
+  font-size: 0.92rem;
+  color: var(--text-secondary);
+  line-height: 1.45;
+  margin-bottom: 20px;
+}
+
+.modal-actions {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+/* Canvas Confetti */
+#confettiCanvas {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 99;
+}
+
+/* ==========================================================================
+   RESPONSIVE MEDIA QUERIES FOR PORTRAIT MOBILE
+   ========================================================================== */
+
+@media (max-width: 640px) {
+  .app-container {
+    width: 100%;
+    padding: 8px 6px 36px;
+  }
+
+  .top-hud {
+    padding: 8px 10px;
+    gap: 6px;
+    margin-bottom: 12px;
+  }
+
+  .hud-pill {
+    padding: 5px 9px;
+    font-size: 0.78rem;
+  }
+
+  .skin-selector {
+    padding: 4px 8px;
+    font-size: 0.75rem;
+  }
+
+  .skin-select-dropdown {
+    padding: 2px 4px;
+    font-size: 0.72rem;
+    max-width: 115px;
+  }
+
+  .icon-btn {
+    width: 32px;
+    height: 32px;
+    font-size: 0.9rem;
+  }
+
+  .signal-beacon-wrap {
+    margin: 4px 0 12px;
+    gap: 8px;
+  }
+
+  .beacon-lamp {
+    width: 50px;
+    height: 50px;
+  }
+
+  .beacon-core {
+    width: 28px;
+    height: 28px;
+  }
+
+  .mascot-container {
+    padding: 10px 12px;
+    gap: 10px;
+    margin-bottom: 12px;
+    border-radius: var(--radius-md);
+  }
+
+  .mascot-bot {
+    font-size: 2rem;
+  }
+
+  .mascot-name {
+    font-size: 0.88rem;
+  }
+
+  .mascot-msg {
+    font-size: 0.8rem;
+  }
+
+  .nav-tabs {
+    gap: 4px;
+    margin-bottom: 14px;
+  }
+
+  .tab-btn {
+    padding: 8px 2px;
+    font-size: 0.7rem;
+    gap: 2px;
+    border-radius: 10px;
+  }
+
+  .tab-btn .tab-icon {
+    font-size: 1.15rem;
+  }
+
+  .game-card {
+    padding: 14px 10px;
+    border-radius: 16px;
+    margin-bottom: 14px;
+  }
+
+  /* Keyboard on portrait phones: perfect fit */
+  .morse-keyboard {
+    gap: 5px;
+  }
+
+  .keyboard-row {
+    gap: 3px;
+  }
+
+  .key-btn {
+    height: 44px;
+    font-size: 1.1rem;
+    border-radius: 8px;
+  }
+
+  .quiz-hero-display {
+    margin: 6px 0 14px;
+  }
+
+  .quiz-signal-dots {
+    min-height: 48px;
+  }
+
+  .btn {
+    padding: 8px 16px;
+    font-size: 0.88rem;
+  }
+}
+
+@media (max-width: 380px) {
+  /* Extra small screens like iPhone SE / Galaxy Fold */
+  .key-btn {
+    height: 40px;
+    font-size: 0.98rem;
+    border-radius: 6px;
+  }
+
+  .keyboard-row {
+    gap: 2px;
+  }
+
+  .tab-btn {
+    font-size: 0.65rem;
+    padding: 6px 1px;
+  }
+
+  .tab-btn .tab-icon {
+    font-size: 1.05rem;
+  }
+}
+
+/* ==========================================================================
+   MORSE SPACE CADET - KEYFRAME ANIMATIONS & EFFECTS
+   ========================================================================== */
+
+@keyframes floatBot {
+  0%, 100% {
+    transform: translateY(0) rotate(0deg);
+  }
+  50% {
+    transform: translateY(-8px) rotate(2deg);
+  }
+}
+
+@keyframes popIn {
+  0% {
+    opacity: 0;
+    transform: scale(0.85);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes fadeIn {
+  0% { opacity: 0; }
+  100% { opacity: 1; }
+}
+
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  20%, 60% { transform: translateX(-8px); }
+  40%, 80% { transform: translateX(8px); }
+}
+
+@keyframes pulseGlow {
+  0%, 100% {
+    box-shadow: 0 0 15px var(--neon-cyan-glow);
+  }
+  50% {
+    box-shadow: 0 0 35px var(--neon-cyan-glow), 0 0 10px #ffffff;
+  }
+}
+
+@keyframes starSpin {
+  0% { transform: scale(0) rotate(-180deg); opacity: 0; }
+  70% { transform: scale(1.25) rotate(15deg); opacity: 1; }
+  100% { transform: scale(1) rotate(0deg); opacity: 1; }
+}
+
+@keyframes comboFlame {
+  0%, 100% {
+    filter: drop-shadow(0 0 4px #ffb703) drop-shadow(0 0 8px #ff2a85);
+    transform: scale(1);
+  }
+  50% {
+    filter: drop-shadow(0 0 8px #ffb703) drop-shadow(0 0 14px #ff2a85);
+    transform: scale(1.08);
+  }
+}
+
+.anim-shake {
+  animation: shake 0.4s ease;
+}
+
+.anim-pop {
+  animation: popIn 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.anim-combo-flame {
+  animation: comboFlame 1.2s infinite;
+}
+
+</style>
 </head>
 <body>
 
@@ -30,29 +1351,29 @@
     <header class="top-hud">
       <div class="hud-left">
         <div class="hud-pill xp-pill">
-          <span>⭐</span>
+          <span>â­</span>
           <span id="hudXp">0 XP</span>
         </div>
         <div class="hud-pill streak-pill">
-          <span>🔥</span>
-          <span id="hudStreak">1 ngày</span>
+          <span>ðŸ”¥</span>
+          <span id="hudStreak">1 ngÃ y</span>
         </div>
       </div>
 
       <div class="hud-right">
         <!-- Sound Skin Selector -->
         <div class="skin-selector">
-          <span>🎵 Âm sắc:</span>
+          <span>ðŸŽµ Ã‚m sáº¯c:</span>
           <select id="hudSkinSelect" class="skin-select-dropdown">
-            <option value="arcade">🎮 8-Bit Arcade</option>
-            <option value="laser">🚀 Laser Blaster</option>
-            <option value="sonar">🛸 Cosmic Sonar</option>
-            <option value="classic">📻 Cổ Điển LCWO</option>
+            <option value="arcade">ðŸŽ® 8-Bit Arcade</option>
+            <option value="laser">ðŸš€ Laser Blaster</option>
+            <option value="sonar">ðŸ›¸ Cosmic Sonar</option>
+            <option value="classic">ðŸ“» Cá»• Äiá»ƒn LCWO</option>
           </select>
         </div>
 
-        <button class="icon-btn" id="hudBadgesBtn" title="Tủ Danh Hiệu & Huy Hiệu">🏆</button>
-        <button class="icon-btn" id="hudSettingsBtn" title="Cài Đặt">⚙️</button>
+        <button class="icon-btn" id="hudBadgesBtn" title="Tá»§ Danh Hiá»‡u & Huy Hiá»‡u">ðŸ†</button>
+        <button class="icon-btn" id="hudSettingsBtn" title="CÃ i Äáº·t">âš™ï¸</button>
       </div>
     </header>
 
@@ -60,8 +1381,8 @@
          SIGNAL BEACON LAMP (SYNCHRONIZED LIGHT FLASH)
          ==================================================================== -->
     <div class="signal-beacon-wrap">
-      <div class="beacon-label">Đèn Tín Hiệu:</div>
-      <div class="beacon-lamp" id="beaconLamp" title="Đèn tín hiệu quang học chớp sáng đồng bộ theo nhịp Morse">
+      <div class="beacon-label">ÄÃ¨n TÃ­n Hiá»‡u:</div>
+      <div class="beacon-lamp" id="beaconLamp" title="ÄÃ¨n tÃ­n hiá»‡u quang há»c chá»›p sÃ¡ng Ä‘á»“ng bá»™ theo nhá»‹p Morse">
         <div class="beacon-core"></div>
       </div>
     </div>
@@ -70,10 +1391,10 @@
          MASCOT BEEP-BOT GREETING & STATUS
          ==================================================================== -->
     <div class="mascot-container">
-      <div class="mascot-bot" id="mascotBot">🤖</div>
+      <div class="mascot-bot" id="mascotBot">ðŸ¤–</div>
       <div class="mascot-bubble">
-        <div class="mascot-name"><span>Beep-Bot</span> <span>⚡</span></div>
-        <div class="mascot-msg" id="mascotMsg">Sẵn sàng thám hiểm không gian mã Morse cùng bạn!</div>
+        <div class="mascot-name"><span>Beep-Bot</span> <span>âš¡</span></div>
+        <div class="mascot-msg" id="mascotMsg">Sáºµn sÃ ng thÃ¡m hiá»ƒm khÃ´ng gian mÃ£ Morse cÃ¹ng báº¡n!</div>
       </div>
     </div>
 
@@ -82,24 +1403,24 @@
          ==================================================================== -->
     <nav class="nav-tabs" role="tablist">
       <button class="tab-btn active" id="tabAdventure" role="tab">
-        <span class="tab-icon">🚀</span>
-        <span>Vượt Ải</span>
+        <span class="tab-icon">ðŸš€</span>
+        <span>VÆ°á»£t áº¢i</span>
       </button>
       <button class="tab-btn" id="tabSending" role="tab">
-        <span class="tab-icon">📡</span>
-        <span>Gõ Điện Báo</span>
+        <span class="tab-icon">ðŸ“¡</span>
+        <span>GÃµ Äiá»‡n BÃ¡o</span>
       </button>
       <button class="tab-btn" id="tabWordDecoder" role="tab">
-        <span class="tab-icon">🕵️</span>
-        <span>Giải Mã Từ</span>
+        <span class="tab-icon">ðŸ•µï¸</span>
+        <span>Giáº£i MÃ£ Tá»«</span>
       </button>
       <button class="tab-btn" id="tabTranslator" role="tab">
-        <span class="tab-icon">📟</span>
-        <span>Hộp Mật Mã</span>
+        <span class="tab-icon">ðŸ“Ÿ</span>
+        <span>Há»™p Máº­t MÃ£</span>
       </button>
       <button class="tab-btn" id="tabFlashcards" role="tab">
-        <span class="tab-icon">📖</span>
-        <span>Tra Cứu</span>
+        <span class="tab-icon">ðŸ“–</span>
+        <span>Tra Cá»©u</span>
       </button>
     </nav>
 
@@ -111,8 +1432,8 @@
       <section id="levelSelectView" class="game-card">
         <div class="card-header">
           <div>
-            <h1 class="card-title">🚀 Bản Đồ Hành Tinh Morse</h1>
-            <p class="card-subtitle">Học dần từng chữ cái theo phương pháp Koch chuẩn quốc tế.</p>
+            <h1 class="card-title">ðŸš€ Báº£n Äá»“ HÃ nh Tinh Morse</h1>
+            <p class="card-subtitle">Há»c dáº§n tá»«ng chá»¯ cÃ¡i theo phÆ°Æ¡ng phÃ¡p Koch chuáº©n quá»‘c táº¿.</p>
           </div>
         </div>
         <div class="level-map-grid" id="levelMapGrid"></div>
@@ -122,21 +1443,21 @@
       <section id="adventurePlayView" class="game-card hidden">
         <div class="card-header">
           <div>
-            <h2 class="card-title" id="advLevelTitle">🚀 Level 1 · Tín Hiệu Đầu Tiên</h2>
-            <p class="card-subtitle" id="advLevelLetters">Ký tự: E · T</p>
+            <h2 class="card-title" id="advLevelTitle">ðŸš€ Level 1 Â· TÃ­n Hiá»‡u Äáº§u TiÃªn</h2>
+            <p class="card-subtitle" id="advLevelLetters">KÃ½ tá»±: E Â· T</p>
           </div>
-          <button class="btn btn-ghost btn-sm" id="advBackToMapTopBtn">🗺️ Đổi Màn</button>
+          <button class="btn btn-ghost btn-sm" id="advBackToMapTopBtn">ðŸ—ºï¸ Äá»•i MÃ n</button>
         </div>
 
         <!-- Boss Challenge Hearts & Status -->
         <div class="challenge-hud hidden" id="advChallengeHud">
-          <span>⚡ 15 câu đúng liên tiếp để vượt ải sớm!</span>
-          <span class="hearts-display" id="advHearts">❤️❤️❤️</span>
+          <span>âš¡ 15 cÃ¢u Ä‘Ãºng liÃªn tiáº¿p Ä‘á»ƒ vÆ°á»£t áº£i sá»›m!</span>
+          <span class="hearts-display" id="advHearts">â¤ï¸â¤ï¸â¤ï¸</span>
         </div>
 
         <!-- Progress Track -->
         <div style="display: flex; justify-content: space-between; font-size: 0.88rem; font-weight: 800; color: var(--text-secondary);">
-          <span>Tiến trình câu hỏi</span>
+          <span>Tiáº¿n trÃ¬nh cÃ¢u há»i</span>
           <span id="advProgressText">0 / 15</span>
         </div>
         <div class="progress-bar-container">
@@ -145,16 +1466,16 @@
 
         <!-- Newly Introduced Letters in this Level -->
         <div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap; margin-bottom: 12px;">
-          <span style="font-size: 0.85rem; font-weight: 800; color: var(--text-muted);">Ký tự mới màn này:</span>
+          <span style="font-size: 0.85rem; font-weight: 800; color: var(--text-muted);">KÃ½ tá»± má»›i mÃ n nÃ y:</span>
           <div id="advNewLetterCards" style="display: flex; gap: 6px; flex-wrap: wrap;"></div>
         </div>
 
         <!-- Central Signal & Question Hero Display -->
         <div class="quiz-hero-display">
-          <div class="quiz-signal-dots" id="advSignalDots">• • •</div>
-          <div class="quiz-feedback" id="advFeedback">Lắng nghe tín hiệu rồi chọn chữ cái tương ứng!</div>
+          <div class="quiz-signal-dots" id="advSignalDots">â€¢ â€¢ â€¢</div>
+          <div class="quiz-feedback" id="advFeedback">Láº¯ng nghe tÃ­n hiá»‡u rá»“i chá»n chá»¯ cÃ¡i tÆ°Æ¡ng á»©ng!</div>
           <div style="margin-top: 14px; display: flex; gap: 10px;">
-            <button class="btn btn-primary" id="advReplayAudioBtn">🔊 Nghe Lại (Phím Space)</button>
+            <button class="btn btn-primary" id="advReplayAudioBtn">ðŸ”Š Nghe Láº¡i (PhÃ­m Space)</button>
           </div>
         </div>
 
@@ -169,39 +1490,39 @@
     <section id="viewSending" class="game-card hidden">
       <div class="card-header">
         <div>
-          <h2 class="card-title">📡 Trạm Phát Tín Hiệu Điện Báo</h2>
-          <p class="card-subtitle">Nhấn giữ phím tròn để tự tạo chấm ngắn và gạch dài.</p>
+          <h2 class="card-title">ðŸ“¡ Tráº¡m PhÃ¡t TÃ­n Hiá»‡u Äiá»‡n BÃ¡o</h2>
+          <p class="card-subtitle">Nháº¥n giá»¯ phÃ­m trÃ²n Ä‘á»ƒ tá»± táº¡o cháº¥m ngáº¯n vÃ  gáº¡ch dÃ i.</p>
         </div>
         <div style="display: flex; gap: 8px;">
-          <button class="btn btn-ghost btn-sm active" id="sendingSubLearnBtn">🎓 Học Gõ</button>
-          <button class="btn btn-ghost btn-sm" id="sendingSubChallengeBtn">⚡ Thử Thách</button>
+          <button class="btn btn-ghost btn-sm active" id="sendingSubLearnBtn">ðŸŽ“ Há»c GÃµ</button>
+          <button class="btn btn-ghost btn-sm" id="sendingSubChallengeBtn">âš¡ Thá»­ ThÃ¡ch</button>
         </div>
       </div>
 
       <!-- Challenge HUD -->
       <div class="challenge-hud hidden" id="sendingChallengeHud">
         <span id="sendingProgressText">1 / 10</span>
-        <span class="hearts-display" id="sendingHearts">❤️❤️❤️</span>
+        <span class="hearts-display" id="sendingHearts">â¤ï¸â¤ï¸â¤ï¸</span>
       </div>
 
       <div class="keyer-station">
         <div>
-          <div style="font-size: 0.9rem; color: var(--text-muted); font-weight: 700;">Hãy phát chữ:</div>
+          <div style="font-size: 0.9rem; color: var(--text-muted); font-weight: 700;">HÃ£y phÃ¡t chá»¯:</div>
           <div style="font-size: clamp(3.5rem, 10vw, 5rem); font-family: var(--font-family-display); font-weight: 900; line-height: 1.1; color: #fff;" id="sendingTargetLetter">E</div>
-          <div style="font-size: 1.5rem; color: var(--neon-cyan); letter-spacing: 6px; font-weight: 900;" id="sendingTargetHint">•</div>
-          <button class="btn btn-ghost btn-sm" style="margin-top: 8px;" id="sendingSampleAudioBtn">🔊 Nghe Mẫu</button>
+          <div style="font-size: 1.5rem; color: var(--neon-cyan); letter-spacing: 6px; font-weight: 900;" id="sendingTargetHint">â€¢</div>
+          <button class="btn btn-ghost btn-sm" style="margin-top: 8px;" id="sendingSampleAudioBtn">ðŸ”Š Nghe Máº«u</button>
         </div>
 
         <!-- Large Tactile Telegraph Key Button -->
         <div class="telegraph-key-outer">
-          <button class="telegraph-key-btn" id="telegraphKeyBtn">NHẤN &amp; GIỮ<br><span style="font-size: 0.8rem; opacity: 0.85;">(Hoặc Space)</span></button>
+          <button class="telegraph-key-btn" id="telegraphKeyBtn">NHáº¤N &amp; GIá»®<br><span style="font-size: 0.8rem; opacity: 0.85;">(Hoáº·c Space)</span></button>
         </div>
 
-        <div class="sending-readout-box" id="sendingReadout">• • •</div>
-        <div id="sendingFeedbackMsg" style="min-height: 24px; font-size: 0.95rem; font-weight: 700; color: var(--text-secondary);">Nhấn ngắn = Chấm (•) · Nhấn lâu hơn = Gạch (—)</div>
+        <div class="sending-readout-box" id="sendingReadout">â€¢ â€¢ â€¢</div>
+        <div id="sendingFeedbackMsg" style="min-height: 24px; font-size: 0.95rem; font-weight: 700; color: var(--text-secondary);">Nháº¥n ngáº¯n = Cháº¥m (â€¢) Â· Nháº¥n lÃ¢u hÆ¡n = Gáº¡ch (â€”)</div>
 
         <div style="display: flex; gap: 10px;">
-          <button class="btn btn-ghost btn-sm" id="sendingResetBufferBtn">↻ Xóa Bộ Nhớ Đệm</button>
+          <button class="btn btn-ghost btn-sm" id="sendingResetBufferBtn">â†» XÃ³a Bá»™ Nhá»› Äá»‡m</button>
         </div>
       </div>
     </section>
@@ -212,23 +1533,23 @@
     <section id="viewWordDecoder" class="game-card hidden">
       <div class="card-header">
         <div>
-          <h2 class="card-title">🕵️ Điệp Viên Giải Mã Từ Bí Mật</h2>
-          <p class="card-subtitle">Nghe từng ký tự để ghép thành từ vựng hoàn chỉnh.</p>
+          <h2 class="card-title">ðŸ•µï¸ Äiá»‡p ViÃªn Giáº£i MÃ£ Tá»« BÃ­ Máº­t</h2>
+          <p class="card-subtitle">Nghe tá»«ng kÃ½ tá»± Ä‘á»ƒ ghÃ©p thÃ nh tá»« vá»±ng hoÃ n chá»‰nh.</p>
         </div>
-        <button class="btn btn-accent btn-sm" id="wordNextMissionBtn">Từ Khác ↻</button>
+        <button class="btn btn-accent btn-sm" id="wordNextMissionBtn">Tá»« KhÃ¡c â†»</button>
       </div>
 
       <div class="word-mission-box">
-        <div class="word-clue-pill" id="wordCategoryClue">Chủ đề: Động vật · Gợi ý: "Bạn mèo kêu meo meo"</div>
+        <div class="word-clue-pill" id="wordCategoryClue">Chá»§ Ä‘á»: Äá»™ng váº­t Â· Gá»£i Ã½: "Báº¡n mÃ¨o kÃªu meo meo"</div>
 
         <!-- Mystery Letter Slots -->
         <div class="mystery-slots" id="wordMysterySlots"></div>
 
-        <div id="wordFeedbackMsg" style="font-size: 1rem; font-weight: 800; color: var(--text-secondary); min-height: 24px;">Lắng nghe tín hiệu của ô đang sáng!</div>
+        <div id="wordFeedbackMsg" style="font-size: 1rem; font-weight: 800; color: var(--text-secondary); min-height: 24px;">Láº¯ng nghe tÃ­n hiá»‡u cá»§a Ã´ Ä‘ang sÃ¡ng!</div>
 
         <div style="display: flex; gap: 10px;">
-          <button class="btn btn-primary" id="wordPlayLetterBtn">🔊 Nghe Ký Tự Này</button>
-          <button class="btn btn-ghost" id="wordPlayFullBtn">🎵 Nghe Cả Từ</button>
+          <button class="btn btn-primary" id="wordPlayLetterBtn">ðŸ”Š Nghe KÃ½ Tá»± NÃ y</button>
+          <button class="btn btn-ghost" id="wordPlayFullBtn">ðŸŽµ Nghe Cáº£ Tá»«</button>
         </div>
 
         <!-- Keyboard for Word Guesses -->
@@ -242,36 +1563,36 @@
     <section id="viewTranslator" class="game-card hidden">
       <div class="card-header">
         <div>
-          <h2 class="card-title">📟 Hộp Mật Mã &amp; Phát Sóng Toàn Cầu</h2>
-          <p class="card-subtitle">Dịch văn bản sang Morse và phát sóng âm thanh + đèn flash.</p>
+          <h2 class="card-title">ðŸ“Ÿ Há»™p Máº­t MÃ£ &amp; PhÃ¡t SÃ³ng ToÃ n Cáº§u</h2>
+          <p class="card-subtitle">Dá»‹ch vÄƒn báº£n sang Morse vÃ  phÃ¡t sÃ³ng Ã¢m thanh + Ä‘Ã¨n flash.</p>
         </div>
       </div>
 
       <!-- Quick Preset Phrases -->
       <div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap; margin-bottom: 16px;">
-        <span style="font-size: 0.85rem; font-weight: 800; color: var(--text-muted);">Mẫu câu nhanh:</span>
-        <button class="hud-pill trans-preset-btn" data-text="SOS">🆘 SOS</button>
-        <button class="hud-pill trans-preset-btn" data-text="HELLO">👋 HELLO</button>
-        <button class="hud-pill trans-preset-btn" data-text="SPACE CADET">🚀 SPACE CADET</button>
-        <button class="hud-pill trans-preset-btn" data-text="I LOVE YOU">❤️ I LOVE YOU</button>
+        <span style="font-size: 0.85rem; font-weight: 800; color: var(--text-muted);">Máº«u cÃ¢u nhanh:</span>
+        <button class="hud-pill trans-preset-btn" data-text="SOS">ðŸ†˜ SOS</button>
+        <button class="hud-pill trans-preset-btn" data-text="HELLO">ðŸ‘‹ HELLO</button>
+        <button class="hud-pill trans-preset-btn" data-text="SPACE CADET">ðŸš€ SPACE CADET</button>
+        <button class="hud-pill trans-preset-btn" data-text="I LOVE YOU">â¤ï¸ I LOVE YOU</button>
       </div>
 
       <div class="translator-grid">
         <div class="trans-box">
-          <label style="font-weight: 800; color: var(--text-secondary);">Văn Bản Bình Thường (Tiếng Việt / English):</label>
-          <textarea id="transTextInput" placeholder="Nhập tin nhắn bí mật của bạn ở đây... (Ví dụ: XIN CHAO)"></textarea>
+          <label style="font-weight: 800; color: var(--text-secondary);">VÄƒn Báº£n BÃ¬nh ThÆ°á»ng (Tiáº¿ng Viá»‡t / English):</label>
+          <textarea id="transTextInput" placeholder="Nháº­p tin nháº¯n bÃ­ máº­t cá»§a báº¡n á»Ÿ Ä‘Ã¢y... (VÃ­ dá»¥: XIN CHAO)"></textarea>
         </div>
 
         <div class="trans-box">
-          <label style="font-weight: 800; color: var(--neon-cyan);">Mã Morse Tương Ứng:</label>
-          <textarea id="transMorseInput" class="morse-area" placeholder="Hoặc gõ mã Morse ở đây... (Ví dụ: ... --- ...)"></textarea>
+          <label style="font-weight: 800; color: var(--neon-cyan);">MÃ£ Morse TÆ°Æ¡ng á»¨ng:</label>
+          <textarea id="transMorseInput" class="morse-area" placeholder="Hoáº·c gÃµ mÃ£ Morse á»Ÿ Ä‘Ã¢y... (VÃ­ dá»¥: ... --- ...)"></textarea>
         </div>
       </div>
 
       <div style="display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; margin-top: 20px;">
-        <button class="btn btn-success btn-lg" id="transBroadcastBtn">📡 Phát Tín Hiệu (Loa + Đèn)</button>
-        <button class="btn btn-danger" id="transStopBtn">⏹ Dừng Phát</button>
-        <button class="btn btn-ghost" id="transCopyMorseBtn">📋 Sao Chép Mã Morse</button>
+        <button class="btn btn-success btn-lg" id="transBroadcastBtn">ðŸ“¡ PhÃ¡t TÃ­n Hiá»‡u (Loa + ÄÃ¨n)</button>
+        <button class="btn btn-danger" id="transStopBtn">â¹ Dá»«ng PhÃ¡t</button>
+        <button class="btn btn-ghost" id="transCopyMorseBtn">ðŸ“‹ Sao ChÃ©p MÃ£ Morse</button>
       </div>
     </section>
 
@@ -281,13 +1602,13 @@
     <section id="viewFlashcards" class="game-card hidden">
       <div class="card-header">
         <div>
-          <h2 class="card-title">📖 Thư Viện Tra Cứu &amp; Thẻ Gợi Nhớ (Mnemonics)</h2>
-          <p class="card-subtitle">Bấm vào từng thẻ để nghe âm thanh chuẩn và xem mẹo ghi nhớ hình ảnh.</p>
+          <h2 class="card-title">ðŸ“– ThÆ° Viá»‡n Tra Cá»©u &amp; Tháº» Gá»£i Nhá»› (Mnemonics)</h2>
+          <p class="card-subtitle">Báº¥m vÃ o tá»«ng tháº» Ä‘á»ƒ nghe Ã¢m thanh chuáº©n vÃ  xem máº¹o ghi nhá»› hÃ¬nh áº£nh.</p>
         </div>
         <div style="display: flex; gap: 6px;">
-          <button class="btn btn-ghost btn-sm active flashcard-filter-btn" data-filter="all">Tất Cả</button>
-          <button class="btn btn-ghost btn-sm flashcard-filter-btn" data-filter="alpha">Chữ Cái (A-Z)</button>
-          <button class="btn btn-ghost btn-sm flashcard-filter-btn" data-filter="num">Chữ Số (0-9)</button>
+          <button class="btn btn-ghost btn-sm active flashcard-filter-btn" data-filter="all">Táº¥t Cáº£</button>
+          <button class="btn btn-ghost btn-sm flashcard-filter-btn" data-filter="alpha">Chá»¯ CÃ¡i (A-Z)</button>
+          <button class="btn btn-ghost btn-sm flashcard-filter-btn" data-filter="num">Chá»¯ Sá»‘ (0-9)</button>
         </div>
       </div>
 
@@ -296,16 +1617,2192 @@
 
   </div>
 
-  <!-- Scripts in Structured Dependency Order -->
-  <script src="js/morse-data.js"></script>
-  <script src="js/audio-engine.js"></script>
-  <script src="js/visual-engine.js"></script>
-  <script src="js/storage.js"></script>
-  <script src="js/games/adventure-mode.js"></script>
-  <script src="js/games/sending-mode.js"></script>
-  <script src="js/games/word-decoder.js"></script>
-  <script src="js/games/translator.js"></script>
-  <script src="js/games/flashcards.js"></script>
-  <script src="js/app.js"></script>
+  <script>
+/* ==========================================================================
+   MORSE SPACE CADET - MORSE DATA, LESSONS & MNEMONICS
+   ========================================================================== */
+
+const MORSE = {
+  // Alphabet
+  A: ".-",
+  B: "-...",
+  C: "-.-.",
+  D: "-..",
+  E: ".",
+  F: "..-.",
+  G: "--.",
+  H: "....",
+  I: "..",
+  J: ".---",
+  K: "-.-",
+  L: ".-..",
+  M: "--",
+  N: "-.",
+  O: "---",
+  P: ".--.",
+  Q: "--.-",
+  R: ".-.",
+  S: "...",
+  T: "-",
+  U: "..-",
+  V: "...-",
+  W: ".--",
+  X: "-..-",
+  Y: "-.--",
+  Z: "--..",
+
+  // Numbers
+  "1": ".----",
+  "2": "..---",
+  "3": "...--",
+  "4": "....-",
+  "5": ".....",
+  "6": "-....",
+  "7": "--...",
+  "8": "---..",
+  "9": "----.",
+  "0": "-----",
+
+  // Punctuation
+  "?": "..--..",
+  "!": "-.-.--",
+  "/": "-..-.",
+  "=": "-...-"
+};
+
+// Reverse map for decoding
+const REVERSE_MORSE = {};
+Object.entries(MORSE).forEach(([char, code]) => {
+  REVERSE_MORSE[code] = char;
+});
+
+// Convert standard dots/dashes to visual symbols
+function formatMorseSymbols(code) {
+  if (!code) return "";
+  return code.replaceAll(".", "â€¢").replaceAll("-", "â€”");
+}
+
+/* ==========================================================================
+   13 KOCH METHOD LESSONS
+   ========================================================================== */
+const LESSONS_DATA = [
+  {
+    level: 1,
+    name: "TÃ­n Hiá»‡u Äáº§u TiÃªn",
+    newLetters: ["E", "T"],
+    letters: ["E", "T"],
+    desc: "LÃ m quen vá»›i Cháº¥m ngáº¯n (E) vÃ  Gáº¡ch dÃ i (T)."
+  },
+  {
+    level: 2,
+    name: "Bá»‘n TÃ­n Hiá»‡u CÆ¡ Báº£n",
+    newLetters: ["A", "N"],
+    letters: ["E", "T", "A", "N"],
+    desc: "Má»Ÿ rá»™ng vá»›i A (â€¢â€”) vÃ  N (â€”â€¢)."
+  },
+  {
+    level: 3,
+    name: "TÃ¢n Binh KhÃ´ng Gian",
+    newLetters: ["I", "M"],
+    letters: ["E", "T", "A", "N", "I", "M"],
+    desc: "ThÃªm I (â€¢â€¢) vÃ  M (â€”â€”) cho nhá»‹p Ä‘iá»‡u."
+  },
+  {
+    level: 4,
+    name: "NhÃ  ThÃ¡m Hiá»ƒm SÃ³ng",
+    newLetters: ["S", "O"],
+    letters: ["E", "T", "A", "N", "I", "M", "S", "O"],
+    desc: "Há»c tÃ­n hiá»‡u huyá»n thoáº¡i SOS (S â€¢â€¢â€¢, O â€”â€”â€”)."
+  },
+  {
+    level: 5,
+    name: "Äiá»‡p ViÃªn Radar",
+    newLetters: ["R", "K"],
+    letters: ["E", "T", "A", "N", "I", "M", "S", "O", "R", "K"],
+    desc: "Pháº£n xáº¡ nhanh vá»›i R (â€¢â€”â€¢) vÃ  K (â€”â€¢â€”)."
+  },
+  {
+    level: 6,
+    name: "Trinh SÃ¡t VÅ© Trá»¥",
+    newLetters: ["D", "G"],
+    letters: ["E", "T", "A", "N", "I", "M", "S", "O", "R", "K", "D", "G"],
+    desc: "Giáº£i mÃ£ cÃ¡c Ã¢m thanh tráº§m D (â€”â€¢â€¢) vÃ  G (â€”â€”â€¢)."
+  },
+  {
+    level: 7,
+    name: "Phi CÃ´ng Phi Thuyá»n",
+    newLetters: ["U", "W"],
+    letters: ["E", "T", "A", "N", "I", "M", "S", "O", "R", "K", "D", "G", "U", "W"],
+    desc: "Chinh phá»¥c U (â€¢â€¢â€”) vÃ  W (â€¢â€”â€”)."
+  },
+  {
+    level: 8,
+    name: "Thá»£ SÄƒn TÃ­n Hiá»‡u",
+    newLetters: ["H", "V"],
+    letters: ["E", "T", "A", "N", "I", "M", "S", "O", "R", "K", "D", "G", "U", "W", "H", "V"],
+    desc: "H (â€¢â€¢â€¢â€¢) 4 cháº¥m dá»“n dáº­p vÃ  V (â€¢â€¢â€¢â€”) khÃºc kháº£i hoÃ n."
+  },
+  {
+    level: 9,
+    name: "NhÃ  Du HÃ nh Morse",
+    newLetters: ["F", "L"],
+    letters: ["E", "T", "A", "N", "I", "M", "S", "O", "R", "K", "D", "G", "U", "W", "H", "V", "F", "L"],
+    desc: "Luyá»‡n Ä‘Ã´i tai sáº¯c bÃ©n vá»›i F (â€¢â€¢â€”â€¢) vÃ  L (â€¢â€”â€¢â€¢)."
+  },
+  {
+    level: 10,
+    name: "Chá»‰ Huy Tráº¡m KhÃ´ng Gian",
+    newLetters: ["P", "J"],
+    letters: ["E", "T", "A", "N", "I", "M", "S", "O", "R", "K", "D", "G", "U", "W", "H", "V", "F", "L", "P", "J"],
+    desc: "PhÃ¡t Ã¢m dÃ i P (â€¢â€”â€”â€¢) vÃ  J (â€¢â€”â€”â€”)."
+  },
+  {
+    level: 11,
+    name: "Cao Thá»§ Máº­t MÃ£",
+    newLetters: ["B", "X"],
+    letters: ["E", "T", "A", "N", "I", "M", "S", "O", "R", "K", "D", "G", "U", "W", "H", "V", "F", "L", "P", "J", "B", "X"],
+    desc: "Giáº£i mÃ£ B (â€”â€¢â€¢â€¢) vÃ  X (â€”â€¢â€¢â€”)."
+  },
+  {
+    level: 12,
+    name: "ChuyÃªn Gia Radar",
+    newLetters: ["C", "Y"],
+    letters: ["E", "T", "A", "N", "I", "M", "S", "O", "R", "K", "D", "G", "U", "W", "H", "V", "F", "L", "P", "J", "B", "X", "C", "Y"],
+    desc: "Chuáº©n bá»‹ vá» Ä‘Ã­ch vá»›i C (â€”â€¢â€”â€¢) vÃ  Y (â€”â€¢â€”â€”)."
+  },
+  {
+    level: 13,
+    name: "Äáº¡i Sá»© Morse VÅ© Trá»¥",
+    newLetters: ["Z", "Q"],
+    letters: ["E", "T", "A", "N", "I", "M", "S", "O", "R", "K", "D", "G", "U", "W", "H", "V", "F", "L", "P", "J", "B", "X", "C", "Y", "Z", "Q"],
+    desc: "Má»Ÿ khÃ³a toÃ n bá»™ 26 chá»¯ cÃ¡i vá»›i Z (â€”â€”â€¢â€¢) vÃ  Q (â€”â€”â€¢â€”)!"
+  }
+];
+
+// Build Full Level Array with Interleaved Boss Review Challenges
+const LEVELS_LIST = [];
+LESSONS_DATA.forEach((lesson, index) => {
+  LEVELS_LIST.push({
+    ...lesson,
+    type: "lesson",
+    levelNumber: LEVELS_LIST.length + 1
+  });
+
+  // After every 2 lessons, insert a Boss Review Challenge
+  if ((index + 1) % 2 === 0) {
+    const challengeNum = (index + 1) / 2;
+    LEVELS_LIST.push({
+      type: "challenge",
+      challengeId: challengeNum,
+      levelNumber: LEVELS_LIST.length + 1,
+      name: `âš¡ Thá»­ ThÃ¡ch Boss ${challengeNum}`,
+      newLetters: [],
+      letters: [...lesson.letters],
+      desc: `Ã”n táº­p tá»•ng há»£p cáº¥p Ä‘á»™ 1 Ä‘áº¿n ${index + 1}. CÃ³ 3 Tim!`
+    });
+  }
+});
+
+/* ==========================================================================
+   VISUAL MNEMONICS (HÃŒNH Gá»¢I NHá»š TRáºº EM)
+   ========================================================================== */
+const MNEMONICS = {
+  A: { icon: "âœˆï¸", word: "Airplane", hint: "MÃ¡y bay cáº¥t cÃ¡nh (ngáº¯n - dÃ i)", code: ".-" },
+  B: { icon: "ðŸŒ", word: "Banana", hint: "Má»™t náº£i chuá»‘i (dÃ i - ngáº¯n - ngáº¯n - ngáº¯n)", code: "-..." },
+  C: { icon: "ðŸ¬", word: "Candy", hint: "Káº¹o ngá»t ngÃ o (dÃ i - ngáº¯n - dÃ i - ngáº¯n)", code: "-.-." },
+  D: { icon: "ðŸ¶", word: "Dog", hint: "ChÃº cÃºn váº«y Ä‘uÃ´i (dÃ i - ngáº¯n - ngáº¯n)", code: "-.." },
+  E: { icon: "ðŸ‘ï¸", word: "Eye", hint: "Má»™t chá»›p máº¯t ngáº¯n (cháº¥m)", code: "." },
+  F: { icon: "ðŸ¦Š", word: "Fox", hint: "CÃ¡o thÃ´ng minh (ngáº¯n - ngáº¯n - dÃ i - ngáº¯n)", code: "..-." },
+  G: { icon: "ðŸ¦’", word: "Giraffe", hint: "HÆ°Æ¡u cao cá»• (dÃ i - dÃ i - ngáº¯n)", code: "--." },
+  H: { icon: "ðŸ ", word: "Home", hint: "4 bá»©c tÆ°á»ng nhÃ  (4 cháº¥m)", code: "...." },
+  I: { icon: "ðŸ¦", word: "Ice cream", hint: "2 viÃªn kem ngon (2 cháº¥m)", code: ".." },
+  J: { icon: "ðŸ¤¹", word: "Juggler", hint: "Tung 3 bÃ³ng dÃ i (ngáº¯n - dÃ i - dÃ i - dÃ i)", code: ".---" },
+  K: { icon: "ðŸ¦˜", word: "Kangaroo", hint: "Chuá»™t tÃºi nháº£y (dÃ i - ngáº¯n - dÃ i)", code: "-.-" },
+  L: { icon: "ðŸ‹", word: "Lemon", hint: "Quáº£ chanh má»ng (ngáº¯n - dÃ i - ngáº¯n - ngáº¯n)", code: ".-.." },
+  M: { icon: "ðŸŒ™", word: "Moon", hint: "2 váº§ng trÄƒng sÃ¡ng (2 gáº¡ch)", code: "--" },
+  N: { icon: "ðŸ¥œ", word: "Nut", hint: "Háº¡t dáº» cáº¯n Ä‘Ã´i (dÃ i - ngáº¯n)", code: "-." },
+  O: { icon: "ðŸ¦‰", word: "Owl", hint: "CÃº mÃ¨o cÃº vá» (3 gáº¡ch dÃ i)", code: "---" },
+  P: { icon: "ðŸ§", word: "Penguin", hint: "Chim cÃ¡nh cá»¥t (ngáº¯n - dÃ i - dÃ i - ngáº¯n)", code: ".--." },
+  Q: { icon: "ðŸ‘‘", word: "Queen", hint: "VÆ°Æ¡ng miá»‡n láº¥p lÃ¡nh (dÃ i - dÃ i - ngáº¯n - dÃ i)", code: "--.-" },
+  R: { icon: "ðŸ¤–", word: "Robot", hint: "Robot Beep-Bot (ngáº¯n - dÃ i - ngáº¯n)", code: ".-." },
+  S: { icon: "ðŸ“", word: "Strawberry", hint: "3 quáº£ dÃ¢u tÃ¢y (3 cháº¥m)", code: "..." },
+  T: { icon: "ðŸŒ²", word: "Tree", hint: "ThÃ¢n cÃ¢y tháº³ng Ä‘á»©ng (1 gáº¡ch)", code: "-" },
+  U: { icon: "ðŸ¦„", word: "Unicorn", hint: "Ká»³ lÃ¢n ká»³ diá»‡u (ngáº¯n - ngáº¯n - dÃ i)", code: "..-" },
+  V: { icon: "ðŸŽ»", word: "Violin", hint: "Nháº¡c giao hÆ°á»Ÿng (3 ngáº¯n - 1 dÃ i)", code: "...-" },
+  W: { icon: "ðŸŒŠ", word: "Wave", hint: "SÃ³ng biá»ƒn dáº­p dá»nh (ngáº¯n - dÃ i - dÃ i)", code: ".--" },
+  X: { icon: "âš”ï¸", word: "Xylophone", hint: "Hai thanh kiáº¿m chÃ©o (dÃ i - 2 ngáº¯n - dÃ i)", code: "-..-" },
+  Y: { icon: "â›µ", word: "Yacht", hint: "Thuyá»n buá»“m ra khÆ¡i (dÃ i - ngáº¯n - 2 dÃ i)", code: "-.--" },
+  Z: { icon: "ðŸ¦“", word: "Zebra", hint: "Ngá»±a váº±n dÅ©ng cáº£m (2 dÃ i - 2 ngáº¯n)", code: "--.." }
+};
+
+/* ==========================================================================
+   SECRET WORDS FOR WORD DECODER MISSION
+   ========================================================================== */
+const SECRET_WORDS = [
+  // Cáº¥p Ä‘á»™ 1: 2-3 chá»¯ cÃ¡i
+  { word: "HI", clue: "Lá»i chÃ o thÃ¢n thiá»‡n!", category: "Giao tiáº¿p", icon: "ðŸ‘‹" },
+  { word: "SOS", clue: "TÃ­n hiá»‡u cáº¥p cá»©u vÅ© trá»¥!", category: "Kháº©n cáº¥p", icon: "ðŸ†˜" },
+  { word: "CAT", clue: "Báº¡n mÃ¨o kÃªu meo meo", category: "Äá»™ng váº­t", icon: "ðŸ±" },
+  { word: "DOG", clue: "Báº¡n cÃºn trung thÃ nh", category: "Äá»™ng váº­t", icon: "ðŸ¶" },
+  { word: "SUN", clue: "Máº·t trá»i áº¥m Ã¡p", category: "VÅ© trá»¥", icon: "â˜€ï¸" },
+  { word: "EGG", clue: "Quáº£ trá»©ng ná»Ÿ ra chim non", category: "Thá»©c Äƒn", icon: "ðŸ¥š" },
+  { word: "ICE", clue: "ÄÃ¡ láº¡nh mÃ¡t rÆ°á»£i", category: "ThiÃªn nhiÃªn", icon: "ðŸ§Š" },
+  { word: "RED", clue: "MÃ u Ä‘á» rá»±c rá»¡", category: "MÃ u sáº¯c", icon: "ðŸ”´" },
+  { word: "FOX", clue: "CÃ¡o thÃ´ng minh nhanh nháº¹n", category: "Äá»™ng váº­t", icon: "ðŸ¦Š" },
+
+  // Cáº¥p Ä‘á»™ 2: 4 chá»¯ cÃ¡i
+  { word: "STAR", clue: "NgÃ´i sao láº¥p lÃ¡nh trÃªn trá»i", category: "VÅ© trá»¥", icon: "â­" },
+  { word: "MOON", clue: "Máº·t trÄƒng trÃ²n Ä‘Ãªm ráº±m", category: "VÅ© trá»¥", icon: "ðŸŒ™" },
+  { word: "SHIP", clue: "Phi thuyá»n thÃ¡m hiá»ƒm ngÃ¢n hÃ ", category: "VÅ© trá»¥", icon: "ðŸš€" },
+  { word: "HERO", clue: "NgÆ°á»i hÃ¹ng nhÃ­ dÅ©ng cáº£m", category: "NhÃ¢n váº­t", icon: "ðŸ¦¸" },
+  { word: "LION", clue: "ChÃºa sÆ¡n lÃ¢m dÅ©ng mÃ£nh", category: "Äá»™ng váº­t", icon: "ðŸ¦" },
+  { word: "BEAR", clue: "ChÃº gáº¥u thÃ­ch máº­t ong", category: "Äá»™ng váº­t", icon: "ðŸ»" },
+  { word: "CODE", clue: "Máº­t mÃ£ bÃ­ máº­t", category: "Khoa há»c", icon: "ðŸ’»" },
+  { word: "GAME", clue: "TrÃ² chÆ¡i siÃªu thÃº vá»‹", category: "Giáº£i trÃ­", icon: "ðŸŽ®" },
+  { word: "BIRD", clue: "ChÃº chim hÃ³t lÃ­u lo", category: "Äá»™ng váº­t", icon: "ðŸ¦" },
+
+  // Cáº¥p Ä‘á»™ 3: 5 chá»¯ cÃ¡i
+  { word: "ROBOT", clue: "NgÆ°á»i báº¡n mÃ¡y Beep-Bot", category: "CÃ´ng nghá»‡", icon: "ðŸ¤–" },
+  { word: "SPACE", clue: "KhÃ´ng gian vÅ© trá»¥ bao la", category: "VÅ© trá»¥", icon: "ðŸŒŒ" },
+  { word: "MAGIC", clue: "PhÃ©p thuáº­t ká»³ diá»‡u", category: "Huyá»n bÃ­", icon: "âœ¨" },
+  { word: "EARTH", clue: "TrÃ¡i Äáº¥t hÃ nh tinh xanh", category: "VÅ© trá»¥", icon: "ðŸŒ" },
+  { word: "BRAVE", clue: "DÅ©ng cáº£m vÆ°á»£t qua thá»­ thÃ¡ch", category: "Pháº©m cháº¥t", icon: "ðŸ›¡ï¸" },
+  { word: "WATER", clue: "Nguá»“n nÆ°á»›c trong lÃ nh", category: "ThiÃªn nhiÃªn", icon: "ðŸ’§" }
+];
+
+/* ==========================================================================
+   12 BADGES / ACHIEVEMENTS
+   ========================================================================== */
+const BADGES_DEF = [
+  { id: "cadet", icon: "ðŸš€", title: "TÃ¢n Binh VÅ© Trá»¥", desc: "HoÃ n thÃ nh mÃ n há»c Ä‘áº§u tiÃªn (Level 1)." },
+  { id: "streak_5", icon: "ðŸ”¥", title: "BÃ n Tay Nhanh Nháº¹n", desc: "Äáº¡t chuá»—i 5 cÃ¢u Ä‘Ãºng liÃªn tiáº¿p." },
+  { id: "streak_15", icon: "âš¡", title: "Tia Chá»›p Morse", desc: "Äáº¡t chuá»—i 15 cÃ¢u Ä‘Ãºng liÃªn tiáº¿p." },
+  { id: "boss_slayer", icon: "ðŸ‘‘", title: "VÆ°á»£t áº¢i Boss", desc: "Chiáº¿n tháº¯ng má»™t mÃ n Thá»­ ThÃ¡ch Boss." },
+  { id: "word_hunter", icon: "ðŸ•µï¸", title: "ThÃ¡m Tá»­ Máº­t MÃ£", desc: "Giáº£i mÃ£ thÃ nh cÃ´ng 3 tá»« bÃ­ máº­t." },
+  { id: "broadcaster", icon: "ðŸ“¡", title: "Tráº¡m PhÃ¡t SÃ³ng", desc: "PhÃ¡t sÃ³ng 1 thÃ´ng Ä‘iá»‡p bÃ­ máº­t." },
+  { id: "keyer_master", icon: "ðŸŽ¹", title: "Nghá»‡ SÄ© Äiá»‡n BÃ¡o", desc: "PhÃ¡t Ä‘Ãºng 5 chá»¯ cÃ¡i á»Ÿ cháº¿ Ä‘á»™ Luyá»‡n GÃµ." },
+  { id: "halfway", icon: "ðŸª", title: "ThÃ¡m Hiá»ƒm Ná»­a NgÃ¢n HÃ ", desc: "Má»Ÿ khÃ³a thÃ nh cÃ´ng Level 7." },
+  { id: "all_letters", icon: "ðŸ†", title: "Äáº¡i Sá»© Morse ToÃ n NÄƒng", desc: "Má»Ÿ khÃ³a toÃ n bá»™ 13 Level báº£ng chá»¯ cÃ¡i." },
+  { id: "star_collector", icon: "â­", title: "Báº§u Trá»i NgÃ´i Sao", desc: "Thu tháº­p Ä‘á»§ 15 ngÃ´i sao vÃ ng." },
+  { id: "sound_explorer", icon: "ðŸŽµ", title: "ÄÃ´i Tai Ã‚m Nháº¡c", desc: "Thá»­ qua cáº£ 4 bá»™ Ã¢m thanh khÃ¡c nhau." },
+  { id: "perfect_run", icon: "ðŸ’Ž", title: "Tuyá»‡t Äá»‘i HoÃ n Háº£o", desc: "VÆ°á»£t qua má»™t bÃ i há»c vá»›i Ä‘á»™ chÃ­nh xÃ¡c 100%." }
+];
+
+/* ==========================================================================
+   MORSE SPACE CADET - WEB AUDIO SYNTHESIZER ENGINE
+   ========================================================================== */
+
+class AudioEngine {
+  constructor() {
+    this.ctx = null;
+    this.currentSkin = "arcade"; // 'arcade', 'laser', 'sonar', 'classic'
+    this.frequency = 600; // Hz
+    this.wpm = 14;
+    this.volume = 0.8;
+    this.activeOsc = null;
+    this.activeGain = null;
+    this.isMuted = false;
+    this.isPlayingSequence = false;
+    this.sequenceCancelToken = { cancel: false };
+
+    // Callbacks for visual sync
+    this.onToneStart = null;
+    this.onToneEnd = null;
+  }
+
+  // Initialize Audio Context on first user interaction
+  init() {
+    if (!this.ctx) {
+      const AudioCtx = window.AudioContext || window.webkitAudioContext;
+      if (AudioCtx) {
+        this.ctx = new AudioCtx();
+      }
+    }
+    if (this.ctx && this.ctx.state === "suspended") {
+      this.ctx.resume();
+    }
+  }
+
+  setSkin(skinName) {
+    this.currentSkin = skinName;
+  }
+
+  setWpm(wpm) {
+    this.wpm = Math.max(8, Math.min(30, Number(wpm)));
+  }
+
+  setFrequency(freq) {
+    this.frequency = Math.max(300, Math.min(1000, Number(freq)));
+  }
+
+  // Dit duration in milliseconds based on PARIS standard (1200 / WPM)
+  getDitDurationMs() {
+    return 1200 / this.wpm;
+  }
+
+  /* ==========================================================================
+     START & STOP SINGLE TONE (For Manual Keyer & Sequence)
+     ========================================================================== */
+  startTone(freq = this.frequency) {
+    this.init();
+    if (!this.ctx || this.isMuted) return;
+
+    if (this.activeOsc) {
+      this.stopTone();
+    }
+
+    try {
+      const now = this.ctx.currentTime;
+      const osc = this.ctx.createOscillator();
+      const gain = this.ctx.createGain();
+
+      // Configure Oscillator Waveform based on Sound Skin
+      switch (this.currentSkin) {
+        case "arcade":
+          osc.type = "square";
+          osc.frequency.setValueAtTime(freq, now);
+          gain.gain.setValueAtTime(0.001, now);
+          gain.gain.linearRampToValueAtTime(0.18 * this.volume, now + 0.006);
+          break;
+
+        case "laser":
+          osc.type = "sawtooth";
+          osc.frequency.setValueAtTime(freq * 1.25, now);
+          osc.frequency.exponentialRampToValueAtTime(freq * 0.85, now + 0.12);
+          gain.gain.setValueAtTime(0.001, now);
+          gain.gain.linearRampToValueAtTime(0.2 * this.volume, now + 0.008);
+          break;
+
+        case "sonar":
+          osc.type = "sine";
+          osc.frequency.setValueAtTime(freq * 1.1, now);
+          osc.frequency.exponentialRampToValueAtTime(freq, now + 0.05);
+          gain.gain.setValueAtTime(0.001, now);
+          gain.gain.linearRampToValueAtTime(0.3 * this.volume, now + 0.015);
+          break;
+
+        case "classic":
+        default:
+          osc.type = "sine";
+          osc.frequency.setValueAtTime(freq, now);
+          gain.gain.setValueAtTime(0.001, now);
+          gain.gain.linearRampToValueAtTime(0.3 * this.volume, now + 0.005);
+          break;
+      }
+
+      osc.connect(gain);
+      gain.connect(this.ctx.destination);
+      osc.start(now);
+
+      this.activeOsc = osc;
+      this.activeGain = gain;
+
+      if (typeof this.onToneStart === "function") {
+        this.onToneStart();
+      }
+    } catch (e) {
+      console.warn("AudioEngine startTone error:", e);
+    }
+  }
+
+  stopTone() {
+    if (!this.ctx || !this.activeOsc || !this.activeGain) return;
+
+    try {
+      const now = this.ctx.currentTime;
+      this.activeGain.gain.cancelScheduledValues(now);
+      this.activeGain.gain.setValueAtTime(this.activeGain.gain.value, now);
+      this.activeGain.gain.linearRampToValueAtTime(0.0001, now + 0.012);
+
+      const osc = this.activeOsc;
+      setTimeout(() => {
+        try {
+          osc.stop();
+          osc.disconnect();
+        } catch (_) {}
+      }, 20);
+
+      this.activeOsc = null;
+      this.activeGain = null;
+
+      if (typeof this.onToneEnd === "function") {
+        this.onToneEnd();
+      }
+    } catch (e) {
+      console.warn("AudioEngine stopTone error:", e);
+    }
+  }
+
+  /* ==========================================================================
+     PLAY MORSE CODE SEQUENCE
+     ========================================================================== */
+  async playMorse(code, customWpm = null) {
+    this.init();
+    if (!code) return;
+
+    // Cancel any currently playing sequence
+    this.stopSequence();
+    this.isPlayingSequence = true;
+    const token = { cancel: false };
+    this.sequenceCancelToken = token;
+
+    const ditMs = customWpm ? 1200 / customWpm : this.getDitDurationMs();
+    const dahMs = ditMs * 3;
+    const elementGapMs = ditMs;
+    const letterGapMs = ditMs * 3;
+    const wordGapMs = ditMs * 7;
+
+    for (let i = 0; i < code.length; i++) {
+      if (token.cancel) break;
+
+      const char = code[i];
+
+      if (char === "." || char === "â€¢") {
+        this.startTone();
+        await this._sleep(ditMs);
+        this.stopTone();
+        await this._sleep(elementGapMs);
+      } else if (char === "-" || char === "â€”") {
+        this.startTone();
+        await this._sleep(dahMs);
+        this.stopTone();
+        await this._sleep(elementGapMs);
+      } else if (char === " ") {
+        await this._sleep(letterGapMs);
+      } else if (char === "/" || char === "|") {
+        await this._sleep(wordGapMs);
+      }
+    }
+
+    this.isPlayingSequence = false;
+  }
+
+  stopSequence() {
+    if (this.sequenceCancelToken) {
+      this.sequenceCancelToken.cancel = true;
+    }
+    this.stopTone();
+    this.isPlayingSequence = false;
+  }
+
+  /* ==========================================================================
+     GAME SOUND EFFECTS (SFX)
+     ========================================================================== */
+  playSuccessChime() {
+    this.init();
+    if (!this.ctx || this.isMuted) return;
+
+    const now = this.ctx.currentTime;
+    const freqs = [523.25, 659.25, 783.99, 1046.5]; // C5 - E5 - G5 - C6
+    freqs.forEach((f, idx) => {
+      const osc = this.ctx.createOscillator();
+      const gain = this.ctx.createGain();
+      osc.type = "triangle";
+      osc.frequency.setValueAtTime(f, now + idx * 0.07);
+
+      gain.gain.setValueAtTime(0.001, now + idx * 0.07);
+      gain.gain.linearRampToValueAtTime(0.22 * this.volume, now + idx * 0.07 + 0.02);
+      gain.gain.exponentialRampToValueAtTime(0.001, now + idx * 0.07 + 0.28);
+
+      osc.connect(gain);
+      gain.connect(this.ctx.destination);
+      osc.start(now + idx * 0.07);
+      osc.stop(now + idx * 0.07 + 0.3);
+    });
+  }
+
+  playWrongBoop() {
+    this.init();
+    if (!this.ctx || this.isMuted) return;
+
+    const now = this.ctx.currentTime;
+    const osc = this.ctx.createOscillator();
+    const gain = this.ctx.createGain();
+
+    osc.type = "sawtooth";
+    osc.frequency.setValueAtTime(220, now);
+    osc.frequency.linearRampToValueAtTime(140, now + 0.25);
+
+    gain.gain.setValueAtTime(0.2 * this.volume, now);
+    gain.gain.exponentialRampToValueAtTime(0.001, now + 0.25);
+
+    osc.connect(gain);
+    gain.connect(this.ctx.destination);
+    osc.start(now);
+    osc.stop(now + 0.26);
+  }
+
+  playLevelUpFanfare() {
+    this.init();
+    if (!this.ctx || this.isMuted) return;
+
+    const notes = [
+      { f: 523.25, d: 0.12 }, // C5
+      { f: 523.25, d: 0.12 }, // C5
+      { f: 523.25, d: 0.12 }, // C5
+      { f: 659.25, d: 0.28 }, // E5
+      { f: 783.99, d: 0.28 }, // G5
+      { f: 1046.5, d: 0.55 }  // C6
+    ];
+
+    let t = this.ctx.currentTime;
+    notes.forEach((n) => {
+      const osc = this.ctx.createOscillator();
+      const gain = this.ctx.createGain();
+      osc.type = "square";
+      osc.frequency.setValueAtTime(n.f, t);
+
+      gain.gain.setValueAtTime(0.001, t);
+      gain.gain.linearRampToValueAtTime(0.18 * this.volume, t + 0.02);
+      gain.gain.exponentialRampToValueAtTime(0.001, t + n.d);
+
+      osc.connect(gain);
+      gain.connect(this.ctx.destination);
+      osc.start(t);
+      osc.stop(t + n.d + 0.05);
+      t += n.d + 0.03;
+    });
+  }
+
+  playClickTap() {
+    this.init();
+    if (!this.ctx || this.isMuted) return;
+    const now = this.ctx.currentTime;
+    const osc = this.ctx.createOscillator();
+    const gain = this.ctx.createGain();
+
+    osc.type = "sine";
+    osc.frequency.setValueAtTime(800, now);
+    gain.gain.setValueAtTime(0.1 * this.volume, now);
+    gain.gain.exponentialRampToValueAtTime(0.001, now + 0.03);
+
+    osc.connect(gain);
+    gain.connect(this.ctx.destination);
+    osc.start(now);
+    osc.stop(now + 0.04);
+  }
+
+  _sleep(ms) {
+    return new Promise((resolve) => setTimeout(resolve, ms));
+  }
+}
+
+// Global Audio Engine Instance
+const soundEngine = new AudioEngine();
+
+/* ==========================================================================
+   MORSE SPACE CADET - VISUAL ENGINE (MASCOT, BEACON & CONFETTI)
+   ========================================================================== */
+
+class VisualEngine {
+  constructor() {
+    this.beaconEl = null;
+    this.mascotMsgEl = null;
+    this.mascotBotEl = null;
+    this.confettiCanvas = null;
+    this.confettiCtx = null;
+    this.particles = [];
+    this.animId = null;
+  }
+
+  init() {
+    this.beaconEl = document.getElementById("beaconLamp");
+    this.mascotMsgEl = document.getElementById("mascotMsg");
+    this.mascotBotEl = document.getElementById("mascotBot");
+    this.confettiCanvas = document.getElementById("confettiCanvas");
+
+    if (this.confettiCanvas) {
+      this.confettiCtx = this.confettiCanvas.getContext("2d");
+      this.resizeCanvas();
+      window.addEventListener("resize", () => this.resizeCanvas());
+    }
+
+    // Connect audio engine callbacks to beacon visual flash
+    soundEngine.onToneStart = () => this.setBeaconFlash(true);
+    soundEngine.onToneEnd = () => this.setBeaconFlash(false);
+  }
+
+  resizeCanvas() {
+    if (!this.confettiCanvas) return;
+    this.confettiCanvas.width = window.innerWidth;
+    this.confettiCanvas.height = window.innerHeight;
+  }
+
+  /* ==========================================================================
+     BEACON FLASHLIGHT
+     ========================================================================== */
+  setBeaconFlash(isFlashing) {
+    if (!this.beaconEl) return;
+    if (isFlashing) {
+      this.beaconEl.classList.add("flashing");
+    } else {
+      this.beaconEl.classList.remove("flashing");
+    }
+  }
+
+  /* ==========================================================================
+     MASCOT BEEP-BOT
+     ========================================================================== */
+  setMascotState(message, emotion = "happy") {
+    if (this.mascotMsgEl) {
+      this.mascotMsgEl.textContent = message;
+      this.mascotMsgEl.classList.remove("anim-pop");
+      void this.mascotMsgEl.offsetWidth; // Trigger reflow
+      this.mascotMsgEl.classList.add("anim-pop");
+    }
+
+    if (this.mascotBotEl) {
+      // Set robot avatar emoji/icon
+      const icons = {
+        happy: "ðŸ¤–",
+        cheer: "ðŸ¥³",
+        thinking: "ðŸ§",
+        oops: "ðŸ˜…",
+        dance: "ðŸš€",
+        hero: "â­"
+      };
+      this.mascotBotEl.textContent = icons[emotion] || "ðŸ¤–";
+    }
+  }
+
+  /* ==========================================================================
+     CANVAS CONFETTI PARTICLE SYSTEM (Zero Dependency)
+     ========================================================================== */
+  launchConfetti(durationMs = 2500) {
+    if (!this.confettiCanvas || !this.confettiCtx) return;
+    this.resizeCanvas();
+
+    const colors = ["#00f0ff", "#ffb703", "#ff2a85", "#06d6a0", "#ffd166", "#9d4edd", "#ffffff"];
+    const count = 120;
+
+    for (let i = 0; i < count; i++) {
+      this.particles.push({
+        x: window.innerWidth * 0.5 + (Math.random() - 0.5) * 300,
+        y: window.innerHeight * 0.45,
+        vx: (Math.random() - 0.5) * 16,
+        vy: (Math.random() - 1.2) * 18,
+        size: Math.random() * 8 + 5,
+        color: colors[Math.floor(Math.random() * colors.length)],
+        rotation: Math.random() * 360,
+        vRot: (Math.random() - 0.5) * 12,
+        shape: Math.random() > 0.4 ? "rect" : "circle",
+        alpha: 1,
+        decay: Math.random() * 0.008 + 0.006
+      });
+    }
+
+    if (!this.animId) {
+      this._animateConfetti();
+    }
+  }
+
+  _animateConfetti() {
+    if (!this.confettiCtx) return;
+    this.confettiCtx.clearRect(0, 0, this.confettiCanvas.width, this.confettiCanvas.height);
+
+    for (let i = this.particles.length - 1; i >= 0; i--) {
+      const p = this.particles[i];
+      p.x += p.vx;
+      p.y += p.vy;
+      p.vy += 0.45; // Gravity
+      p.rotation += p.vRot;
+      p.alpha -= p.decay;
+
+      if (p.alpha <= 0 || p.y > window.innerHeight + 50) {
+        this.particles.splice(i, 1);
+        continue;
+      }
+
+      this.confettiCtx.save();
+      this.confettiCtx.globalAlpha = Math.max(0, p.alpha);
+      this.confettiCtx.translate(p.x, p.y);
+      this.confettiCtx.rotate((p.rotation * Math.PI) / 180);
+      this.confettiCtx.fillStyle = p.color;
+
+      if (p.shape === "rect") {
+        this.confettiCtx.fillRect(-p.size / 2, -p.size / 2, p.size, p.size * 0.6);
+      } else {
+        this.confettiCtx.beginPath();
+        this.confettiCtx.arc(0, 0, p.size / 2, 0, Math.PI * 2);
+        this.confettiCtx.fill();
+      }
+
+      this.confettiCtx.restore();
+    }
+
+    if (this.particles.length > 0) {
+      this.animId = requestAnimationFrame(() => this._animateConfetti());
+    } else {
+      this.animId = null;
+      this.confettiCtx.clearRect(0, 0, this.confettiCanvas.width, this.confettiCanvas.height);
+    }
+  }
+}
+
+// Global Visual Engine Instance
+const visualEngine = new VisualEngine();
+
+/* ==========================================================================
+   MORSE SPACE CADET - STORAGE & GAMIFICATION MANAGER
+   ========================================================================== */
+
+class StorageManager {
+  constructor() {
+    this.prefix = "morseSpace_";
+    this.data = {
+      unlockedLevel: 1,
+      stars: {}, // { 1: 3, 2: 2, ... }
+      xp: 0,
+      streak: 1,
+      lastActiveDate: new Date().toDateString(),
+      badges: [],
+      wordsDecodedCount: 0,
+      keyerSuccessCount: 0,
+      totalQuestions: 0,
+      correctQuestions: 0,
+      usedSkins: ["arcade"],
+      settings: {
+        soundSkin: "arcade",
+        wpm: 14,
+        frequency: 600,
+        volume: 0.8
+      }
+    };
+    this.load();
+  }
+
+  load() {
+    try {
+      // Check legacy values if upgrading from previous version
+      const legacyLevel = localStorage.getItem("morseUnlockedLevel");
+      const legacyStep = localStorage.getItem("morseUnlockedStep");
+      const legacyWpm = localStorage.getItem("morseSpeedWpm");
+
+      const saved = localStorage.getItem(this.prefix + "data");
+      if (saved) {
+        this.data = Object.assign(this.data, JSON.parse(saved));
+      } else if (legacyStep || legacyLevel) {
+        this.data.unlockedLevel = Number(legacyStep) || Number(legacyLevel) || 1;
+        if (legacyWpm) this.data.settings.wpm = Number(legacyWpm);
+      }
+
+      // Check daily streak
+      const today = new Date().toDateString();
+      if (this.data.lastActiveDate !== today) {
+        const lastDate = new Date(this.data.lastActiveDate);
+        const diffDays = Math.round((new Date(today) - lastDate) / (1000 * 60 * 60 * 24));
+        if (diffDays === 1) {
+          this.data.streak += 1;
+        } else if (diffDays > 1) {
+          this.data.streak = 1;
+        }
+        this.data.lastActiveDate = today;
+        this.save();
+      }
+    } catch (e) {
+      console.warn("StorageManager load error:", e);
+    }
+  }
+
+  save() {
+    try {
+      localStorage.setItem(this.prefix + "data", JSON.stringify(this.data));
+    } catch (e) {
+      console.warn("StorageManager save error:", e);
+    }
+  }
+
+  addXp(amount) {
+    this.data.xp += amount;
+    this.save();
+    this.updateHUD();
+  }
+
+  setLevelStars(levelNum, starCount) {
+    const prev = this.data.stars[levelNum] || 0;
+    if (starCount > prev) {
+      this.data.stars[levelNum] = starCount;
+      this.save();
+    }
+    this.checkStarBadge();
+  }
+
+  unlockNextLevel(currentLevelNum) {
+    if (currentLevelNum >= this.data.unlockedLevel) {
+      this.data.unlockedLevel = Math.min(LEVELS_LIST.length, currentLevelNum + 1);
+      this.save();
+    }
+
+    if (this.data.unlockedLevel >= 1) {
+      this.unlockBadge("cadet");
+    }
+    if (this.data.unlockedLevel >= 7) {
+      this.unlockBadge("halfway");
+    }
+    if (this.data.unlockedLevel >= LEVELS_LIST.length) {
+      this.unlockBadge("all_letters");
+    }
+  }
+
+  unlockBadge(badgeId) {
+    if (!this.data.badges.includes(badgeId)) {
+      this.data.badges.push(badgeId);
+      this.save();
+
+      const def = BADGES_DEF.find((b) => b.id === badgeId);
+      if (def) {
+        this.showBadgeModal(def);
+        this.addXp(100);
+      }
+    }
+  }
+
+  checkStarBadge() {
+    const totalStars = Object.values(this.data.stars).reduce((a, b) => a + b, 0);
+    if (totalStars >= 15) {
+      this.unlockBadge("star_collector");
+    }
+  }
+
+  recordUsedSkin(skinName) {
+    if (!this.data.usedSkins.includes(skinName)) {
+      this.data.usedSkins.push(skinName);
+      if (this.data.usedSkins.length >= 4) {
+        this.unlockBadge("sound_explorer");
+      }
+      this.save();
+    }
+  }
+
+  showBadgeModal(badge) {
+    visualEngine.launchConfetti();
+    soundEngine.playLevelUpFanfare();
+
+    const modal = document.createElement("div");
+    modal.className = "modal-overlay";
+    modal.innerHTML = `
+      <div class="modal-box">
+        <div class="modal-icon">${badge.icon}</div>
+        <div class="modal-title">Huy Hiá»‡u Má»›i Má»Ÿ KhÃ³a!</div>
+        <h3 style="color: var(--neon-amber); margin-bottom: 8px;">${badge.title}</h3>
+        <p class="modal-desc">${badge.desc}</p>
+        <p style="color: var(--neon-cyan); font-weight: 800; margin-bottom: 16px;">+100 XP ThÆ°á»Ÿng</p>
+        <button class="btn btn-primary" id="closeBadgeModalBtn">Tuyá»‡t Vá»i! ðŸš€</button>
+      </div>
+    `;
+
+    document.body.appendChild(modal);
+    modal.querySelector("#closeBadgeModalBtn").addEventListener("click", () => {
+      modal.remove();
+    });
+  }
+
+  updateHUD() {
+    const xpEl = document.getElementById("hudXp");
+    const streakEl = document.getElementById("hudStreak");
+    if (xpEl) xpEl.textContent = `${this.data.xp} XP`;
+    if (streakEl) streakEl.textContent = `${this.data.streak} ngÃ y`;
+  }
+}
+
+// Global Storage Manager Instance
+const storage = new StorageManager();
+
+/* ==========================================================================
+   MORSE SPACE CADET - ADVENTURE MODE (13 KOCH LESSONS & BOSS CHALLENGES)
+   ========================================================================== */
+
+class AdventureMode {
+  constructor() {
+    this.currentLevelIndex = 0; // 0-based index in LEVELS_LIST
+    this.levelData = null;
+    this.targetQuestionCount = 15;
+    this.currentQuestionIndex = 0;
+    this.currentLetter = "";
+    this.score = 0;
+    this.tries = 0;
+    this.combo = 0;
+    this.maxCombo = 0;
+    this.hearts = 3;
+    this.isLocked = false;
+    this.levelOneAlternator = 0;
+  }
+
+  init() {
+    // Render Level Selection Grid on load
+    this.renderLevelMap();
+  }
+
+  renderLevelMap() {
+    const grid = document.getElementById("levelMapGrid");
+    if (!grid) return;
+    grid.innerHTML = "";
+
+    LEVELS_LIST.forEach((level, idx) => {
+      const isUnlocked = level.levelNumber <= storage.data.unlockedLevel;
+      const starsCount = storage.data.stars[level.levelNumber] || 0;
+      const isChallenge = level.type === "challenge";
+
+      const card = document.createElement("div");
+      card.className = `level-card-btn ${isUnlocked ? "" : "locked"} ${isChallenge ? "challenge" : ""} ${level.levelNumber === storage.data.unlockedLevel ? "current" : ""}`;
+      
+      const starsHtml = isUnlocked
+        ? "â˜…".repeat(starsCount) + "â˜†".repeat(3 - starsCount)
+        : "ðŸ”’ KhÃ³a";
+
+      card.innerHTML = `
+        <div style="display: flex; justify-content: space-between; align-items: center;">
+          <span class="level-num-badge">${isChallenge ? "ðŸ‘‘ BOSS" : `LEVEL ${level.levelNumber}`}</span>
+          <span class="level-stars">${starsHtml}</span>
+        </div>
+        <div style="font-size: 1.05rem; font-weight: 800; color: #fff;">${level.name}</div>
+        <div class="level-letters-tag">${level.letters.join(" Â· ")}</div>
+      `;
+
+      if (isUnlocked) {
+        card.addEventListener("click", () => {
+          soundEngine.playClickTap();
+          this.startLevel(idx);
+        });
+      }
+
+      grid.appendChild(card);
+    });
+  }
+
+  startLevel(index) {
+    this.currentLevelIndex = index;
+    this.levelData = LEVELS_LIST[index];
+    this.currentQuestionIndex = 0;
+    this.score = 0;
+    this.tries = 0;
+    this.combo = 0;
+    this.maxCombo = 0;
+    this.hearts = 3;
+    this.isLocked = false;
+    this.levelOneAlternator = 0;
+    this.targetQuestionCount = this.levelData.type === "challenge" ? 20 : 15;
+
+    // Switch views
+    document.getElementById("levelSelectView").classList.add("hidden");
+    document.getElementById("adventurePlayView").classList.remove("hidden");
+
+    // Update Headers
+    document.getElementById("advLevelTitle").textContent = `${this.levelData.type === "challenge" ? "ðŸ‘‘ " : "ðŸš€ "}${this.levelData.name}`;
+    document.getElementById("advLevelLetters").textContent = `KÃ½ tá»±: ${this.levelData.letters.join(" Â· ")}`;
+    
+    const challengeHud = document.getElementById("advChallengeHud");
+    if (this.levelData.type === "challenge") {
+      challengeHud.classList.remove("hidden");
+      this.updateHeartsDisplay();
+    } else {
+      challengeHud.classList.add("hidden");
+    }
+
+    this.renderKeyboard();
+    this.renderNewLetterCards();
+    this.updateProgress();
+
+    visualEngine.setMascotState(
+      `ChÃ o má»«ng Ä‘áº¿n vá»›i ${this.levelData.name}! HÃ£y láº¯ng nghe tháº­t ká»¹ nhÃ©!`,
+      "cheer"
+    );
+
+    this.nextQuestion();
+  }
+
+  renderNewLetterCards() {
+    const container = document.getElementById("advNewLetterCards");
+    if (!container) return;
+    container.innerHTML = "";
+
+    if (this.levelData.newLetters && this.levelData.newLetters.length > 0) {
+      this.levelData.newLetters.forEach((char) => {
+        const code = MORSE[char];
+        const card = document.createElement("div");
+        card.className = "hud-pill";
+        card.style.background = "rgba(0, 240, 255, 0.15)";
+        card.style.borderColor = "var(--neon-cyan)";
+        card.style.color = "#fff";
+        card.innerHTML = `<strong>${char}</strong>: <span style="color:var(--neon-cyan); letter-spacing:2px;">${formatMorseSymbols(code)}</span>`;
+        container.appendChild(card);
+      });
+    }
+  }
+
+  renderKeyboard() {
+    const keyboard = document.getElementById("advKeyboard");
+    if (!keyboard) return;
+    keyboard.innerHTML = "";
+
+    const rows = ["QWERTYUIOP", "ASDFGHJKL", "ZXCVBNM"];
+    rows.forEach((rowChars) => {
+      const rowDiv = document.createElement("div");
+      rowDiv.className = "keyboard-row";
+
+      [...rowChars].forEach((char) => {
+        const key = document.createElement("button");
+        key.className = "key-btn";
+        key.textContent = char;
+        key.id = `advKey_${char}`;
+
+        const isIncluded = this.levelData.letters.includes(char);
+        if (isIncluded) {
+          key.classList.add("active");
+          key.addEventListener("click", () => this.handleAnswer(char, key));
+        } else {
+          key.classList.add("disabled");
+        }
+
+        rowDiv.appendChild(key);
+      });
+
+      keyboard.appendChild(rowDiv);
+    });
+  }
+
+  nextQuestion() {
+    this.isLocked = false;
+
+    // Pick target letter
+    if (this.levelData.levelNumber === 1) {
+      // Alternate E and T for level 1
+      this.currentLetter = this.levelData.letters[this.levelOneAlternator % 2];
+      this.levelOneAlternator++;
+    } else {
+      // Weighted random favoring new letters slightly
+      const pool = [...this.levelData.letters];
+      if (this.levelData.newLetters && this.levelData.newLetters.length > 0) {
+        pool.push(...this.levelData.newLetters);
+      }
+      this.currentLetter = pool[Math.floor(Math.random() * pool.length)];
+    }
+
+    document.getElementById("advSignalDots").textContent = "â€¢ â€¢ â€¢";
+    document.getElementById("advFeedback").textContent = "Nháº¥n [Nghe TÃ­n Hiá»‡u] hoáº·c PhÃ­m Space Ä‘á»ƒ nghe!";
+
+    // Automatically play the Morse sound
+    setTimeout(() => {
+      this.playCurrentMorse();
+    }, 250);
+  }
+
+  playCurrentMorse() {
+    if (!this.currentLetter) return;
+    const code = MORSE[this.currentLetter];
+    soundEngine.playMorse(code);
+  }
+
+  handleAnswer(selectedChar, btnEl) {
+    if (this.isLocked) return;
+    soundEngine.init();
+
+    this.tries++;
+    storage.data.totalQuestions++;
+
+    if (selectedChar === this.currentLetter) {
+      // Correct!
+      this.isLocked = true;
+      this.score++;
+      this.combo++;
+      if (this.combo > this.maxCombo) this.maxCombo = this.combo;
+      storage.data.correctQuestions++;
+      storage.addXp(10 + this.combo * 2);
+
+      if (btnEl) btnEl.classList.add("correct-burst");
+      soundEngine.playSuccessChime();
+
+      // Check combo badges
+      if (this.combo >= 5) storage.unlockBadge("streak_5");
+      if (this.combo >= 15) storage.unlockBadge("streak_15");
+
+      document.getElementById("advSignalDots").textContent = `${this.currentLetter} = ${formatMorseSymbols(MORSE[this.currentLetter])}`;
+      document.getElementById("advFeedback").textContent = `ChÃ­nh xÃ¡c! Chuá»—i: ${this.combo} ðŸ”¥`;
+      visualEngine.setMascotState(`Xuáº¥t sáº¯c! Báº¡n Ä‘oÃ¡n Ä‘Ãºng chá»¯ ${this.currentLetter}!`, "cheer");
+
+      this.currentQuestionIndex++;
+      this.updateProgress();
+
+      // Check for early victory in boss challenge with 15 combo
+      if (this.levelData.type === "challenge" && this.combo >= 15) {
+        setTimeout(() => this.finishLevel(true), 800);
+        return;
+      }
+
+      // Check if target questions completed
+      if (this.currentQuestionIndex >= this.targetQuestionCount) {
+        setTimeout(() => this.finishLevel(false), 800);
+        return;
+      }
+
+      setTimeout(() => {
+        if (btnEl) btnEl.classList.remove("correct-burst");
+        this.nextQuestion();
+      }, 750);
+
+    } else {
+      // Wrong!
+      this.combo = 0;
+      soundEngine.playWrongBoop();
+      if (btnEl) btnEl.classList.add("wrong-burst");
+      visualEngine.setMascotState(`Ã”i suÃ½t Ä‘Ãºng! HÃ£y nghe láº¡i chá»¯ ${this.currentLetter} nhÃ©!`, "oops");
+
+      document.getElementById("advFeedback").textContent = `ChÆ°a Ä‘Ãºng rá»“i! HÃ£y thá»­ láº¡i cÃ¢u nÃ y nhÃ©.`;
+
+      if (this.levelData.type === "challenge") {
+        this.hearts--;
+        this.updateHeartsDisplay();
+        if (this.hearts <= 0) {
+          this.gameOverChallenge();
+          return;
+        }
+      }
+
+      setTimeout(() => {
+        if (btnEl) btnEl.classList.remove("wrong-burst");
+        this.playCurrentMorse();
+      }, 700);
+    }
+  }
+
+  updateHeartsDisplay() {
+    const heartsEl = document.getElementById("advHearts");
+    if (heartsEl) {
+      heartsEl.textContent = "â¤ï¸".repeat(this.hearts) + "ðŸ–¤".repeat(3 - this.hearts);
+    }
+  }
+
+  updateProgress() {
+    const progressEl = document.getElementById("advProgressText");
+    const fillEl = document.getElementById("advProgressFill");
+    const pct = Math.min(100, Math.round((this.currentQuestionIndex / this.targetQuestionCount) * 100));
+
+    if (progressEl) progressEl.textContent = `${this.currentQuestionIndex} / ${this.targetQuestionCount}`;
+    if (fillEl) fillEl.style.width = `${pct}%`;
+  }
+
+  finishLevel(isEarlyPassed = false) {
+    const accuracy = this.tries > 0 ? Math.round((this.score / this.tries) * 100) : 100;
+    const isSuccess = isEarlyPassed || accuracy >= 80;
+
+    if (isSuccess) {
+      // Calculate Stars
+      let stars = 1;
+      if (accuracy >= 95 || isEarlyPassed) stars = 3;
+      else if (accuracy >= 85) stars = 2;
+
+      storage.setLevelStars(this.levelData.levelNumber, stars);
+      storage.unlockNextLevel(this.levelData.levelNumber);
+
+      if (accuracy === 100) storage.unlockBadge("perfect_run");
+      if (this.levelData.type === "challenge") storage.unlockBadge("boss_slayer");
+
+      visualEngine.launchConfetti();
+      soundEngine.playLevelUpFanfare();
+
+      this.showCompleteModal(true, stars, accuracy, isEarlyPassed);
+    } else {
+      this.showCompleteModal(false, 0, accuracy, false);
+    }
+  }
+
+  gameOverChallenge() {
+    this.isLocked = true;
+    soundEngine.playWrongBoop();
+    this.showCompleteModal(false, 0, 0, false, "Báº¡n Ä‘Ã£ háº¿t tim trong thá»­ thÃ¡ch Boss!");
+  }
+
+  showCompleteModal(isSuccess, stars, accuracy, isEarly, customMsg = "") {
+    const modal = document.createElement("div");
+    modal.className = "modal-overlay";
+
+    const starIcons = "â­".repeat(stars) + "â˜†".repeat(3 - stars);
+    const title = isSuccess ? "CHIáº¾N THáº®NG MÃ€N Há»ŒC! ðŸš€" : "CHÆ¯A HOÃ€N THÃ€NH";
+    const icon = isSuccess ? "ðŸ†" : "ðŸ’ª";
+    const desc = customMsg || (isSuccess
+      ? `Äá»™ chÃ­nh xÃ¡c: ${accuracy}% Â· Chuá»—i cao nháº¥t: ${this.maxCombo}${isEarly ? " (VÆ°á»£t sá»›m nhá» 15 combo!)" : ""}`
+      : `Äá»™ chÃ­nh xÃ¡c Ä‘áº¡t ${accuracy}%. Cáº§n tá»‘i thiá»ƒu 80% Ä‘á»ƒ má»Ÿ khÃ³a mÃ n tiáº¿p theo!`);
+
+    modal.innerHTML = `
+      <div class="modal-box">
+        <div class="modal-icon">${icon}</div>
+        <div class="modal-title">${title}</div>
+        ${isSuccess ? `<div style="font-size: 2rem; color: var(--neon-amber); margin-bottom: 12px;">${starIcons}</div>` : ""}
+        <p class="modal-desc">${desc}</p>
+        <div class="modal-actions">
+          <button class="btn btn-ghost" id="advBackToMapBtn">ðŸ—ºï¸ Báº£n Äá»“ Cáº¥p Äá»™</button>
+          <button class="btn btn-primary" id="advReplayLevelBtn">â†» ${isSuccess ? "Luyá»‡n Láº¡i" : "Thá»­ Láº¡i Ngay"}</button>
+        </div>
+      </div>
+    `;
+
+    document.body.appendChild(modal);
+
+    modal.querySelector("#advBackToMapBtn").addEventListener("click", () => {
+      modal.remove();
+      this.returnToLevelMap();
+    });
+
+    modal.querySelector("#advReplayLevelBtn").addEventListener("click", () => {
+      modal.remove();
+      this.startLevel(this.currentLevelIndex);
+    });
+  }
+
+  returnToLevelMap() {
+    document.getElementById("adventurePlayView").classList.add("hidden");
+    document.getElementById("levelSelectView").classList.remove("hidden");
+    this.renderLevelMap();
+  }
+}
+
+// Global Adventure Mode Instance
+const adventureGame = new AdventureMode();
+
+/* ==========================================================================
+   MORSE SPACE CADET - SENDING MODE (TELEGRAPH KEYER)
+   ========================================================================== */
+
+class SendingMode {
+  constructor() {
+    this.mode = "learn"; // 'learn' or 'challenge'
+    this.currentTarget = "E";
+    this.currentMarks = [];
+    this.pressStartTime = 0;
+    this.isPressed = false;
+    this.gapTimer = null;
+    this.challengeIndex = 0;
+    this.challengeScore = 0;
+    this.challengeHearts = 3;
+    this.challengeList = [];
+  }
+
+  init() {
+    const keyBtn = document.getElementById("telegraphKeyBtn");
+    if (!keyBtn) return;
+
+    // Mouse events
+    keyBtn.addEventListener("mousedown", (e) => {
+      e.preventDefault();
+      this.handleKeyDown();
+    });
+    window.addEventListener("mouseup", () => this.handleKeyUp());
+
+    // Touch events for mobile/tablet
+    keyBtn.addEventListener("touchstart", (e) => {
+      e.preventDefault();
+      this.handleKeyDown();
+    }, { passive: false });
+
+    keyBtn.addEventListener("touchend", (e) => {
+      e.preventDefault();
+      this.handleKeyUp();
+    });
+
+    // Sub-mode switch buttons
+    const learnBtn = document.getElementById("sendingSubLearnBtn");
+    const challengeBtn = document.getElementById("sendingSubChallengeBtn");
+
+    if (learnBtn) {
+      learnBtn.addEventListener("click", () => {
+        learnBtn.classList.add("active");
+        if (challengeBtn) challengeBtn.classList.remove("active");
+        this.setMode("learn");
+      });
+    }
+
+    if (challengeBtn) {
+      challengeBtn.addEventListener("click", () => {
+        challengeBtn.classList.add("active");
+        if (learnBtn) learnBtn.classList.remove("active");
+        this.setMode("challenge");
+      });
+    }
+
+    // Sample audio button
+    const sampleBtn = document.getElementById("sendingSampleAudioBtn");
+    if (sampleBtn) {
+      sampleBtn.addEventListener("click", () => {
+        const code = MORSE[this.currentTarget];
+        soundEngine.playMorse(code);
+      });
+    }
+
+    // Reset buffer button
+    const resetBtn = document.getElementById("sendingResetBufferBtn");
+    if (resetBtn) {
+      resetBtn.addEventListener("click", () => {
+        this.currentMarks = [];
+        this.updateReadout();
+      });
+    }
+  }
+
+  setMode(newMode) {
+    this.mode = newMode;
+    this.currentMarks = [];
+    this.updateReadout();
+
+    const hudEl = document.getElementById("sendingChallengeHud");
+    if (newMode === "challenge") {
+      hudEl.classList.remove("hidden");
+      this.startChallenge();
+    } else {
+      hudEl.classList.add("hidden");
+      this.nextLearnTarget();
+    }
+  }
+
+  nextLearnTarget() {
+    const letters = Object.keys(MORSE).filter((k) => k.length === 1 && /[A-Z]/.test(k));
+    this.currentTarget = letters[Math.floor(Math.random() * letters.length)];
+    this.updateTargetDisplay();
+    visualEngine.setMascotState(`HÃ£y gÃµ chá»¯ ${this.currentTarget} (${formatMorseSymbols(MORSE[this.currentTarget])}) nÃ o!`, "cheer");
+  }
+
+  startChallenge() {
+    const letters = ["E", "T", "A", "N", "I", "M", "S", "O", "R", "K"];
+    this.challengeList = [...letters].sort(() => Math.random() - 0.5);
+    this.challengeIndex = 0;
+    this.challengeScore = 0;
+    this.challengeHearts = 3;
+    this.currentTarget = this.challengeList[0];
+    this.updateTargetDisplay();
+    this.updateChallengeHearts();
+    document.getElementById("sendingProgressText").textContent = `1 / ${this.challengeList.length}`;
+  }
+
+  updateTargetDisplay() {
+    const letterEl = document.getElementById("sendingTargetLetter");
+    const hintEl = document.getElementById("sendingTargetHint");
+    if (letterEl) letterEl.textContent = this.currentTarget;
+    if (hintEl) hintEl.textContent = formatMorseSymbols(MORSE[this.currentTarget]);
+  }
+
+  updateChallengeHearts() {
+    const heartsEl = document.getElementById("sendingHearts");
+    if (heartsEl) {
+      heartsEl.textContent = "â¤ï¸".repeat(this.challengeHearts) + "ðŸ–¤".repeat(3 - this.challengeHearts);
+    }
+  }
+
+  handleKeyDown() {
+    if (this.isPressed) return;
+    this.isPressed = true;
+    this.pressStartTime = Date.now();
+
+    if (this.gapTimer) {
+      clearTimeout(this.gapTimer);
+      this.gapTimer = null;
+    }
+
+    const keyBtn = document.getElementById("telegraphKeyBtn");
+    if (keyBtn) keyBtn.classList.add("pressed");
+
+    soundEngine.startTone();
+  }
+
+  handleKeyUp() {
+    if (!this.isPressed) return;
+    this.isPressed = false;
+
+    const keyBtn = document.getElementById("telegraphKeyBtn");
+    if (keyBtn) keyBtn.classList.remove("pressed");
+
+    soundEngine.stopTone();
+
+    const duration = Date.now() - this.pressStartTime;
+    const ditThreshold = soundEngine.getDitDurationMs() * 2.0;
+
+    // Detect Dot vs Dash
+    const mark = duration < ditThreshold ? "." : "-";
+    this.currentMarks.push(mark);
+    this.updateReadout();
+
+    // Schedule letter evaluation after inter-element gap (3 dits of silence)
+    const letterGapMs = soundEngine.getDitDurationMs() * 3.2;
+    this.gapTimer = setTimeout(() => {
+      this.evaluateBufferedLetter();
+    }, letterGapMs);
+  }
+
+  updateReadout() {
+    const readoutEl = document.getElementById("sendingReadout");
+    if (!readoutEl) return;
+
+    if (this.currentMarks.length === 0) {
+      readoutEl.textContent = "â€¢ â€¢ â€¢";
+    } else {
+      readoutEl.textContent = formatMorseSymbols(this.currentMarks.join(""));
+    }
+  }
+
+  evaluateBufferedLetter() {
+    const code = this.currentMarks.join("");
+    this.currentMarks = [];
+    if (!code) return;
+
+    const decodedLetter = REVERSE_MORSE[code] || "?";
+    const feedbackEl = document.getElementById("sendingFeedbackMsg");
+
+    if (decodedLetter === this.currentTarget) {
+      // Success!
+      soundEngine.playSuccessChime();
+      storage.data.keyerSuccessCount = (storage.data.keyerSuccessCount || 0) + 1;
+      storage.addXp(15);
+
+      if (storage.data.keyerSuccessCount >= 5) {
+        storage.unlockBadge("keyer_master");
+      }
+
+      if (feedbackEl) {
+        feedbackEl.innerHTML = `<span style="color:var(--neon-green); font-weight:800;">ChÃ­nh xÃ¡c! Báº¡n vá»«a gá»­i chá»¯ ${decodedLetter}! ðŸŒŸ</span>`;
+      }
+      visualEngine.setMascotState(`Chuáº©n tá»«ng nhá»‹p! Báº¡n vá»«a phÃ¡t chá»¯ ${decodedLetter}!`, "cheer");
+
+      if (this.mode === "challenge") {
+        this.challengeScore++;
+        this.challengeIndex++;
+        if (this.challengeIndex >= this.challengeList.length) {
+          this.finishChallenge();
+          return;
+        }
+        document.getElementById("sendingProgressText").textContent = `${this.challengeIndex + 1} / ${this.challengeList.length}`;
+        this.currentTarget = this.challengeList[this.challengeIndex];
+        setTimeout(() => {
+          this.updateTargetDisplay();
+          this.updateReadout();
+        }, 800);
+      } else {
+        setTimeout(() => {
+          this.nextLearnTarget();
+          this.updateReadout();
+        }, 1200);
+      }
+    } else {
+      // Wrong
+      soundEngine.playWrongBoop();
+      if (feedbackEl) {
+        feedbackEl.innerHTML = `<span style="color:var(--neon-pink); font-weight:800;">Báº¡n vá»«a gÃµ: <strong>${decodedLetter}</strong> (${formatMorseSymbols(code)}). Cáº§n gÃµ: <strong>${this.currentTarget}</strong> (${formatMorseSymbols(MORSE[this.currentTarget])})</span>`;
+      }
+      visualEngine.setMascotState(`ChÆ°a khá»›p rá»“i! HÃ£y thá»­ láº¡i theo nhá»‹p nhÃ©!`, "oops");
+
+      if (this.mode === "challenge") {
+        this.challengeHearts--;
+        this.updateChallengeHearts();
+        if (this.challengeHearts <= 0) {
+          this.gameOverChallenge();
+        }
+      }
+    }
+  }
+
+  finishChallenge() {
+    visualEngine.launchConfetti();
+    soundEngine.playLevelUpFanfare();
+    storage.addXp(150);
+
+    const modal = document.createElement("div");
+    modal.className = "modal-overlay";
+    modal.innerHTML = `
+      <div class="modal-box">
+        <div class="modal-icon">ðŸ†</div>
+        <div class="modal-title">HOÃ€N THÃ€NH THá»¬ THÃCH GÃ•!</div>
+        <p class="modal-desc">Báº¡n Ä‘Ã£ gÃµ chÃ­nh xÃ¡c cáº£ 10 chá»¯ cÃ¡i cá»§a tráº¡m phÃ¡t sÃ³ng!</p>
+        <p style="color:var(--neon-amber); font-weight:800; margin-bottom: 20px;">+150 XP ThÆ°á»Ÿng</p>
+        <button class="btn btn-primary" id="sendingFinishBtn">Tuyá»‡t Vá»i! ðŸš€</button>
+      </div>
+    `;
+    document.body.appendChild(modal);
+    modal.querySelector("#sendingFinishBtn").addEventListener("click", () => {
+      modal.remove();
+      this.setMode("learn");
+    });
+  }
+
+  gameOverChallenge() {
+    soundEngine.playWrongBoop();
+    const modal = document.createElement("div");
+    modal.className = "modal-overlay";
+    modal.innerHTML = `
+      <div class="modal-box">
+        <div class="modal-icon">ðŸ’”</div>
+        <div class="modal-title">Háº¾T TIM Rá»’I!</div>
+        <p class="modal-desc">Äá»«ng náº£n lÃ²ng, hÃ£y luyá»‡n táº­p thÃªm Ä‘á»ƒ báº¯t Ä‘Ãºng nhá»‹p nhÃ©!</p>
+        <button class="btn btn-primary" id="sendingRetryChallengeBtn">Thá»­ Láº¡i â†»</button>
+      </div>
+    `;
+    document.body.appendChild(modal);
+    modal.querySelector("#sendingRetryChallengeBtn").addEventListener("click", () => {
+      modal.remove();
+      this.startChallenge();
+    });
+  }
+}
+
+// Global Sending Mode Instance
+const sendingGame = new SendingMode();
+
+/* ==========================================================================
+   MORSE SPACE CADET - WORD DECODER (SECRET WORD MISSION)
+   ========================================================================== */
+
+class WordDecoderMode {
+  constructor() {
+    this.wordData = null;
+    this.currentLetterIdx = 0;
+    this.isLocked = false;
+    this.completedWords = 0;
+  }
+
+  init() {
+    const playWordBtn = document.getElementById("wordPlayLetterBtn");
+    if (playWordBtn) {
+      playWordBtn.addEventListener("click", () => this.playCurrentLetterAudio());
+    }
+
+    const playFullBtn = document.getElementById("wordPlayFullBtn");
+    if (playFullBtn) {
+      playFullBtn.addEventListener("click", () => this.playFullWordAudio());
+    }
+
+    const nextWordBtn = document.getElementById("wordNextMissionBtn");
+    if (nextWordBtn) {
+      nextWordBtn.addEventListener("click", () => this.startNewWord());
+    }
+  }
+
+  startNewWord() {
+    this.isLocked = false;
+    this.currentLetterIdx = 0;
+
+    // Pick random secret word
+    const randomIndex = Math.floor(Math.random() * SECRET_WORDS.length);
+    this.wordData = SECRET_WORDS[randomIndex];
+
+    document.getElementById("wordCategoryClue").textContent = `Chá»§ Ä‘á»: ${this.wordData.category} Â· Gá»£i Ã½: "${this.wordData.clue}"`;
+    document.getElementById("wordFeedbackMsg").textContent = "Láº¯ng nghe tÃ­n hiá»‡u cá»§a Ã´ Ä‘ang chá»n!";
+
+    this.renderSlots();
+    this.renderKeyboard();
+
+    visualEngine.setMascotState(`Nhiá»‡m vá»¥ bÃ­ máº­t: HÃ£y giáº£i mÃ£ tá»« ${this.wordData.word.length} chá»¯ cÃ¡i nÃ y!`, "thinking");
+
+    setTimeout(() => {
+      this.playCurrentLetterAudio();
+    }, 400);
+  }
+
+  renderSlots() {
+    const container = document.getElementById("wordMysterySlots");
+    if (!container) return;
+    container.innerHTML = "";
+
+    const letters = [...this.wordData.word];
+    letters.forEach((char, idx) => {
+      const slot = document.createElement("div");
+      slot.className = `mystery-slot ${idx === 0 ? "current" : ""}`;
+      slot.id = `wordSlot_${idx}`;
+      slot.textContent = "?";
+      container.appendChild(slot);
+    });
+  }
+
+  renderKeyboard() {
+    const keyboard = document.getElementById("wordKeyboard");
+    if (!keyboard) return;
+    keyboard.innerHTML = "";
+
+    const rows = ["QWERTYUIOP", "ASDFGHJKL", "ZXCVBNM"];
+    rows.forEach((rowChars) => {
+      const rowDiv = document.createElement("div");
+      rowDiv.className = "keyboard-row";
+
+      [...rowChars].forEach((char) => {
+        const key = document.createElement("button");
+        key.className = "key-btn active";
+        key.textContent = char;
+        key.addEventListener("click", () => this.handleKeyClick(char, key));
+        rowDiv.appendChild(key);
+      });
+
+      keyboard.appendChild(rowDiv);
+    });
+  }
+
+  playCurrentLetterAudio() {
+    if (!this.wordData) return;
+    const targetChar = this.wordData.word[this.currentLetterIdx];
+    const code = MORSE[targetChar];
+    soundEngine.playMorse(code);
+  }
+
+  playFullWordAudio() {
+    if (!this.wordData) return;
+    const fullCode = [...this.wordData.word].map((c) => MORSE[c]).join(" ");
+    soundEngine.playMorse(fullCode);
+  }
+
+  handleKeyClick(selectedChar, btnEl) {
+    if (this.isLocked || !this.wordData) return;
+    soundEngine.init();
+
+    const expectedChar = this.wordData.word[this.currentLetterIdx];
+
+    if (selectedChar === expectedChar) {
+      // Correct letter slot!
+      soundEngine.playSuccessChime();
+      storage.addXp(10);
+
+      const slot = document.getElementById(`wordSlot_${this.currentLetterIdx}`);
+      if (slot) {
+        slot.textContent = expectedChar;
+        slot.classList.remove("current");
+        slot.classList.add("revealed");
+      }
+
+      this.currentLetterIdx++;
+
+      // Check if full word solved!
+      if (this.currentLetterIdx >= this.wordData.word.length) {
+        this.solveWordSuccess();
+      } else {
+        // Move to next slot
+        const nextSlot = document.getElementById(`wordSlot_${this.currentLetterIdx}`);
+        if (nextSlot) nextSlot.classList.add("current");
+
+        document.getElementById("wordFeedbackMsg").textContent = `ChÃ­nh xÃ¡c! Tiáº¿p tá»¥c giáº£i chá»¯ thá»© ${this.currentLetterIdx + 1}.`;
+        setTimeout(() => this.playCurrentLetterAudio(), 500);
+      }
+    } else {
+      // Wrong letter
+      soundEngine.playWrongBoop();
+      if (btnEl) btnEl.classList.add("wrong-burst");
+      document.getElementById("wordFeedbackMsg").textContent = `ChÆ°a Ä‘Ãºng! HÃ£y nghe láº¡i chá»¯ nÃ y nhÃ©.`;
+      setTimeout(() => {
+        if (btnEl) btnEl.classList.remove("wrong-burst");
+        this.playCurrentLetterAudio();
+      }, 600);
+    }
+  }
+
+  solveWordSuccess() {
+    this.isLocked = true;
+    this.completedWords++;
+    storage.data.wordsDecodedCount = (storage.data.wordsDecodedCount || 0) + 1;
+    storage.addXp(50);
+
+    if (storage.data.wordsDecodedCount >= 3) {
+      storage.unlockBadge("word_hunter");
+    }
+
+    visualEngine.launchConfetti();
+    soundEngine.playLevelUpFanfare();
+    visualEngine.setMascotState(`Hoan hÃ´! Báº¡n vá»«a giáº£i mÃ£ thÃ nh cÃ´ng tá»« "${this.wordData.word}"!`, "cheer");
+
+    const modal = document.createElement("div");
+    modal.className = "modal-overlay";
+    modal.innerHTML = `
+      <div class="modal-box">
+        <div class="modal-icon">${this.wordData.icon}</div>
+        <div class="modal-title">${this.wordData.word}</div>
+        <p style="font-size:1.1rem; color:var(--neon-cyan); margin-bottom: 8px;">"${this.wordData.clue}"</p>
+        <p class="modal-desc">Báº¡n vá»«a giáº£i mÃ£ thÃ nh cÃ´ng bá»©c Ä‘iá»‡n tÃ­n bÃ­ máº­t!</p>
+        <p style="color:var(--neon-amber); font-weight:800; margin-bottom: 20px;">+50 XP ThÆ°á»Ÿng</p>
+        <div class="modal-actions">
+          <button class="btn btn-primary btn-lg" id="wordNextModalBtn">Tá»« BÃ­ Máº­t Tiáº¿p Theo ðŸš€</button>
+        </div>
+      </div>
+    `;
+
+    document.body.appendChild(modal);
+    modal.querySelector("#wordNextModalBtn").addEventListener("click", () => {
+      modal.remove();
+      this.startNewWord();
+    });
+  }
+}
+
+// Global Word Decoder Instance
+const wordDecoderGame = new WordDecoderMode();
+
+/* ==========================================================================
+   MORSE SPACE CADET - TRANSLATOR & BROADCASTER
+   ========================================================================== */
+
+class TranslatorMode {
+  constructor() {
+    this.textInputEl = null;
+    this.morseInputEl = null;
+    this.isBroadcasting = false;
+  }
+
+  init() {
+    this.textInputEl = document.getElementById("transTextInput");
+    this.morseInputEl = document.getElementById("transMorseInput");
+
+    if (this.textInputEl) {
+      this.textInputEl.addEventListener("input", () => this.handleTextChange());
+    }
+
+    if (this.morseInputEl) {
+      this.morseInputEl.addEventListener("input", () => this.handleMorseChange());
+    }
+
+    const broadcastBtn = document.getElementById("transBroadcastBtn");
+    if (broadcastBtn) {
+      broadcastBtn.addEventListener("click", () => this.handleBroadcast());
+    }
+
+    const stopBtn = document.getElementById("transStopBtn");
+    if (stopBtn) {
+      stopBtn.addEventListener("click", () => this.stopBroadcast());
+    }
+
+    const copyBtn = document.getElementById("transCopyMorseBtn");
+    if (copyBtn) {
+      copyBtn.addEventListener("click", () => this.copyMorseToClipboard());
+    }
+
+    // Quick preset buttons
+    const presetBtns = document.querySelectorAll(".trans-preset-btn");
+    presetBtns.forEach((btn) => {
+      btn.addEventListener("click", () => {
+        const text = btn.getAttribute("data-text");
+        if (this.textInputEl) {
+          this.textInputEl.value = text;
+          this.handleTextChange();
+        }
+      });
+    });
+  }
+
+  // Remove Vietnamese accents and special marks for standard Morse encoding
+  removeAccents(str) {
+    return str
+      .normalize("NFD")
+      .replace(/[\u0300-\u036f]/g, "")
+      .replace(/Ä‘/g, "d")
+      .replace(/Ä/g, "D");
+  }
+
+  handleTextChange() {
+    const rawText = this.textInputEl.value.trim().toUpperCase();
+    const cleanText = this.removeAccents(rawText);
+
+    if (!cleanText) {
+      this.morseInputEl.value = "";
+      return;
+    }
+
+    const words = cleanText.split(/\s+/);
+    const morseWords = words.map((w) => {
+      return [...w]
+        .map((char) => MORSE[char] || "")
+        .filter(Boolean)
+        .join(" ");
+    });
+
+    this.morseInputEl.value = morseWords.join(" / ");
+  }
+
+  handleMorseChange() {
+    const rawMorse = this.morseInputEl.value.trim();
+    if (!rawMorse) {
+      this.textInputEl.value = "";
+      return;
+    }
+
+    // Replace unicode dot/dash with standard ./ -
+    const standardMorse = rawMorse.replaceAll("â€¢", ".").replaceAll("â€”", "-");
+    const words = standardMorse.split(/\s*\/\s*|\s*\|\s*/);
+
+    const textWords = words.map((w) => {
+      const letters = w.split(/\s+/);
+      return letters
+        .map((code) => REVERSE_MORSE[code] || "?")
+        .join("");
+    });
+
+    this.textInputEl.value = textWords.join(" ");
+  }
+
+  handleBroadcast() {
+    const morseCode = this.morseInputEl.value.trim();
+    if (!morseCode) {
+      visualEngine.setMascotState("HÃ£y nháº­p tin nháº¯n trÆ°á»›c khi phÃ¡t sÃ³ng nhÃ©!", "thinking");
+      return;
+    }
+
+    this.isBroadcasting = true;
+    storage.unlockBadge("broadcaster");
+    visualEngine.setMascotState("Äang phÃ¡t sÃ³ng tÃ­n hiá»‡u Morse ra toÃ n tráº¡m vÅ© trá»¥...", "hero");
+
+    const standardCode = morseCode.replaceAll("â€¢", ".").replaceAll("â€”", "-");
+    soundEngine.playMorse(standardCode);
+  }
+
+  stopBroadcast() {
+    this.isBroadcasting = false;
+    soundEngine.stopSequence();
+    visualEngine.setMascotState("ÄÃ£ dá»«ng phÃ¡t sÃ³ng tÃ­n hiá»‡u!", "happy");
+  }
+
+  copyMorseToClipboard() {
+    const code = this.morseInputEl.value.trim();
+    if (!code) return;
+
+    navigator.clipboard.writeText(code).then(() => {
+      visualEngine.setMascotState("ÄÃ£ sao chÃ©p mÃ£ Morse vÃ o bá»™ nhá»› táº¡m! Báº¡n cÃ³ thá»ƒ dÃ¡n Ä‘á»ƒ gá»­i cho báº¡n bÃ¨!", "cheer");
+      soundEngine.playSuccessChime();
+    });
+  }
+}
+
+// Global Translator Instance
+const translatorGame = new TranslatorMode();
+
+/* ==========================================================================
+   MORSE SPACE CADET - FLASHCARDS & VISUAL MNEMONICS LIBRARY
+   ========================================================================== */
+
+class FlashcardsMode {
+  constructor() {
+    this.currentFilter = "all"; // 'all', 'alpha', 'num'
+  }
+
+  init() {
+    this.renderGrid();
+
+    // Filter tabs
+    const filterBtns = document.querySelectorAll(".flashcard-filter-btn");
+    filterBtns.forEach((btn) => {
+      btn.addEventListener("click", () => {
+        filterBtns.forEach((b) => b.classList.remove("active"));
+        btn.classList.add("active");
+        this.currentFilter = btn.getAttribute("data-filter");
+        this.renderGrid();
+      });
+    });
+  }
+
+  renderGrid() {
+    const grid = document.getElementById("flashcardGrid");
+    if (!grid) return;
+    grid.innerHTML = "";
+
+    const entries = Object.entries(MORSE);
+
+    entries.forEach(([char, code]) => {
+      const isNum = /[0-9]/.test(char);
+      const isAlpha = /[A-Z]/.test(char);
+
+      if (this.currentFilter === "alpha" && !isAlpha) return;
+      if (this.currentFilter === "num" && !isNum) return;
+
+      const mnemonic = MNEMONICS[char] || {
+        icon: isNum ? "ðŸ”¢" : "âœ¨",
+        word: `KÃ½ tá»± ${char}`,
+        hint: `MÃ£ Morse cá»§a ${char}`
+      };
+
+      const card = document.createElement("div");
+      card.className = "mnemonic-card anim-pop";
+      card.innerHTML = `
+        <div class="mnemonic-letter">${char}</div>
+        <div class="mnemonic-code">${formatMorseSymbols(code)}</div>
+        <div class="mnemonic-icon">${mnemonic.icon}</div>
+        <div class="mnemonic-word">${mnemonic.word}</div>
+      `;
+
+      card.addEventListener("click", () => {
+        soundEngine.playMorse(code);
+        visualEngine.setMascotState(`${char} = ${formatMorseSymbols(code)}: ${mnemonic.hint}`, "happy");
+      });
+
+      grid.appendChild(card);
+    });
+  }
+}
+
+// Global Flashcards Instance
+const flashcardsGame = new FlashcardsMode();
+
+/* ==========================================================================
+   MORSE SPACE CADET - MAIN APPLICATION CONTROLLER
+   ========================================================================== */
+
+document.addEventListener("DOMContentLoaded", () => {
+  // 1. Initialize Engines
+  visualEngine.init();
+  storage.updateHUD();
+
+  // Apply saved audio settings
+  soundEngine.setSkin(storage.data.settings.soundSkin || "arcade");
+  soundEngine.setWpm(storage.data.settings.wpm || 14);
+  soundEngine.setFrequency(storage.data.settings.frequency || 600);
+
+  // Sync HUD Skin dropdown
+  const skinSelect = document.getElementById("hudSkinSelect");
+  if (skinSelect) {
+    skinSelect.value = soundEngine.currentSkin;
+    skinSelect.addEventListener("change", (e) => {
+      const newSkin = e.target.value;
+      soundEngine.setSkin(newSkin);
+      storage.data.settings.soundSkin = newSkin;
+      storage.recordUsedSkin(newSkin);
+      storage.save();
+      soundEngine.playSuccessChime();
+    });
+  }
+
+  // 2. Initialize Game Modes
+  adventureGame.init();
+  sendingGame.init();
+  wordDecoderGame.init();
+  translatorGame.init();
+  flashcardsGame.init();
+
+  // 3. Tab Navigation Wiring
+  const tabButtons = document.querySelectorAll(".nav-tabs .tab-btn");
+  const views = {
+    tabAdventure: document.getElementById("viewAdventure"),
+    tabSending: document.getElementById("viewSending"),
+    tabWordDecoder: document.getElementById("viewWordDecoder"),
+    tabTranslator: document.getElementById("viewTranslator"),
+    tabFlashcards: document.getElementById("viewFlashcards")
+  };
+
+  tabButtons.forEach((tab) => {
+    tab.addEventListener("click", () => {
+      soundEngine.playClickTap();
+      const targetViewKey = tab.id;
+
+      // Update active tab button
+      tabButtons.forEach((t) => t.classList.remove("active"));
+      tab.classList.add("active");
+
+      // Switch view visibility
+      Object.values(views).forEach((view) => {
+        if (view) view.classList.add("hidden");
+      });
+
+      if (views[targetViewKey]) {
+        views[targetViewKey].classList.remove("hidden");
+      }
+
+      // Handle mode specific initializations
+      if (targetViewKey === "tabAdventure") {
+        adventureGame.renderLevelMap();
+      } else if (targetViewKey === "tabSending") {
+        sendingGame.setMode(sendingGame.mode);
+      } else if (targetViewKey === "tabWordDecoder") {
+        if (!wordDecoderGame.wordData) wordDecoderGame.startNewWord();
+      } else if (targetViewKey === "tabFlashcards") {
+        flashcardsGame.renderGrid();
+      }
+    });
+  });
+
+  // 4. Adventure Mode Sub-Buttons
+  const advReplayAudioBtn = document.getElementById("advReplayAudioBtn");
+  if (advReplayAudioBtn) {
+    advReplayAudioBtn.addEventListener("click", () => {
+      adventureGame.playCurrentMorse();
+    });
+  }
+
+  const advBackToMapTopBtn = document.getElementById("advBackToMapTopBtn");
+  if (advBackToMapTopBtn) {
+    advBackToMapTopBtn.addEventListener("click", () => {
+      adventureGame.returnToLevelMap();
+    });
+  }
+
+  // 5. Badges Trophy Cabinet Button
+  const badgesBtn = document.getElementById("hudBadgesBtn");
+  if (badgesBtn) {
+    badgesBtn.addEventListener("click", () => {
+      soundEngine.playClickTap();
+      showBadgesCabinet();
+    });
+  }
+
+  // 6. Settings Modal Button
+  const settingsBtn = document.getElementById("hudSettingsBtn");
+  if (settingsBtn) {
+    settingsBtn.addEventListener("click", () => {
+      soundEngine.playClickTap();
+      showSettingsModal();
+    });
+  }
+
+  // 7. Global Keyboard Shortcuts Handler
+  window.addEventListener("keydown", (e) => {
+    // Ignore input if user is typing in translator textareas
+    if (e.target.tagName === "TEXTAREA" || e.target.tagName === "INPUT") {
+      return;
+    }
+
+    const key = e.key.toUpperCase();
+
+    // SPACEBAR handler
+    if (e.code === "Space") {
+      e.preventDefault();
+      // If in Sending Mode -> Keyer Down
+      if (!views.tabSending.classList.contains("hidden")) {
+        sendingGame.handleKeyDown();
+      }
+      // If in Adventure Quiz -> Replay Audio
+      else if (!document.getElementById("adventurePlayView").classList.contains("hidden")) {
+        adventureGame.playCurrentMorse();
+      }
+      return;
+    }
+
+    // Single letter keys (A-Z)
+    if (/^[A-Z]$/.test(key)) {
+      // In Adventure Play Mode
+      if (!document.getElementById("adventurePlayView").classList.contains("hidden")) {
+        const btn = document.getElementById(`advKey_${key}`);
+        if (btn && !btn.classList.contains("disabled")) {
+          adventureGame.handleAnswer(key, btn);
+        }
+      }
+      // In Word Decoder Mode
+      else if (!views.tabWordDecoder.classList.contains("hidden")) {
+        wordDecoderGame.handleKeyClick(key, null);
+      }
+    }
+  });
+
+  window.addEventListener("keyup", (e) => {
+    if (e.code === "Space") {
+      if (!views.tabSending.classList.contains("hidden")) {
+        sendingGame.handleKeyUp();
+      }
+    }
+  });
+
+  // Welcome Mascot Greeting
+  visualEngine.setMascotState("ChÃ o má»«ng báº¡n Ä‘áº¿n vá»›i Morse Space Cadet! HÃ£y chá»n má»™t cháº¿ Ä‘á»™ Ä‘á»ƒ báº¯t Ä‘áº§u khÃ¡m phÃ¡!", "happy");
+});
+
+/* ==========================================================================
+   BADGES TROPHY CABINET MODAL
+   ========================================================================== */
+function showBadgesCabinet() {
+  const modal = document.createElement("div");
+  modal.className = "modal-overlay";
+
+  const totalBadges = BADGES_DEF.length;
+  const unlockedCount = storage.data.badges.length;
+
+  let badgesHtml = "";
+  BADGES_DEF.forEach((badge) => {
+    const isUnlocked = storage.data.badges.includes(badge.id);
+    badgesHtml += `
+      <div class="badge-item ${isUnlocked ? "unlocked" : "locked"}">
+        <div class="badge-icon">${badge.icon}</div>
+        <div class="badge-title">${badge.title}</div>
+        <div class="badge-desc">${badge.desc}</div>
+        <div style="font-size: 0.75rem; font-weight:800; color: ${isUnlocked ? "var(--neon-green)" : "var(--text-muted)"}">
+          ${isUnlocked ? "âœ“ ÄÃ£ má»Ÿ" : "ðŸ”’ ChÆ°a Ä‘áº¡t"}
+        </div>
+      </div>
+    `;
+  });
+
+  modal.innerHTML = `
+    <div class="modal-box" style="max-width: 680px; max-height: 88vh; overflow-y: auto;">
+      <div class="modal-title">ðŸ† Tá»§ Danh Hiá»‡u Cá»§a Báº¡n</div>
+      <p class="modal-desc">ÄÃ£ má»Ÿ khÃ³a: <strong>${unlockedCount} / ${totalBadges}</strong> danh hiá»‡u</p>
+      <div class="badge-grid" style="margin-bottom: 24px;">
+        ${badgesHtml}
+      </div>
+      <button class="btn btn-primary" id="closeCabinetBtn">ÄÃ³ng</button>
+    </div>
+  `;
+
+  document.body.appendChild(modal);
+  modal.querySelector("#closeCabinetBtn").addEventListener("click", () => modal.remove());
+}
+
+/* ==========================================================================
+   SETTINGS MODAL
+   ========================================================================== */
+function showSettingsModal() {
+  const modal = document.createElement("div");
+  modal.className = "modal-overlay";
+
+  modal.innerHTML = `
+    <div class="modal-box" style="max-width: 480px; text-align: left;">
+      <div class="modal-title" style="text-align: center; margin-bottom: 18px;">âš™ï¸ CÃ i Äáº·t KhÃ´ng Gian</div>
+      
+      <div style="margin-bottom: 16px;">
+        <label style="display: flex; justify-content: space-between; font-weight: 800; margin-bottom: 6px;">
+          <span>âš¡ Tá»‘c Äá»™ PhÃ¡t (WPM):</span>
+          <span id="setWpmValue" style="color: var(--neon-cyan);">${soundEngine.wpm} WPM</span>
+        </label>
+        <input type="range" id="setWpmRange" min="8" max="26" value="${soundEngine.wpm}" style="width: 100%; accent-color: var(--neon-cyan);">
+        <div style="font-size: 0.78rem; color: var(--text-muted); margin-top: 4px;">NgÆ°á»i má»›i nÃªn Ä‘á»ƒ 10-14 WPM; quen tai cÃ³ thá»ƒ tÄƒng 18-24 WPM.</div>
+      </div>
+
+      <div style="margin-bottom: 16px;">
+        <label style="display: flex; justify-content: space-between; font-weight: 800; margin-bottom: 6px;">
+          <span>ðŸŽµ Táº§n Sá»‘ Ã‚m Thanh (Hz):</span>
+          <span id="setToneValue" style="color: var(--neon-amber);">${soundEngine.frequency} Hz</span>
+        </label>
+        <input type="range" id="setToneRange" min="400" max="850" step="25" value="${soundEngine.frequency}" style="width: 100%; accent-color: var(--neon-amber);">
+      </div>
+
+      <div style="margin-bottom: 24px;">
+        <button class="btn btn-danger btn-sm" id="resetProgressBtn" style="width: 100%;">âš ï¸ XÃ³a vÃ  Äáº·t Láº¡i Tiáº¿n TrÃ¬nh</button>
+      </div>
+
+      <div style="display: flex; justify-content: flex-end; gap: 10px;">
+        <button class="btn btn-primary" id="saveSettingsBtn">LÆ°u & ÄÃ³ng</button>
+      </div>
+    </div>
+  `;
+
+  document.body.appendChild(modal);
+
+  const wpmRange = modal.querySelector("#setWpmRange");
+  const wpmVal = modal.querySelector("#setWpmValue");
+  wpmRange.addEventListener("input", (e) => {
+    wpmVal.textContent = `${e.target.value} WPM`;
+  });
+
+  const toneRange = modal.querySelector("#setToneRange");
+  const toneVal = modal.querySelector("#setToneValue");
+  toneRange.addEventListener("input", (e) => {
+    toneVal.textContent = `${e.target.value} Hz`;
+  });
+
+  modal.querySelector("#resetProgressBtn").addEventListener("click", () => {
+    if (confirm("Báº¡n cÃ³ cháº¯c cháº¯n muá»‘n xÃ³a toÃ n bá»™ tiáº¿n trÃ¬nh há»c vÃ  cÃ¡c huy hiá»‡u Ä‘Ã£ má»Ÿ?")) {
+      localStorage.clear();
+      location.reload();
+    }
+  });
+
+  modal.querySelector("#saveSettingsBtn").addEventListener("click", () => {
+    const newWpm = Number(wpmRange.value);
+    const newTone = Number(toneRange.value);
+
+    soundEngine.setWpm(newWpm);
+    soundEngine.setFrequency(newTone);
+
+    storage.data.settings.wpm = newWpm;
+    storage.data.settings.frequency = newTone;
+    storage.save();
+
+    soundEngine.playSuccessChime();
+    modal.remove();
+  });
+}
+
+</script>
 </body>
 </html>
