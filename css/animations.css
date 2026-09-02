@@ -1,0 +1,72 @@
+/* ==========================================================================
+   MORSE SPACE CADET - KEYFRAME ANIMATIONS & EFFECTS
+   ========================================================================== */
+
+@keyframes floatBot {
+  0%, 100% {
+    transform: translateY(0) rotate(0deg);
+  }
+  50% {
+    transform: translateY(-8px) rotate(2deg);
+  }
+}
+
+@keyframes popIn {
+  0% {
+    opacity: 0;
+    transform: scale(0.85);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes fadeIn {
+  0% { opacity: 0; }
+  100% { opacity: 1; }
+}
+
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  20%, 60% { transform: translateX(-8px); }
+  40%, 80% { transform: translateX(8px); }
+}
+
+@keyframes pulseGlow {
+  0%, 100% {
+    box-shadow: 0 0 15px var(--neon-cyan-glow);
+  }
+  50% {
+    box-shadow: 0 0 35px var(--neon-cyan-glow), 0 0 10px #ffffff;
+  }
+}
+
+@keyframes starSpin {
+  0% { transform: scale(0) rotate(-180deg); opacity: 0; }
+  70% { transform: scale(1.25) rotate(15deg); opacity: 1; }
+  100% { transform: scale(1) rotate(0deg); opacity: 1; }
+}
+
+@keyframes comboFlame {
+  0%, 100% {
+    filter: drop-shadow(0 0 4px #ffb703) drop-shadow(0 0 8px #ff2a85);
+    transform: scale(1);
+  }
+  50% {
+    filter: drop-shadow(0 0 8px #ffb703) drop-shadow(0 0 14px #ff2a85);
+    transform: scale(1.08);
+  }
+}
+
+.anim-shake {
+  animation: shake 0.4s ease;
+}
+
+.anim-pop {
+  animation: popIn 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.anim-combo-flame {
+  animation: comboFlame 1.2s infinite;
+}
