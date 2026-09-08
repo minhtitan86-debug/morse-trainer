@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="vi">
 <head>
   <meta charset="UTF-8">
@@ -1465,7 +1465,7 @@ input, select {
         <!-- Progress Track -->
         <div style="display: flex; justify-content: space-between; font-size: 0.88rem; font-weight: 800; color: var(--text-secondary);">
           <span>Tiến trình câu hỏi</span>
-          <span id="advProgressText">0 / 15</span>
+          <span id="advProgressText">0 / 16</span>
         </div>
         <div class="progress-bar-container">
           <div class="progress-bar-fill" id="advProgressFill"></div>
@@ -2517,13 +2517,16 @@ const storage = new StorageManager();
 
 /* ==========================================================================
    MORSE SPACE CADET - ADVENTURE MODE (13 KOCH LESSONS & BOSS CHALLENGES)
+   - Dynamic Question Count Scaling based on character pool size
+   - Smart Spaced Repetition (50% focus on newly introduced characters)
+   - Real-time Mastery Tracking for new letters
    ========================================================================== */
 
 class AdventureMode {
   constructor() {
     this.currentLevelIndex = 0; // 0-based index in LEVELS_LIST
     this.levelData = null;
-    this.targetQuestionCount = 15;
+    this.targetQuestionCount = 16;
     this.currentQuestionIndex = 0;
     this.currentLetter = "";
     this.score = 0;
@@ -2533,6 +2536,8 @@ class AdventureMode {
     this.hearts = 3;
     this.isLocked = false;
     this.levelOneAlternator = 0;
+    this.newLettersCorrectCount = {}; // { 'A': 3, 'N': 4 }
+    this.requiredMasteryPerNewLetter = 4; // Cần đúng ít nhất 4 lần mỗi chữ mới
   }
 
   init() {
@@ -2557,13 +2562,15 @@ class AdventureMode {
         ? "★".repeat(starsCount) + "☆".repeat(3 - starsCount)
         : "🔒 Khóa";
 
+      const qCount = this.calculateTargetQuestionCount(level);
+
       card.innerHTML = `
         <div style="display: flex; justify-content: space-between; align-items: center;">
           <span class="level-num-badge">${isChallenge ? "👑 BOSS" : `LEVEL ${level.levelNumber}`}</span>
           <span class="level-stars">${starsHtml}</span>
         </div>
         <div style="font-size: 1.05rem; font-weight: 800; color: #fff;">${level.name}</div>
-        <div class="level-letters-tag">${level.letters.join(" · ")}</div>
+        <div class="level-letters-tag">${level.letters.join(" · ")} <span style="opacity:0.75; font-size:0.75rem;">(${qCount} câu)</span></div>
       `;
 
       if (isUnlocked) {
@@ -2577,6 +2584,32 @@ class AdventureMode {
     });
   }
 
+  /**
+   * Tính số lượng câu hỏi thử thách lũy tiến theo số lượng chữ cái đã mở
+   * Càng nhiều chữ cái ➔ Càng tăng số câu để người học có đủ lượt thực hành chữ mới
+   */
+  calculateTargetQuestionCount(levelData) {
+    if (levelData.type === "challenge") {
+      return 35; // Màn Boss tổng hợp thử thách 35 câu
+    }
+
+    const letterCount = (levelData.letters && levelData.letters.length) || 2;
+    
+    // Công thức tính số câu lũy tiến theo số lượng chữ cái:
+    // Level 1 (2 chữ): 16 câu
+    // Level 2 (4 chữ): 18 câu (Chữ mới ~10 lần, chữ cũ ~8 lần)
+    // Level 3 (6 chữ): 20 câu
+    // Level 4 (8 chữ): 22 câu
+    // Level 5 (10 chữ): 24 câu
+    // Level 6 (12 chữ): 26 câu
+    // Level 7 (14 chữ): 28 câu
+    // Level 8 (16 chữ): 30 câu
+    // Level 9 (18 chữ): 32 câu
+    // Level 10-13 (20-26 chữ): 34 - 40 câu
+    const dynamicCount = Math.min(40, Math.max(16, 16 + Math.round((letterCount - 2) * 1.0)));
+    return dynamicCount;
+  }
+
   startLevel(index) {
     this.currentLevelIndex = index;
     this.levelData = LEVELS_LIST[index];
@@ -2588,7 +2621,17 @@ class AdventureMode {
     this.hearts = 3;
     this.isLocked = false;
     this.levelOneAlternator = 0;
-    this.targetQuestionCount = this.levelData.type === "challenge" ? 20 : 15;
+
+    // Reset bộ đếm thành thạo chữ mới
+    this.newLettersCorrectCount = {};
+    if (this.levelData.newLetters) {
+      this.levelData.newLetters.forEach(char => {
+        this.newLettersCorrectCount[char] = 0;
+      });
+    }
+
+    // Tự động điều chỉnh số lượng thử thách theo quy mô kho chữ cái
+    this.targetQuestionCount = this.calculateTargetQuestionCount(this.levelData);
 
     // Switch views
     document.getElementById("levelSelectView").classList.add("hidden");
@@ -2596,7 +2639,7 @@ class AdventureMode {
 
     // Update Headers
     document.getElementById("advLevelTitle").textContent = `${this.levelData.type === "challenge" ? "👑 " : "🚀 "}${this.levelData.name}`;
-    document.getElementById("advLevelLetters").textContent = `Ký tự: ${this.levelData.letters.join(" · ")}`;
+    document.getElementById("advLevelLetters").textContent = `Ký tự: ${this.levelData.letters.join(" · ")} (${this.targetQuestionCount} thử thách)`;
     
     const challengeHud = document.getElementById("advChallengeHud");
     if (this.levelData.type === "challenge") {
@@ -2610,8 +2653,12 @@ class AdventureMode {
     this.renderNewLetterCards();
     this.updateProgress();
 
+    const newCharsText = this.levelData.newLetters && this.levelData.newLetters.length > 0
+      ? ` Chữ mới bài này: [${this.levelData.newLetters.join(", ")}]!`
+      : "";
+
     visualEngine.setMascotState(
-      `Chào mừng đến với ${this.levelData.name}! Hãy lắng nghe thật kỹ nhé!`,
+      `Chào mừng đến với ${this.levelData.name}!${newCharsText} Cùng luyện tập ${this.targetQuestionCount} câu nhé!`,
       "cheer"
     );
 
@@ -2626,15 +2673,41 @@ class AdventureMode {
     if (this.levelData.newLetters && this.levelData.newLetters.length > 0) {
       this.levelData.newLetters.forEach((char) => {
         const code = MORSE[char];
+        const correctCount = this.newLettersCorrectCount[char] || 0;
+        const isMastered = correctCount >= this.requiredMasteryPerNewLetter;
+
         const card = document.createElement("div");
+        card.id = `newLetterCard_${char}`;
         card.className = "hud-pill";
-        card.style.background = "rgba(0, 240, 255, 0.15)";
-        card.style.borderColor = "var(--neon-cyan)";
+        card.style.background = isMastered ? "rgba(6, 214, 160, 0.25)" : "rgba(0, 240, 255, 0.15)";
+        card.style.borderColor = isMastered ? "var(--neon-green)" : "var(--neon-cyan)";
         card.style.color = "#fff";
-        card.innerHTML = `<strong>${char}</strong>: <span style="color:var(--neon-cyan); letter-spacing:2px;">${formatMorseSymbols(code)}</span>`;
+        card.style.transition = "all 0.3s ease";
+        card.innerHTML = `
+          <strong>${char}</strong>: <span style="color:${isMastered ? 'var(--neon-green)' : 'var(--neon-cyan)'}; letter-spacing:2px;">${formatMorseSymbols(code)}</span>
+          <span style="font-size:0.75rem; margin-left:6px; opacity:0.9;">(${correctCount}/${this.requiredMasteryPerNewLetter} ${isMastered ? '⭐' : '🎯'})</span>
+        `;
         container.appendChild(card);
       });
     }
+  }
+
+  updateNewLettersCards() {
+    if (!this.levelData.newLetters) return;
+    this.levelData.newLetters.forEach((char) => {
+      const card = document.getElementById(`newLetterCard_${char}`);
+      if (!card) return;
+      const code = MORSE[char];
+      const correctCount = this.newLettersCorrectCount[char] || 0;
+      const isMastered = correctCount >= this.requiredMasteryPerNewLetter;
+
+      card.style.background = isMastered ? "rgba(6, 214, 160, 0.25)" : "rgba(0, 240, 255, 0.15)";
+      card.style.borderColor = isMastered ? "var(--neon-green)" : "var(--neon-cyan)";
+      card.innerHTML = `
+        <strong>${char}</strong>: <span style="color:${isMastered ? 'var(--neon-green)' : 'var(--neon-cyan)'}; letter-spacing:2px;">${formatMorseSymbols(code)}</span>
+        <span style="font-size:0.75rem; margin-left:6px; opacity:0.9;">(${correctCount}/${this.requiredMasteryPerNewLetter} ${isMastered ? '⭐' : '🎯'})</span>
+      `;
+    });
   }
 
   renderKeyboard() {
@@ -2654,8 +2727,14 @@ class AdventureMode {
         key.id = `advKey_${char}`;
 
         const isIncluded = this.levelData.letters.includes(char);
+        const isNewLetter = this.levelData.newLetters && this.levelData.newLetters.includes(char);
+
         if (isIncluded) {
           key.classList.add("active");
+          if (isNewLetter) {
+            key.style.borderColor = "var(--neon-cyan)";
+            key.style.boxShadow = "0 0 8px rgba(0, 240, 255, 0.3)";
+          }
           key.addEventListener("click", () => this.handleAnswer(char, key));
         } else {
           key.classList.add("disabled");
@@ -2668,27 +2747,48 @@ class AdventureMode {
     });
   }
 
+  /**
+   * Thuật toán chọn câu hỏi thông minh (Smart Adaptive Weighting):
+   * 1. 4 câu đầu tiên: Bắt buộc lần lượt giới thiệu các chữ mới.
+   * 2. Trong toàn bộ bài: Chữ mới chiếm 50% - 55% tổng số lần xuất hiện.
+   * 3. Ưu tiên chữ mới nào có số lần làm đúng ít hơn để người học nhớ sâu.
+   */
   nextQuestion() {
     this.isLocked = false;
 
-    // Pick target letter
+    const newLetters = this.levelData.newLetters || [];
+    const allLetters = this.levelData.letters || [];
+
     if (this.levelData.levelNumber === 1) {
-      // Alternate E and T for level 1
+      // Màn 1: Luân phiên E và T
       this.currentLetter = this.levelData.letters[this.levelOneAlternator % 2];
       this.levelOneAlternator++;
+    } else if (newLetters.length > 0 && this.currentQuestionIndex < newLetters.length * 2) {
+      // GIAI ĐOẠN 1 (WARM-UP): 4 câu đầu bắt buộc luân phiên giới thiệu chữ mới
+      this.currentLetter = newLetters[this.currentQuestionIndex % newLetters.length];
     } else {
-      // Weighted random favoring new letters slightly
-      const pool = [...this.levelData.letters];
-      if (this.levelData.newLetters && this.levelData.newLetters.length > 0) {
-        pool.push(...this.levelData.newLetters);
+      // GIAI ĐOẠN 2: PHÂN BỔ TRỌNG SỐ THÔNG MINH
+      // Tỷ lệ 52% chọn chữ mới, 48% chọn chữ cũ ôn tập
+      const shouldPickNew = (Math.random() < 0.52 && newLetters.length > 0);
+
+      if (shouldPickNew) {
+        // Ưu tiên chữ mới có số lần đúng ít hơn
+        const sortedNew = [...newLetters].sort((a, b) => 
+          (this.newLettersCorrectCount[a] || 0) - (this.newLettersCorrectCount[b] || 0)
+        );
+        this.currentLetter = sortedNew[0];
+      } else {
+        // Chọn từ các chữ đã học trước đó (ôn tập tổng hợp)
+        const oldLetters = allLetters.filter(c => !newLetters.includes(c));
+        const pool = oldLetters.length > 0 ? oldLetters : allLetters;
+        this.currentLetter = pool[Math.floor(Math.random() * pool.length)];
       }
-      this.currentLetter = pool[Math.floor(Math.random() * pool.length)];
     }
 
     document.getElementById("advSignalDots").textContent = "• • •";
     document.getElementById("advFeedback").textContent = "Nhấn [Nghe Tín Hiệu] hoặc Phím Space để nghe!";
 
-    // Automatically play the Morse sound
+    // Tự động phát âm thanh Morse
     setTimeout(() => {
       this.playCurrentMorse();
     }, 250);
@@ -2707,14 +2807,22 @@ class AdventureMode {
     this.tries++;
     storage.data.totalQuestions++;
 
+    const isNew = this.levelData.newLetters && this.levelData.newLetters.includes(selectedChar);
+
     if (selectedChar === this.currentLetter) {
-      // Correct!
+      // Đúng!
       this.isLocked = true;
       this.score++;
       this.combo++;
       if (this.combo > this.maxCombo) this.maxCombo = this.combo;
       storage.data.correctQuestions++;
       storage.addXp(10 + this.combo * 2);
+
+      // Cập nhật số lần làm đúng chữ mới
+      if (isNew) {
+        this.newLettersCorrectCount[selectedChar] = (this.newLettersCorrectCount[selectedChar] || 0) + 1;
+        this.updateNewLettersCards();
+      }
 
       if (btnEl) btnEl.classList.add("correct-burst");
       soundEngine.playSuccessChime();
@@ -2748,7 +2856,7 @@ class AdventureMode {
       }, 750);
 
     } else {
-      // Wrong!
+      // Sai!
       this.combo = 0;
       soundEngine.playWrongBoop();
       if (btnEl) btnEl.classList.add("wrong-burst");
@@ -2835,36 +2943,55 @@ class AdventureMode {
         <div class="modal-icon">${icon}</div>
         <div class="modal-title">${title}</div>
         ${isSuccess ? `<div style="font-size: 2rem; color: var(--neon-amber); margin-bottom: 12px;">${starIcons}</div>` : ""}
-        <p class="modal-desc">${desc}</p>
+        <div class="modal-desc">${desc}</div>
         <div class="modal-actions">
-          <button class="btn btn-ghost" id="advBackToMapBtn">🗺️ Bản Đồ Cấp Độ</button>
-          <button class="btn btn-primary" id="advReplayLevelBtn">↻ ${isSuccess ? "Luyện Lại" : "Thử Lại Ngay"}</button>
+          <button class="btn btn-primary" id="btnModalNext">
+            ${isSuccess ? "Màn Tiếp Theo 🚀" : "Thử Lại 🔄"}
+          </button>
+          <button class="btn btn-ghost" id="btnModalMap">
+            Bản Đồ Màn Chơi 🗺️
+          </button>
         </div>
       </div>
     `;
 
     document.body.appendChild(modal);
 
-    modal.querySelector("#advBackToMapBtn").addEventListener("click", () => {
+    document.getElementById("btnModalNext").addEventListener("click", () => {
+      soundEngine.playClickTap();
       modal.remove();
-      this.returnToLevelMap();
+      if (isSuccess) {
+        if (this.currentLevelIndex + 1 < LEVELS_LIST.length) {
+          this.startLevel(this.currentLevelIndex + 1);
+        } else {
+          this.exitToMap();
+        }
+      } else {
+        this.startLevel(this.currentLevelIndex);
+      }
     });
 
-    modal.querySelector("#advReplayLevelBtn").addEventListener("click", () => {
+    document.getElementById("btnModalMap").addEventListener("click", () => {
+      soundEngine.playClickTap();
       modal.remove();
-      this.startLevel(this.currentLevelIndex);
+      this.exitToMap();
     });
   }
 
-  returnToLevelMap() {
+  exitToMap() {
     document.getElementById("adventurePlayView").classList.add("hidden");
     document.getElementById("levelSelectView").classList.remove("hidden");
     this.renderLevelMap();
+  }
+
+  returnToLevelMap() {
+    this.exitToMap();
   }
 }
 
 // Global Adventure Mode Instance
 const adventureGame = new AdventureMode();
+
 
 /* ==========================================================================
    MORSE SPACE CADET - SENDING MODE (TELEGRAPH KEYER)
