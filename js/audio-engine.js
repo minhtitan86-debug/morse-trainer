@@ -68,6 +68,7 @@ class AudioEngine {
 
       // Configure Oscillator Waveform based on Sound Skin
       switch (this.currentSkin) {
+        // === 4 ÂM SẮC CŨ NGUYÊN BẢN ===
         case "arcade":
           osc.type = "square";
           osc.frequency.setValueAtTime(freq, now);
@@ -92,6 +93,62 @@ class AudioEngine {
           break;
 
         case "classic":
+          osc.type = "sine";
+          osc.frequency.setValueAtTime(freq, now);
+          gain.gain.setValueAtTime(0.001, now);
+          gain.gain.linearRampToValueAtTime(0.3 * this.volume, now + 0.005);
+          break;
+
+        // === CÁC ÂM SẮC MỚI BỔ SUNG SIÊU VUI TAI ===
+        case "crystal": // Chuông Pha Lê ngân vang trong trẻo
+          osc.type = "sine";
+          osc.frequency.setValueAtTime(freq * 1.5, now);
+          gain.gain.setValueAtTime(0.001, now);
+          gain.gain.linearRampToValueAtTime(0.28 * this.volume, now + 0.004);
+          gain.gain.exponentialRampToValueAtTime(0.12 * this.volume, now + 0.08);
+          break;
+
+        case "bubble": // Bong Bóng Nước nảy lụp bụp dễ thương
+          osc.type = "sine";
+          osc.frequency.setValueAtTime(freq * 0.8, now);
+          osc.frequency.exponentialRampToValueAtTime(freq * 1.45, now + 0.04);
+          gain.gain.setValueAtTime(0.001, now);
+          gain.gain.linearRampToValueAtTime(0.26 * this.volume, now + 0.008);
+          break;
+
+        case "kitty": // Mèo Con Meo Meo vui nhộn
+          osc.type = "triangle";
+          osc.frequency.setValueAtTime(freq * 1.35, now);
+          osc.frequency.exponentialRampToValueAtTime(freq * 0.95, now + 0.09);
+          gain.gain.setValueAtTime(0.001, now);
+          gain.gain.linearRampToValueAtTime(0.22 * this.volume, now + 0.01);
+          break;
+
+        case "robot": // Robot Bíp Bọp R2-D2
+          osc.type = "sawtooth";
+          osc.frequency.setValueAtTime(freq * 1.6, now);
+          osc.frequency.setValueAtTime(freq * 0.9, now + 0.03);
+          osc.frequency.setValueAtTime(freq * 1.3, now + 0.06);
+          gain.gain.setValueAtTime(0.001, now);
+          gain.gain.linearRampToValueAtTime(0.18 * this.volume, now + 0.005);
+          break;
+
+        case "marimba": // Đàn Marimba Gõ Phím Ấm Áp
+          osc.type = "triangle";
+          osc.frequency.setValueAtTime(freq * 1.0, now);
+          gain.gain.setValueAtTime(0.001, now);
+          gain.gain.linearRampToValueAtTime(0.32 * this.volume, now + 0.003);
+          gain.gain.exponentialRampToValueAtTime(0.08 * this.volume, now + 0.06);
+          break;
+
+        case "plasma": // Tia Sét Plasma Năng Lượng
+          osc.type = "sawtooth";
+          osc.frequency.setValueAtTime(freq * 2.0, now);
+          osc.frequency.exponentialRampToValueAtTime(freq * 0.7, now + 0.07);
+          gain.gain.setValueAtTime(0.001, now);
+          gain.gain.linearRampToValueAtTime(0.2 * this.volume, now + 0.005);
+          break;
+
         default:
           osc.type = "sine";
           osc.frequency.setValueAtTime(freq, now);
