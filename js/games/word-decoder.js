@@ -1,54 +1,127 @@
 /* ==========================================================================
-   MORSE SPACE CADET - WORD DECODER (SECRET WORD MISSION)
+   MORSE SPACE CADET - WORD & SENTENCE DECODER (KHÔNG GỢI Ý)
    ========================================================================== */
 
 class WordDecoderMode {
   constructor() {
+    this.mode = "word"; // "word" or "sentence"
     this.wordData = null;
-    this.currentLetterIdx = 0;
+    this.sentenceData = null;
+    this.sentenceWords = [];
+    this.flatLetters = []; // [{ char, wordIdx, charIdx, globalIdx }]
+    this.currentIdx = 0;
     this.isLocked = false;
-    this.completedWords = 0;
+    this.completedMissions = 0;
   }
 
   init() {
-    const playWordBtn = document.getElementById("wordPlayLetterBtn");
+    // Mode toggles
+    const btnWord = document.getElementById("btnDecoderModeWord");
+    const btnSent = document.getElementById("btnDecoderModeSentence");
+    if (btnWord && btnSent) {
+      btnWord.addEventListener("click", () => this.switchMode("word"));
+      btnSent.addEventListener("click", () => this.switchMode("sentence"));
+    }
+
+    const playLetterBtn = document.getElementById("wordPlayLetterBtn");
+    if (playLetterBtn) {
+      playLetterBtn.addEventListener("click", () => this.playCurrentLetterAudio());
+    }
+
+    const playWordBtn = document.getElementById("wordPlayFullBtn");
     if (playWordBtn) {
-      playWordBtn.addEventListener("click", () => this.playCurrentLetterAudio());
+      playWordBtn.addEventListener("click", () => this.playCurrentWordAudio());
     }
 
-    const playFullBtn = document.getElementById("wordPlayFullBtn");
-    if (playFullBtn) {
-      playFullBtn.addEventListener("click", () => this.playFullWordAudio());
+    const playSentenceBtn = document.getElementById("wordPlaySentenceBtn");
+    if (playSentenceBtn) {
+      playSentenceBtn.addEventListener("click", () => this.playFullSentenceAudio());
     }
 
-    const nextWordBtn = document.getElementById("wordNextMissionBtn");
-    if (nextWordBtn) {
-      nextWordBtn.addEventListener("click", () => this.startNewWord());
+    const nextMissionBtn = document.getElementById("wordNextMissionBtn");
+    if (nextMissionBtn) {
+      nextMissionBtn.addEventListener("click", () => this.startNewMission());
     }
   }
 
-  startNewWord() {
-    this.isLocked = false;
-    this.currentLetterIdx = 0;
+  switchMode(newMode) {
+    if (this.mode === newMode) return;
+    this.mode = newMode;
+    soundEngine.playLetterPop();
 
-    // Pick random secret word
+    const btnWord = document.getElementById("btnDecoderModeWord");
+    const btnSent = document.getElementById("btnDecoderModeSentence");
+    if (btnWord && btnSent) {
+      btnWord.classList.toggle("active", this.mode === "word");
+      btnSent.classList.toggle("active", this.mode === "sentence");
+    }
+
+    const playSentenceBtn = document.getElementById("wordPlaySentenceBtn");
+    const playWordBtn = document.getElementById("wordPlayFullBtn");
+    if (this.mode === "sentence") {
+      if (playSentenceBtn) playSentenceBtn.style.display = "inline-flex";
+      if (playWordBtn) playWordBtn.textContent = "🎵 Nghe Từ Này";
+    } else {
+      if (playSentenceBtn) playSentenceBtn.style.display = "none";
+      if (playWordBtn) playWordBtn.textContent = "🎵 Nghe Cả Từ";
+    }
+
+    this.startNewMission();
+  }
+
+  startNewMission() {
+    this.isLocked = false;
+    this.currentIdx = 0;
+
+    if (this.mode === "word") {
+      this.startWordMission();
+    } else {
+      this.startSentenceMission();
+    }
+
+    this.renderKeyboard();
+  }
+
+  startWordMission() {
     const randomIndex = Math.floor(Math.random() * SECRET_WORDS.length);
     this.wordData = SECRET_WORDS[randomIndex];
 
-    document.getElementById("wordCategoryClue").textContent = `Chủ đề: ${this.wordData.category} · Gợi ý: "${this.wordData.clue}"`;
-    document.getElementById("wordFeedbackMsg").textContent = "Lắng nghe tín hiệu của ô đang chọn!";
+    // KHÔNG THÊM GỢI Ý - BẢO MẬT TUYỆT ĐỐI CHO ĐIỆP VIÊN
+    document.getElementById("wordCategoryClue").innerHTML = `🔒 MẬT MÃ TỪ VỰNG · <b style="color:var(--neon-cyan)">KHÔNG GỢI Ý</b> · ${this.wordData.word.length} KÝ TỰ`;
+    document.getElementById("wordFeedbackMsg").textContent = "Lắng nghe tín hiệu âm thanh của ô đang sáng!";
 
-    this.renderSlots();
-    this.renderKeyboard();
+    this.renderWordSlots();
+    visualEngine.setMascotState(`Nhiệm vụ bí mật: Lắng nghe và giải mã từ ${this.wordData.word.length} chữ cái này!`, "thinking");
 
-    visualEngine.setMascotState(`Nhiệm vụ bí mật: Hãy giải mã từ ${this.wordData.word.length} chữ cái này!`, "thinking");
-
-    setTimeout(() => {
-      this.playCurrentLetterAudio();
-    }, 400);
+    setTimeout(() => this.playCurrentLetterAudio(), 400);
   }
 
-  renderSlots() {
+  startSentenceMission() {
+    const randomIndex = Math.floor(Math.random() * SECRET_SENTENCES.length);
+    this.sentenceData = SECRET_SENTENCES[randomIndex];
+    this.sentenceWords = this.sentenceData.text.split(" ");
+
+    // Flatten letters for indexing
+    this.flatLetters = [];
+    let gIdx = 0;
+    this.sentenceWords.forEach((word, wIdx) => {
+      [...word].forEach((char, cIdx) => {
+        this.flatLetters.push({ char, wordIdx: wIdx, charIdx: cIdx, globalIdx: gIdx });
+        gIdx++;
+      });
+    });
+
+    // KHÔNG THÊM GỢI Ý NGHĨA - BẢO MẬT TUYỆT ĐỐI CHO ĐIỆP VIÊN
+    document.getElementById("wordCategoryClue").innerHTML = `🔒 MẬT MÃ CÂU DÀI · <b style="color:var(--neon-cyan)">KHÔNG GỢI Ý</b> · ${this.sentenceWords.length} TỪ · ${this.flatLetters.length} KÝ TỰ`;
+    document.getElementById("wordFeedbackMsg").textContent = "Điện tín dài 5-7 chữ! Lắng nghe và giải mã từng từ.";
+
+    this.renderSentenceSlots();
+    visualEngine.setMascotState(`Điện tín vũ trụ: ${this.sentenceWords.length} chữ cái đang chờ bạn giải mã!`, "thinking");
+
+    setTimeout(() => this.playCurrentLetterAudio(), 400);
+  }
+
+  renderWordSlots() {
     const container = document.getElementById("wordMysterySlots");
     if (!container) return;
     container.innerHTML = "";
@@ -57,10 +130,38 @@ class WordDecoderMode {
     letters.forEach((char, idx) => {
       const slot = document.createElement("div");
       slot.className = `mystery-slot ${idx === 0 ? "current" : ""}`;
-      slot.id = `wordSlot_${idx}`;
+      slot.id = `slot_${idx}`;
       slot.textContent = "?";
       container.appendChild(slot);
     });
+  }
+
+  renderSentenceSlots() {
+    const container = document.getElementById("wordMysterySlots");
+    if (!container) return;
+    container.innerHTML = "";
+
+    const sentenceBox = document.createElement("div");
+    sentenceBox.className = "mystery-sentence-container";
+
+    let letterCounter = 0;
+    this.sentenceWords.forEach((word, wIdx) => {
+      const wordGroup = document.createElement("div");
+      wordGroup.className = "mystery-word-group";
+
+      [...word].forEach((char, cIdx) => {
+        const slot = document.createElement("div");
+        slot.className = `mystery-slot sentence-slot ${letterCounter === 0 ? "current" : ""}`;
+        slot.id = `slot_${letterCounter}`;
+        slot.textContent = "?";
+        wordGroup.appendChild(slot);
+        letterCounter++;
+      });
+
+      sentenceBox.appendChild(wordGroup);
+    });
+
+    container.appendChild(sentenceBox);
   }
 
   renderKeyboard() {
@@ -86,64 +187,136 @@ class WordDecoderMode {
   }
 
   playCurrentLetterAudio() {
-    if (!this.wordData) return;
-    const targetChar = this.wordData.word[this.currentLetterIdx];
-    const code = MORSE[targetChar];
-    soundEngine.playMorse(code);
+    soundEngine.init();
+    if (this.mode === "word") {
+      if (!this.wordData) return;
+      const char = this.wordData.word[this.currentIdx];
+      soundEngine.playMorse(MORSE[char]);
+    } else {
+      if (!this.flatLetters[this.currentIdx]) return;
+      const char = this.flatLetters[this.currentIdx].char;
+      soundEngine.playMorse(MORSE[char]);
+    }
   }
 
-  playFullWordAudio() {
-    if (!this.wordData) return;
-    const fullCode = [...this.wordData.word].map((c) => MORSE[c]).join(" ");
-    soundEngine.playMorse(fullCode);
+  playCurrentWordAudio() {
+    soundEngine.init();
+    if (this.mode === "word") {
+      if (!this.wordData) return;
+      const code = [...this.wordData.word].map(c => MORSE[c]).join(" ");
+      soundEngine.playMorse(code);
+    } else {
+      if (!this.flatLetters[this.currentIdx]) return;
+      const wIdx = this.flatLetters[this.currentIdx].wordIdx;
+      const word = this.sentenceWords[wIdx];
+      const code = [...word].map(c => MORSE[c]).join(" ");
+      soundEngine.playMorse(code);
+    }
+  }
+
+  playFullSentenceAudio() {
+    soundEngine.init();
+    if (this.mode === "sentence" && this.sentenceWords.length > 0) {
+      // Dấu gạch chéo '/' biểu thị khoảng nghỉ 7-dit giữa các từ
+      const sentenceMorse = this.sentenceWords
+        .map(w => [...w].map(c => MORSE[c]).join(" "))
+        .join(" / ");
+      soundEngine.playMorse(sentenceMorse);
+    }
   }
 
   handleKeyClick(selectedChar, btnEl) {
-    if (this.isLocked || !this.wordData) return;
+    if (this.isLocked) return;
     soundEngine.init();
+    soundEngine.playLetterPop();
 
-    const expectedChar = this.wordData.word[this.currentLetterIdx];
+    if (this.mode === "word") {
+      this.handleWordKey(selectedChar, btnEl);
+    } else {
+      this.handleSentenceKey(selectedChar, btnEl);
+    }
+  }
+
+  handleWordKey(selectedChar, btnEl) {
+    if (!this.wordData) return;
+    const expectedChar = this.wordData.word[this.currentIdx];
 
     if (selectedChar === expectedChar) {
-      // Correct letter slot!
       soundEngine.playSuccessChime();
       storage.addXp(10);
 
-      const slot = document.getElementById(`wordSlot_${this.currentLetterIdx}`);
+      const slot = document.getElementById(`slot_${this.currentIdx}`);
       if (slot) {
         slot.textContent = expectedChar;
         slot.classList.remove("current");
         slot.classList.add("revealed");
       }
 
-      this.currentLetterIdx++;
+      this.currentIdx++;
 
-      // Check if full word solved!
-      if (this.currentLetterIdx >= this.wordData.word.length) {
+      if (this.currentIdx >= this.wordData.word.length) {
         this.solveWordSuccess();
       } else {
-        // Move to next slot
-        const nextSlot = document.getElementById(`wordSlot_${this.currentLetterIdx}`);
+        const nextSlot = document.getElementById(`slot_${this.currentIdx}`);
         if (nextSlot) nextSlot.classList.add("current");
 
-        document.getElementById("wordFeedbackMsg").textContent = `Chính xác! Tiếp tục giải chữ thứ ${this.currentLetterIdx + 1}.`;
-        setTimeout(() => this.playCurrentLetterAudio(), 500);
+        document.getElementById("wordFeedbackMsg").textContent = `Chính xác! Tiếp tục giải chữ thứ ${this.currentIdx + 1}.`;
+        setTimeout(() => this.playCurrentLetterAudio(), 450);
       }
     } else {
-      // Wrong letter
       soundEngine.playWrongBoop();
       if (btnEl) btnEl.classList.add("wrong-burst");
       document.getElementById("wordFeedbackMsg").textContent = `Chưa đúng! Hãy nghe lại chữ này nhé.`;
       setTimeout(() => {
         if (btnEl) btnEl.classList.remove("wrong-burst");
         this.playCurrentLetterAudio();
-      }, 600);
+      }, 550);
+    }
+  }
+
+  handleSentenceKey(selectedChar, btnEl) {
+    if (!this.flatLetters[this.currentIdx]) return;
+    const item = this.flatLetters[this.currentIdx];
+    const expectedChar = item.char;
+
+    if (selectedChar === expectedChar) {
+      soundEngine.playSuccessChime();
+      storage.addXp(10);
+
+      const slot = document.getElementById(`slot_${this.currentIdx}`);
+      if (slot) {
+        slot.textContent = expectedChar;
+        slot.classList.remove("current");
+        slot.classList.add("revealed");
+      }
+
+      this.currentIdx++;
+
+      if (this.currentIdx >= this.flatLetters.length) {
+        this.solveSentenceSuccess();
+      } else {
+        const nextSlot = document.getElementById(`slot_${this.currentIdx}`);
+        if (nextSlot) nextSlot.classList.add("current");
+
+        const nextWordIdx = this.flatLetters[this.currentIdx].wordIdx;
+        const currentWordNum = nextWordIdx + 1;
+        document.getElementById("wordFeedbackMsg").textContent = `Đúng rồi! Đang giải từ thứ ${currentWordNum}/${this.sentenceWords.length}.`;
+        setTimeout(() => this.playCurrentLetterAudio(), 450);
+      }
+    } else {
+      soundEngine.playWrongBoop();
+      if (btnEl) btnEl.classList.add("wrong-burst");
+      document.getElementById("wordFeedbackMsg").textContent = `Chưa đúng! Lắng nghe lại tín hiệu Morse nhé.`;
+      setTimeout(() => {
+        if (btnEl) btnEl.classList.remove("wrong-burst");
+        this.playCurrentLetterAudio();
+      }, 550);
     }
   }
 
   solveWordSuccess() {
     this.isLocked = true;
-    this.completedWords++;
+    this.completedMissions++;
     storage.data.wordsDecodedCount = (storage.data.wordsDecodedCount || 0) + 1;
     storage.addXp(50);
 
@@ -159,13 +332,13 @@ class WordDecoderMode {
     modal.className = "modal-overlay";
     modal.innerHTML = `
       <div class="modal-box">
-        <div class="modal-icon">${this.wordData.icon}</div>
+        <div class="modal-icon">${this.wordData.icon || "🎉"}</div>
         <div class="modal-title">${this.wordData.word}</div>
-        <p style="font-size:1.1rem; color:var(--neon-cyan); margin-bottom: 8px;">"${this.wordData.clue}"</p>
-        <p class="modal-desc">Bạn vừa giải mã thành công bức điện tín bí mật!</p>
-        <p style="color:var(--neon-amber); font-weight:800; margin-bottom: 20px;">+50 XP Thưởng</p>
+        <p style="font-size:1.15rem; color:var(--neon-green); font-weight:800; margin-bottom: 8px;">✨ GIẢI MÃ THÀNH CÔNG (KHÔNG GỢI Ý)!</p>
+        <p class="modal-desc">Đôi tai mật vụ xuất sắc! Bạn đã phá vỡ bức mật thư bằng chính khả năng nghe Morse.</p>
+        <p style="color:var(--neon-amber); font-weight:800; margin-bottom: 20px;">+50 XP Thưởng Điệp Viên</p>
         <div class="modal-actions">
-          <button class="btn btn-primary btn-lg" id="wordNextModalBtn">Từ Bí Mật Tiếp Theo 🚀</button>
+          <button class="btn btn-primary btn-lg" id="wordNextModalBtn">Từ Tiếp Theo 🚀</button>
         </div>
       </div>
     `;
@@ -173,7 +346,39 @@ class WordDecoderMode {
     document.body.appendChild(modal);
     modal.querySelector("#wordNextModalBtn").addEventListener("click", () => {
       modal.remove();
-      this.startNewWord();
+      this.startNewMission();
+    });
+  }
+
+  solveSentenceSuccess() {
+    this.isLocked = true;
+    this.completedMissions++;
+    storage.data.sentencesDecodedCount = (storage.data.sentencesDecodedCount || 0) + 1;
+    storage.addXp(150);
+
+    visualEngine.launchConfetti();
+    soundEngine.playSentenceVictoryFanfare();
+    visualEngine.setMascotState(`Tuyệt đỉnh! Bạn vừa giải mã thành công toàn bộ câu điện tín dài!`, "cheer");
+
+    const modal = document.createElement("div");
+    modal.className = "modal-overlay";
+    modal.innerHTML = `
+      <div class="modal-box" style="max-width: 520px;">
+        <div class="modal-icon">🌌</div>
+        <div class="modal-title" style="font-size: 1.6rem; letter-spacing: 2px;">${this.sentenceData.text}</div>
+        <p style="font-size:1.1rem; color:var(--neon-cyan); margin-bottom: 8px;">Dịch nghĩa: "${this.sentenceData.vi}"</p>
+        <p class="modal-desc">Bản lĩnh của một chuyên gia điện tín thực thụ! Bạn đã phá mã thành công một bức điện tín dài 5-7 chữ hoàn toàn không cần gợi ý.</p>
+        <p style="color:var(--neon-amber); font-weight:800; font-size: 1.2rem; margin-bottom: 20px;">+150 XP Thưởng Đại Sứ Vũ Trụ</p>
+        <div class="modal-actions">
+          <button class="btn btn-primary btn-lg" id="wordNextModalBtn">Câu Mật Mã Tiếp Theo 🚀</button>
+        </div>
+      </div>
+    `;
+
+    document.body.appendChild(modal);
+    modal.querySelector("#wordNextModalBtn").addEventListener("click", () => {
+      modal.remove();
+      this.startNewMission();
     });
   }
 }

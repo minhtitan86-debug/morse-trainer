@@ -253,6 +253,33 @@ const SECRET_WORDS = [
 /* ==========================================================================
    12 BADGES / ACHIEVEMENTS
    ========================================================================== */
+const SECRET_SENTENCES = [
+  { text: "HELLO WORLD HOW ARE YOU", vi: "Xin chào thế giới bạn khỏe không" },
+  { text: "CHUNG TA LA DONG DOI", vi: "Chúng ta là đồng đội" },
+  { text: "BAY VAO KHONG GIAN XANH", vi: "Bay vào không gian xanh" },
+  { text: "MAT MA BI MAT NGAN HA", vi: "Mật mã bí mật ngân hà" },
+  { text: "TIN HIEU CAP CUU VU TRU", vi: "Tín hiệu cấp cứu vũ trụ" },
+  { text: "CON TAU VU TRU BAY XA", vi: "Con tàu vũ trụ bay xa" },
+  { text: "HOC MA MORSE THAT LA VUI", vi: "Học mã Morse thật là vui" },
+  { text: "CHUC BAN MOT NGAY TOT LANH", vi: "Chúc bạn một ngày tốt lành" },
+  { text: "NGUOI HUNG NHI RAT DUNG CAM", vi: "Người hùng nhí rất dũng cảm" },
+  { text: "KHAM PHA BI MAT CUA VU TRU", vi: "Khám phá bí mật của vũ trụ" },
+  { text: "TIENG TIT TE VANG TRONG DEM", vi: "Tiếng tít te vang trong đêm" },
+  { text: "KHOA HOC GIUP CON NGUOI TIEN BO", vi: "Khoa học giúp con người tiến bộ" },
+  { text: "VE DEP KY DIEU CUA THIEN NHIEN", vi: "Vẻ đẹp kỳ diệu của thiên nhiên" },
+  { text: "VIET NAM DAT NUOC MEN YEU", vi: "Việt Nam đất nước mến yêu" },
+  { text: "NGHE TIENG MORSE VA GIAI MA", vi: "Nghe tiếng Morse và giải mã" },
+  { text: "THAM HIEM HANH TINH MOI LA", vi: "Thám hiểm hành tinh mới lạ" },
+  { text: "CO GANG KHONG BAO GIO BO CUOC", vi: "Cố gắng không bao giờ bỏ cuộc" },
+  { text: "DIEP VIEN TAI BA GIAI DUOC HET", vi: "Điệp viên tài ba giải được hết" },
+  { text: "TINH BAN LA MON QUA VO GIA", vi: "Tình bạn là món quà vô giá" },
+  { text: "VU TRU BAO LA DANG CHO DON", vi: "Vũ trụ bao la đang chờ đón" }
+];
+
+/* ==========================================================================
+   12 BADGES / ACHIEVEMENTS
+   ========================================================================== */
+
 const BADGES_DEF = [
   { id: "cadet", icon: "🚀", title: "Tân Binh Vũ Trụ", desc: "Hoàn thành màn học đầu tiên (Level 1)." },
   { id: "streak_5", icon: "🔥", title: "Bàn Tay Nhanh Nhẹn", desc: "Đạt chuỗi 5 câu đúng liên tiếp." },
